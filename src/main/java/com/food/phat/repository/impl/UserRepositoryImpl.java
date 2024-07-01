@@ -1,0 +1,40 @@
+package com.food.phat.repository.impl;
+
+import com.food.phat.entity.User;
+import com.food.phat.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class UserRepositoryImpl implements UserRepository {
+    EntityManager em;
+
+    @Autowired
+    public UserRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
+
+    public User getUserById(int userId) {
+        Query q = em.createQuery("FROM User WHERE id = :userId");
+        q.setParameter("userId", userId);
+
+        return (User) q.getSingleResult();
+    }
+
+    @Override
+    public User save(User user) {
+        return em.merge(user);
+    }
+
+    public User getUserByUsername(String username) {
+
+        Query q = em.createQuery("FROM User WHERE username = :username");
+        q.setParameter("username", username);
+
+        return (User) q.getSingleResult();
+    }
+
+}
+
