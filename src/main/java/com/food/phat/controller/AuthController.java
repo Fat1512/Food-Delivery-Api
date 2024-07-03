@@ -40,12 +40,6 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-
-    @GetMapping("/getting")
-    public ResponseEntity<String> getRes() {
-        return new ResponseEntity<>("asdd", HttpStatus.OK);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -81,4 +75,6 @@ public class AuthController {
         String jwt = jwtService.generateToken(userDetails);
         return new ResponseEntity<JwtResponse>(new JwtResponse(jwt), HttpStatus.OK);
     }
+
+
 }

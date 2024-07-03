@@ -4,6 +4,7 @@ package com.food.phat.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Table(name="product")
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -30,8 +32,10 @@ public class Product {
     @Column(name="price")
     private float price;
 
+    @Column(name="thumbnail")
+    private String thumbnail;
 
-    public Product() {
-
-    }
+    @JoinColumn(name="category_pkey")
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Category category;
 }

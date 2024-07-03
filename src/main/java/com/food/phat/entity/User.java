@@ -49,6 +49,10 @@ public class User {
     @Column(name="status")
     private Boolean status;
 
+    @Column(name="avatar")
+    private String avatar;
+
+
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;

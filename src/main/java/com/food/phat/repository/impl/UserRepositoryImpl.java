@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    EntityManager em;
+    private EntityManager em;
 
     @Autowired
     public UserRepositoryImpl(EntityManager em) {
@@ -17,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public User getUserById(int userId) {
-        Query q = em.createQuery("FROM User WHERE id = :userId");
+        Query q = em.createQuery("FROM User WHERE userId = :userId");
         q.setParameter("userId", userId);
 
         return (User) q.getSingleResult();

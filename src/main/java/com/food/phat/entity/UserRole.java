@@ -7,15 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-@Table(name="role")
+@Table(name="user_role")
 @Entity
 @Setter
 @Getter
 public class UserRole {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     public UserRole() {
 
@@ -23,9 +19,11 @@ public class UserRole {
 
     @JoinColumn(name = "user_pkey", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
+    @Id
     private User userPkey;
 
     @JoinColumn(name = "role_pkey", referencedColumnName = "role_id")
     @ManyToOne(optional = false)
+    @Id
     private Role rolePkey;
 }
