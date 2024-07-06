@@ -25,4 +25,10 @@ public class CategoryController {
         List<Category> categories = categoryService.getAllCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
+
+    @PostMapping("/category")
+    public ResponseEntity<Category> createProduct(@RequestBody Category category) {
+        Category responseCategory = categoryService.save(category);
+        return new ResponseEntity<>(responseCategory, HttpStatus.OK);
+    }
 }

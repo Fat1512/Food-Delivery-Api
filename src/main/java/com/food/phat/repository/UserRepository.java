@@ -1,9 +1,7 @@
 package com.food.phat.repository;
 
 import com.food.phat.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository  {
-    User getUserByUsername(String username);
-    User getUserById(int userId);
-    User save(User user);
+public interface UserRepository extends JpaRepository<User, Integer> {
 }

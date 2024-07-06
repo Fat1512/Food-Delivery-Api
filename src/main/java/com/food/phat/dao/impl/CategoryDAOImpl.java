@@ -1,7 +1,7 @@
-package com.food.phat.repository.impl;
+package com.food.phat.dao.impl;
 
 import com.food.phat.entity.Category;
-import com.food.phat.repository.CategoryRepository;
+import com.food.phat.dao.CategoryDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CategoryRepositoryImpl implements CategoryRepository {
+public class CategoryDAOImpl implements CategoryDAO {
 
     private EntityManager em;
 
     @Autowired
-    public CategoryRepositoryImpl(EntityManager em) {
+    public CategoryDAOImpl(EntityManager em) {
         this.em = em;
     }
 

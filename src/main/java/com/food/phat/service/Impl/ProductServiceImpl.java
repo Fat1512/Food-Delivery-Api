@@ -2,12 +2,13 @@ package com.food.phat.service.Impl;
 
 import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
-import com.food.phat.repository.CategoryRepository;
 import com.food.phat.repository.ProductRepository;
 import com.food.phat.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -15,36 +16,42 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
-    CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
     }
     @Override
     @Transactional
-    public PageResponse<Product> getAllProducts(Map<String, String> filteredConditions) {
-        Page<Product> products = productRepository.getAllProducts(filteredConditions);
-        PageResponse<Product> productPageResponse = new PageResponse(
+    public PageResponse<Product> getAllProducts(Map<String, String> filteredCondition) {
+        int page = Integer.parseInt(filteredCondition.get("page"));
+        int size = Integer.parseInt(filteredCondition.get("size"));
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageable);
+        if(products.getTotalElements() == 0) {
+
+        }
+
+        return new PageResponse<Product>(
                 products.getContent(),
-                filteredConditions.get("page"),
-                filteredConditions.get("size"),
+                page,
+                size,
                 products.getTotalElements(),
-                products.getTotalPages(), products.isLast());
-        return productPageResponse;
+                products.getTotalPages(),
+                products.isLast());
     }
 
     @Override
     @Transactional
     public Product getProductById(int id) {
-        return productRepository.getProductById(id);
+        return productRepository.findById(id).get();
     }
 
     @Override
     @Transactional
     public Product getProductByName(String name) {
-        return productRepository.getProductByName(name);
+        return productRepository.findByName(name);
     }
 
     @Override

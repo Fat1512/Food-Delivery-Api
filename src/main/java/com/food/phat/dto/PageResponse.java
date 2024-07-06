@@ -13,9 +13,9 @@ public class PageResponse<T> {
 
     private List<T> content;
     //current page
-    private String page;
+    private int page;
     //element per page
-    private String size;
+    private int size;
     //element quantity of the record
     private long totalElements;
     //page count

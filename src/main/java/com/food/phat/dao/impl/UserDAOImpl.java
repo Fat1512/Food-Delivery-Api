@@ -1,18 +1,18 @@
-package com.food.phat.repository.impl;
+package com.food.phat.dao.impl;
 
 import com.food.phat.entity.User;
-import com.food.phat.repository.UserRepository;
+import com.food.phat.dao.UserDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository {
+public class UserDAOImpl implements UserDAO {
     private EntityManager em;
 
     @Autowired
-    public UserRepositoryImpl(EntityManager em) {
+    public UserDAOImpl(EntityManager em) {
         this.em = em;
     }
 

@@ -1,5 +1,7 @@
 package com.food.phat.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import java.util.List;
 @Table(name="category")
 @Entity
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category {
 
     @Id
@@ -22,7 +25,8 @@ public class Category {
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy="category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="category", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Product> products;
 
     public Category() {

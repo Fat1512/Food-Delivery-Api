@@ -6,7 +6,7 @@ import com.food.phat.dto.RegisterRequest;
 import com.food.phat.entity.Role;
 import com.food.phat.entity.User;
 import com.food.phat.service.Impl.UserService;
-import com.food.phat.service.JwtService;
+import com.food.phat.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package com.food.phat.repository.impl;
+package com.food.phat.dao.impl;
 
 import com.food.phat.entity.Product;
-import com.food.phat.repository.ProductRepository;
+import com.food.phat.dao.ProductDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class ProductRepositoryImpl implements ProductRepository {
+public class ProductDAOImpl implements ProductDAO {
 
     private EntityManager em;
 
     @Autowired
-    public ProductRepositoryImpl(EntityManager em) {
+    public ProductDAOImpl(EntityManager em) {
         this.em = em;
     }
 

@@ -1,4 +1,4 @@
-package com.food.phat.service;
+package com.food.phat.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

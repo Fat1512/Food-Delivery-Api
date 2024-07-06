@@ -6,8 +6,8 @@ import com.food.phat.entity.Product;
 import java.util.Map;
 
 public interface ProductService {
-    PageResponse<Product> getAllProducts(Map<String, String> filteredConditions);
+    PageResponse<Product> getAllProducts(Map<String, String> filteredCondition);
     Product getProductById(int id);
     Product getProductByName(String name);
-    Product save(Product user);
+    Product save(Product product);
 }

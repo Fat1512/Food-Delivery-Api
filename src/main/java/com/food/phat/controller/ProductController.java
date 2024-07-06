@@ -22,16 +22,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    /**
-     *
-     * @param page
-     * @param size
-     * @param categoryId
-     * @param sort
-     * @param fromPrice
-     * @param toPrice
-     * @return <>ProductResponse</>
-     */
     @GetMapping("/products")
     public PageResponse<Product> getAllProducts(
             @RequestParam(name = "page", required = false, defaultValue = "0") String page,
@@ -55,6 +45,8 @@ public class ProductController {
 
     @PostMapping("/product")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return new ResponseEntity<>(new Product(), HttpStatus.OK);
+        Product responseProduct = productService.save(product);
+
+        return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 }

@@ -1,7 +1,7 @@
 package com.food.phat.filters;
 
 import com.food.phat.service.Impl.UserService;
-import com.food.phat.service.JwtService;
+import com.food.phat.config.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,12 +1,8 @@
 package com.food.phat.repository;
 
 import com.food.phat.entity.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-public interface CategoryRepository {
-    List<Category> getAllCategories();
-    Category getCategoryById(int id);
-    Category getCategoryByName(String name);
-    Category save(Category category);
 }

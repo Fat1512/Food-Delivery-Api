@@ -1,7 +1,7 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.entity.User;
-import com.food.phat.repository.UserRepository;
+import com.food.phat.dao.UserDAO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,16 +15,16 @@ import java.util.Collection;
 
 @Service
 public class UserService implements UserDetailsService {
-    UserRepository userRepository;
+    UserDAO userDAO;
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getUserByUsername(username);
+        User user = userDAO.getUserByUsername(username);
         if(user == null) {
             throw new Error("user not found");
         }
@@ -35,11 +35,11 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User getUserById(int userId) {
-        return userRepository.getUserById(userId);
+        return userDAO.getUserById(userId);
     }
 
     @Transactional
     public User save(User user) {
-        return userRepository.save(user);
+        return userDAO.save(user);
     }
 }

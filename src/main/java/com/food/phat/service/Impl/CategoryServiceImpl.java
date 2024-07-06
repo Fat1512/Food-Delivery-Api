@@ -22,19 +22,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public List<Category> getAllCategories() {
-        return categoryRepository.getAllCategories();
+        return categoryRepository.findAll();
     }
 
     @Override
     @Transactional
     public Category getCategoryById(int id) {
-        return categoryRepository.getCategoryById(id);
-    }
-
-    @Override
-    @Transactional
-    public Category getCategoryByName(String name) {
-        return categoryRepository.getCategoryByName(name);
+        return categoryRepository.findById(id).orElse(null);
     }
 
     @Override
