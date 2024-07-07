@@ -38,4 +38,5 @@ public class Product {
     @JoinColumn(name="category_pkey")
     @ManyToOne(fetch=FetchType.LAZY)
     private Category category;
+
 }

@@ -26,15 +26,17 @@ public class ProductController {
     public PageResponse<Product> getAllProducts(
             @RequestParam(name = "page", required = false, defaultValue = "0") String page,
             @RequestParam(name = "size", required = false, defaultValue = "3") String size,
-            @RequestParam(name = "category", required = false) String categoryId,
-            @RequestParam(name = "sort", required = false, defaultValue = "desc") String sort,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            @RequestParam(name = "sortDir", required = false) String sortDir,
+            @RequestParam(name = "sortBy", required = false) String sortBy,
             @RequestParam(name = "fromPrice", required = false) String fromPrice,
             @RequestParam(name = "toPrice", required = false) String toPrice
     ) {
         Map<String, String> filteredConditions = new HashMap<>();
         filteredConditions.put("page", page);
         filteredConditions.put("size", size);
-        filteredConditions.put("sort", sort);
+        filteredConditions.put("sortDir", sortDir);
+        filteredConditions.put("sortBy", sortBy);
         filteredConditions.put("categoryId", categoryId);
         filteredConditions.put("fromPrice", fromPrice);
         filteredConditions.put("toPrice", toPrice);
