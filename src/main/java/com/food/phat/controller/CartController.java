@@ -29,17 +29,3 @@ public class CartController {
     }
 
 }
-/**
- *
- *  items : [
- *      {
- *          name: "asdasd"
- *          description: "asdas"
- *          price: "asdads"
- *          qty: "123"
- *
- *      }
- *  ]
- *
- *
- */

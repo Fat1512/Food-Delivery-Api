@@ -17,12 +17,12 @@ public class UserRole {
 
     }
 
-    @JoinColumn(name = "user_pkey", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_fkey", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
     @Id
     private User userPkey;
 
-    @JoinColumn(name = "role_pkey", referencedColumnName = "role_id")
+    @JoinColumn(name = "role_fkey", referencedColumnName = "role_id")
     @ManyToOne(optional = false)
     @Id
     private Role rolePkey;

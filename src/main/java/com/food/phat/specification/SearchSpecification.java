@@ -19,7 +19,6 @@ public class SearchSpecification<T> implements Specification<T> {
         Predicate predicate = cb.equal(cb.literal(Boolean.TRUE), Boolean.TRUE);
 
         for (FilterRequest filter : filters) {
-//            if(filter.getValue() != null)
             predicate = filter.getOperator().build(root, cb, filter, predicate);
         }
         return predicate;

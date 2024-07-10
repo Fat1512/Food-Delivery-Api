@@ -35,7 +35,7 @@ public class Product {
     @Column(name="thumbnail")
     private String thumbnail;
 
-    @JoinColumn(name="category_pkey")
+    @JoinColumn(name="category_fkey")
     @ManyToOne(fetch=FetchType.LAZY)
     private Category category;
 

@@ -21,12 +21,12 @@ public class Cart {
     @ManyToMany
     @JoinTable(
             name="cart_detail",
-            joinColumns = @JoinColumn(name="cart_pkey"),
-            inverseJoinColumns = @JoinColumn(name="product_pkey")
+            joinColumns = @JoinColumn(name="cart_fkey"),
+            inverseJoinColumns = @JoinColumn(name="product_fkey")
     )
     private List<Product> products;
 
-    @JoinColumn(name="user_pkey", referencedColumnName = "user_id")
+    @JoinColumn(name="user_fkey", referencedColumnName = "user_id")
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
