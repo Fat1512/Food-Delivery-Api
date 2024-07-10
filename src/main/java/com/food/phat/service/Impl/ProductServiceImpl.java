@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
         Float fromPrice = filteredCondition.get("fromPrice") == null ? null : Float.parseFloat(filteredCondition.get("fromPrice"));
         Float toPrice = filteredCondition.get("toPrice") == null ? null : Float.parseFloat(filteredCondition.get("toPrice"));
 
-
+        //-------------------------------------Filtering-------------------------------------
         FilterRequest<Product> categoryRequest = new FilterRequest<>() {
             @Override
             public Expression setExpression(Root root) {
@@ -61,12 +61,13 @@ public class ProductServiceImpl implements ProductService {
         priceRequest.setValueTo(toPrice);
         priceRequest.setOperator(Operator.BETWEEN);
 
-        SearchSpecification<Product> specs = new SearchSpecification<>(new ArrayList<>(List.of(categoryRequest, priceRequest)));
-
-        Sort sort = Sort.by(Sort.Direction.ASC, "price");
+        //-------------------------------------Sorting-------------------------------------
+        Sort sort = Sort.by(Sort.DEFAULT_DIRECTION, "productId");
         if(sortDir == "ASC") sort = Sort.by(Sort.Direction.ASC, filteredCondition.get("sortBy"));
         else if(sortDir == "DESC") sort = Sort.by(Sort.Direction.ASC, filteredCondition.get("sortBy"));
 
+        //-------------------------------------Specification-------------------------------------
+        SearchSpecification<Product> specs = new SearchSpecification<>(new ArrayList<>(List.of(categoryRequest, priceRequest)));
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Product> products = productRepository.findAll(specs, pageable);
 

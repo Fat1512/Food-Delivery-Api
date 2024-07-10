@@ -1,6 +1,7 @@
 package com.food.phat.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,10 +63,11 @@ public class User {
     private Date lastAccessed;
 
     @ManyToMany(cascade = CascadeType.ALL)
-            @JoinTable(
-                    name="user_role",
-                    joinColumns = @JoinColumn(name="user_pkey"),
-                    inverseJoinColumns = @JoinColumn(name="role_pkey"))
+    @JoinTable(
+            name="user_role",
+            joinColumns = @JoinColumn(name="user_pkey"),
+            inverseJoinColumns = @JoinColumn(name="role_pkey"))
+    @JsonIgnore
     List<Role> roles;
 
     public User() {

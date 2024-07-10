@@ -59,16 +59,16 @@ public class AuthController {
         user.setLastName(registerRequest.getLastName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(new Role("ROLE_CUSTOMER"));
-        user.setRoles(roleList);
-
+        user.setRoles(new ArrayList<>(List.of(new Role("ROLE_CUSTOMER"))));
         user = userService.save(user);
+
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user
                 .getRoles()
                 .stream()
                 .forEach(u -> authorities.add(new SimpleGrantedAuthority(u.getName())));
+
+
         //The password cannot be null
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
 

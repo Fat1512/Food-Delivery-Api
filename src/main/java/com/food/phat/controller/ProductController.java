@@ -22,8 +22,8 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public PageResponse<Product> getAllProducts(
+    @GetMapping("/product")
+    public PageResponse<Product> getProducts(
             @RequestParam(name = "page", required = false, defaultValue = "0") String page,
             @RequestParam(name = "size", required = false, defaultValue = "3") String size,
             @RequestParam(name = "categoryId", required = false) String categoryId,

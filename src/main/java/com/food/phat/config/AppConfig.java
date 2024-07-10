@@ -1,5 +1,6 @@
 package com.food.phat.config;
 
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class AppConfig {
-
+    Environment env;
     private UserDetailsService userDetailsService;
 
     @Autowired
