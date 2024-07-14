@@ -53,7 +53,6 @@ public class User {
     @Column(name="avatar")
     private String avatar;
 
-
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;

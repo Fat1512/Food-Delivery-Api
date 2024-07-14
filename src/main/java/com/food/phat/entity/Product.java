@@ -1,11 +1,14 @@
 package com.food.phat.entity;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,4 +42,16 @@ public class Product {
     @ManyToOne(fetch=FetchType.LAZY)
     private Category category;
 
+    @ManyToMany
+    @JoinTable(
+            name="product_option",
+            joinColumns = @JoinColumn(name="product_fkey"),
+            inverseJoinColumns = @JoinColumn(name="modifier_fkey")
+    )
+    @Nullable
+    private List<Modifier> modifiers;
+
+    @ManyToOne
+    @JoinColumn(name="restaurant_fkey")
+    private Restaurant restaurant;
 }

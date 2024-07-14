@@ -28,6 +28,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public Cart getCartItem(String username) {
+        cartRepository.getCartItems(username);
         FilterRequest<Cart> cartRequest = new FilterRequest<>() {
             @Override
             public Expression setExpression(Root root) {

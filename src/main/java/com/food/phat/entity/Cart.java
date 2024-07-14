@@ -16,15 +16,19 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="cart_id")
     private Integer cartId;
 
-    @ManyToMany
-    @JoinTable(
-            name="cart_detail",
-            joinColumns = @JoinColumn(name="cart_fkey"),
-            inverseJoinColumns = @JoinColumn(name="product_fkey")
-    )
-    private List<Product> products;
+//    @ManyToMany
+//    @JoinTable(
+//            name="cart_detail",
+//            joinColumns = @JoinColumn(name="cart_fkey"),
+//            inverseJoinColumns = @JoinColumn(name="product_fkey")
+//    )
+//    private List<Product> products;
+
+    @OneToMany(mappedBy = "cart")
+    private List<CartDetail> cartDetail;
 
     @JoinColumn(name="user_fkey", referencedColumnName = "user_id")
     @OneToOne(fetch = FetchType.LAZY)

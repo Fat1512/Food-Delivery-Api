@@ -27,5 +27,4 @@ public class CartController {
     public ResponseEntity<Cart> getCartItems(Principal principal) {
         return new ResponseEntity<>(cartService.getCartItem(principal.getName()), HttpStatus.OK);
     }
-
 }
