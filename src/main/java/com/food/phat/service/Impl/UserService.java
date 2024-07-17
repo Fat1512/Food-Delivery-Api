@@ -39,6 +39,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
