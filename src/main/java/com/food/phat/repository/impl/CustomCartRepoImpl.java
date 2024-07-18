@@ -17,17 +17,17 @@ public class CustomCartRepoImpl implements CustomCartRepo {
     @PersistenceContext
     private EntityManager em;
 
-    @Override
-    public CartResponse getCart(Integer userId) {
+//    @Override
+    public CartResponse getCart(int userId) {
 
         //Get restaurant ID
         List<Object[]> restaurantIdList = em.createNativeQuery("""
-            select distinct res.restaurant_id, res.name 
+            select distinct res.restaurant_id, res.name
             from user u, cart c, cart_detail cd, product p, restaurant res
-            where 
+            where
             u.user_id = ?1 and
             u.user_id = c.user_fkey and
-            c.cart_id = cd.cart_fkey and 
+            c.cart_id = cd.cart_fkey and
             cd.product_fkey = p.product_id and
            p.restaurant_fkey = res.restaurant_id
         """).setParameter(1, userId).getResultList();
@@ -35,7 +35,7 @@ public class CustomCartRepoImpl implements CustomCartRepo {
         //Get cart ID
         Integer cartID = (Integer) em.createNativeQuery("""
             select cart_id from cart, user
-            where 
+            where
             cart.user_fkey = user.user_id and
             user.user_id = ?1
         """).setParameter(1, userId).getSingleResult();
@@ -69,10 +69,11 @@ public class CustomCartRepoImpl implements CustomCartRepo {
                     select m.title, mo.title, mo.price from cart_detail cd, modifier m, modifier_option mo, cart_modifier cm
                     where
                     cd.product_fkey = ?1 and
-                    cd.cart_detail_id = cm.cart_detail_fkey and=
+                    cd.cart_detail_id = cm.cart_detail_fkey and
                     cm.modifier_option_fkey = mo.modifier_option_id and
-                    mo.modifier_fkey = m.modifier_id;
+                    mo.modifier_fkey = m.modifier_id
                 """).setParameter(1, prod[0]).getResultList();
+
                 ProductResponse prodRes = new ProductResponse();
                 prodRes.setProductId((Integer) prod[0]);
                 prodRes.setName((String) prod[1]);
@@ -84,7 +85,7 @@ public class CustomCartRepoImpl implements CustomCartRepo {
                 return prodRes;
             }).collect(Collectors.toList());
 
-            cartItemResponse.setProducts(productResponseList);
+//            cartItemResponse.setProducts(productResponseList);
             cartResponse.addCartItem(cartItemResponse);
         });
         return cartResponse;

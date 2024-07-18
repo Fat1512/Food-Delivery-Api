@@ -2,6 +2,8 @@ package com.food.phat.service;
 
 import com.food.phat.entity.Restaurant;
 
+import java.util.List;
+
 public interface RestaurantService {
-    Restaurant getRestaurantByCustomerId(Integer customerId);
+    List<Restaurant> getRestaurantByCustomerId(Integer customerId);
 }

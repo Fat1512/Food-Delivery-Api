@@ -64,8 +64,8 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name="user_role",
-            joinColumns = @JoinColumn(name="user_fkey"),
-            inverseJoinColumns = @JoinColumn(name="role_fkey"))
+            joinColumns = {@JoinColumn(name="user_fkey")},
+            inverseJoinColumns = {@JoinColumn(name="role_fkey")})
     @JsonIgnore
     List<Role> roles;
 

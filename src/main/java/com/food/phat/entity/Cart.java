@@ -19,7 +19,8 @@ public class Cart {
     @Column(name="cart_id")
     private Integer cartId;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany
+    @JoinColumn(name="cart_fkey")
     private List<CartDetail> cartDetail;
 
     @JoinColumn(name="user_fkey", referencedColumnName = "user_id")

@@ -17,7 +17,6 @@ public class Modifier {
     @Column(name="title")
     private String title;
 
-    @OneToMany
-    @JoinColumn(name="modifier_fkey")
+    @OneToMany(mappedBy = "modifier")
     private List<ModifierOption> modifierOption;
 }
