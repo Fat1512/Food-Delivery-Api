@@ -6,13 +6,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
 @Table(name="user")
-@Entity
+@Entity @DynamicUpdate
 @Setter
 @Getter
 public class User {

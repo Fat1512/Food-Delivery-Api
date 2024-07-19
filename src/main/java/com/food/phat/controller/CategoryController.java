@@ -13,17 +13,17 @@ import java.util.List;
 @RequestMapping("/api/v1/")
     public class CategoryController {
 
-        private CategoryService categoryService;
+    private CategoryService categoryService;
 
-        @Autowired
-        public CategoryController(CategoryService categoryService) {
-            this.categoryService = categoryService;
-        }
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
-        @GetMapping("/categories")
-        public ResponseEntity<List<Category>> getAllCategories() {
-            List<Category> categories = categoryService.getAllCategories();
-            return new ResponseEntity<>(categories, HttpStatus.OK);
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @PostMapping("/category")

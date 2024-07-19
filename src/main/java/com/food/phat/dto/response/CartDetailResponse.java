@@ -1,7 +1,6 @@
-package com.food.phat.dto;
+package com.food.phat.dto.response;
 
 import com.food.phat.entity.Category;
-import com.food.phat.entity.ModifierOption;
 import lombok.*;
 
 import java.util.List;
@@ -21,6 +20,6 @@ public class CartDetailResponse {
     private int qty;
     private String note;
     private String thumbnail;
-    List<ModifierOption> modifiers;
+    List<Object[]> modifiers;
     private Category category;
 }

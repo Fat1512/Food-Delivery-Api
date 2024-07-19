@@ -1,6 +1,6 @@
 package com.food.phat.service;
 
-import com.food.phat.dto.PageResponse;
+import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 
 import java.util.Map;

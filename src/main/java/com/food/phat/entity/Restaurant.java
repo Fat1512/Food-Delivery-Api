@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
-@Entity
+@Entity @DynamicUpdate
 @Table(name="restaurant")
 @Getter
 @Setter
@@ -39,4 +40,15 @@ public class Restaurant {
     @JoinColumn(name = "user_fkey")
     @JsonIgnore
     private User user;
+
+    @Override
+    public int hashCode() {
+        return this.restaurantId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Restaurant res = (Restaurant) obj;
+        return res.getRestaurantId().equals(this.restaurantId);
+    }
 }

@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Table(name="product")
-@Entity
+@Entity @DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {

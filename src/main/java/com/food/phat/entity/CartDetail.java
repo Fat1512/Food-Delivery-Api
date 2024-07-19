@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 import java.util.List;
 
 @Table(name = "cart_detail")
-@Entity
+@Entity @DynamicUpdate
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class CartDetail {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "cart_modifier",
             joinColumns = {@JoinColumn(name = "cart_detail_fkey")},
@@ -45,4 +46,8 @@ public class CartDetail {
 
     @Column(name="note")
     private String note;
+
+    @ManyToOne
+    @JoinColumn(name="cart_fkey")
+    private Cart cart;
 }

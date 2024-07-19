@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 @AllArgsConstructor
 @Table(name="user_role")
-@Entity
+@Entity @DynamicUpdate
 @Setter
 @Getter
 public class UserRole {

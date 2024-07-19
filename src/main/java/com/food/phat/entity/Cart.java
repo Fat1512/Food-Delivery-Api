@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Table(name="cart")
-@Entity
+@Entity @DynamicUpdate
 public class Cart {
 
     @Id
@@ -19,8 +20,7 @@ public class Cart {
     @Column(name="cart_id")
     private Integer cartId;
 
-    @OneToMany
-    @JoinColumn(name="cart_fkey")
+    @OneToMany(mappedBy = "cart")
     private List<CartDetail> cartDetail;
 
     @JoinColumn(name="user_fkey", referencedColumnName = "user_id")

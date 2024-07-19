@@ -1,8 +1,8 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.JwtResponse;
-import com.food.phat.dto.LoginRequest;
-import com.food.phat.dto.RegisterRequest;
+import com.food.phat.dto.response.JwtResponse;
+import com.food.phat.dto.request.LoginRequest;
+import com.food.phat.dto.request.RegisterRequest;
 import com.food.phat.entity.Role;
 import com.food.phat.entity.User;
 import com.food.phat.service.Impl.UserService;

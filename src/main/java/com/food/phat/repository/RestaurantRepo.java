@@ -1,13 +1,12 @@
 package com.food.phat.repository;
 
 import com.food.phat.entity.Restaurant;
-import com.food.phat.repository.custom.CustomRestaurantRepo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface RestaurantRepo extends JpaRepository<Restaurant, Integer>, CustomRestaurantRepo {
+public interface RestaurantRepo extends JpaRepository<Restaurant, Integer> {
     @Query(value = """
         select distinct res.*
             from user u, cart c, cart_detail cd, product p, restaurant res

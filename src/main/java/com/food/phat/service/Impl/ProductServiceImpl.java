@@ -1,6 +1,6 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.PageResponse;
+import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.repository.ProductRepository;
 import com.food.phat.service.ProductService;

@@ -1,4 +1,4 @@
-package com.food.phat.dto;
+package com.food.phat.dto.request;
 
 
 import lombok.Data;

@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
-@Entity
+@Entity @DynamicUpdate
 @Table(name="modifier_option")
 @Setter
 @Getter
