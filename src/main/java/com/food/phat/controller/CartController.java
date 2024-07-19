@@ -27,14 +27,14 @@ public class CartController {
     }
 
     @DeleteMapping("/cart")
-    public ResponseEntity<String> deleteCartDetail(@RequestBody Map<String, Integer[]> cartDetailIdList) {
-        cartService.deleteCartDetail(Arrays.stream(cartDetailIdList.get("idList")).toList());
+    public ResponseEntity<String> deleteCartItem(@RequestBody Map<String, Integer[]> cartDetailIdList) {
+        cartService.deleteCartItem(Arrays.stream(cartDetailIdList.get("idList")).toList());
         return null;
     }
 
     @PatchMapping("/cart")
     public ResponseEntity<String> updateCart(@RequestBody CartDetailRequest cartDetailRequest) {
-        cartService.updateCartDetail(cartDetailRequest);
+        cartService.updateCartItem(cartDetailRequest);
         return null;
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CartService {
     CartResponse getCart(Integer cartId);
-    void deleteCartDetail(List<Integer> cartDetailId);
-    void updateCartDetail(CartDetailRequest cartDetailRequest);
+    void deleteCartItem(List<Integer> cartDetailId);
+    void updateCartItem(CartDetailRequest cartDetailRequest);
 }

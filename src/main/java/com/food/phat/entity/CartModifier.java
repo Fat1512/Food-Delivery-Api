@@ -15,7 +15,7 @@ public class CartModifier {
     @JoinColumn(name = "cart_detail_fkey", referencedColumnName = "cart_detail_id")
     @ManyToOne(optional = false)
     @Id
-    private CartDetail cartDetail;
+    private CartItem cartItem;
 
     @JoinColumn(name = "modifier_option_fkey", referencedColumnName = "modifier_option_id")
     @ManyToOne(optional = false)

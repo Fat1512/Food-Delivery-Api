@@ -12,10 +12,10 @@ import java.util.List;
 public class CartItemResponse {
     private int restaurantId;
     private String restaurantName;
-    List<CartDetailResponse> products;
+    List<CartItemDetailResponse> products;
 
-    public void addCartDetailResponse(CartDetailResponse cartDetailResponse) {
+    public void addCartDetailResponse(CartItemDetailResponse cartItemDetailResponse) {
         if(products == null) products = new ArrayList<>();
-        products.add(cartDetailResponse);
+        products.add(cartItemDetailResponse);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CartDetailResponse {
+public class CartItemDetailResponse {
     private Integer productId;
     private String name;
     private Boolean status;
