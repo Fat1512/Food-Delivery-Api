@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,5 +28,11 @@ public class Cart {
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private User user;
+
+    public void addCartItem(CartItem cartItem) {
+        if(this.cartItem.isEmpty()) this.cartItem = new ArrayList<>();
+        this.cartItem.add(cartItem);
+        cartItem.setCart(this);
+    }
 
 }

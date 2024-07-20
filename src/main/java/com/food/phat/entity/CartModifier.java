@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 public class CartModifier {
 
-    @JoinColumn(name = "cart_detail_fkey", referencedColumnName = "cart_detail_id")
+    @JoinColumn(name = "cart_item_fkey", referencedColumnName = "")
     @ManyToOne(optional = false)
     @Id
     private CartItem cartItem;

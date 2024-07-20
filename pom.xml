@@ -83,7 +83,11 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
         </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>io.github.tdilber</groupId>-->
+<!--            <artifactId>spring-jpa-dynamic-query</artifactId>-->
+<!--            <version>0.3.1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

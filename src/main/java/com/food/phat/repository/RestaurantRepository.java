@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface RestaurantRepo extends JpaRepository<Restaurant, Integer> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
     @Query(value = """
         select distinct res.*
             from user u, cart c, cart_detail cd, product p, restaurant res

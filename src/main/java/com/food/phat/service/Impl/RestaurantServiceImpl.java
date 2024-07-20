@@ -2,7 +2,7 @@ package com.food.phat.service.Impl;
 
 
 import com.food.phat.entity.Restaurant;
-import com.food.phat.repository.RestaurantRepo;
+import com.food.phat.repository.RestaurantRepository;
 import com.food.phat.service.RestaurantService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
-    private RestaurantRepo restaurantRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
-    public RestaurantServiceImpl(RestaurantRepo restaurantRepository) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
 

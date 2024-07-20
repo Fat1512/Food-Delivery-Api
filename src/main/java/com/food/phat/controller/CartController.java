@@ -1,7 +1,7 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.request.CartDetailRequest;
+import com.food.phat.dto.request.CartRequest;
 import com.food.phat.dto.response.CartResponse;
 import com.food.phat.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,14 @@ public class CartController {
     }
 
     @PatchMapping("/cart")
-    public ResponseEntity<String> updateCart(@RequestBody CartDetailRequest cartDetailRequest) {
-        cartService.updateCartItem(cartDetailRequest);
+    public ResponseEntity<String> updateCart(@RequestBody CartRequest cartRequest) {
+        cartService.updateCartItem(cartRequest);
+        return null;
+    }
+
+    @PostMapping("/cart")
+    public ResponseEntity<String> saveCart(@RequestBody CartRequest cartRequest) {
+        cartService.saveCartItem(cartRequest);
         return null;
     }
 }

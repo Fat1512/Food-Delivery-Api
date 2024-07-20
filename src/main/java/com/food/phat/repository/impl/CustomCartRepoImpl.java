@@ -69,7 +69,7 @@
 //                    select m.title, mo.title, mo.price from cart_detail cd, modifier m, modifier_option mo, cart_modifier cm
 //                    where
 //                    cd.product_fkey = ?1 and
-//                    cd.cart_detail_id = cm.cart_detail_fkey and
+//                    cd. = cm.cart_detail_fkey and
 //                    cm.modifier_option_fkey = mo.modifier_option_id and
 //                    mo.modifier_fkey = m.modifier_id
 //                """).setParameter(1, prod[0]).getResultList();
