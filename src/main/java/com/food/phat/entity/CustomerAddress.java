@@ -2,9 +2,13 @@ package com.food.phat.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Table(name="customer_address")
 @Entity
+@Getter
+@Setter
 public class CustomerAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

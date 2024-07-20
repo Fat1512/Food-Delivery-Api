@@ -1,10 +1,10 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.request.CartItemRequest;
-import com.food.phat.dto.request.CartRequest;
-import com.food.phat.dto.response.CartItemDetailResponse;
-import com.food.phat.dto.response.CartItemResponse;
-import com.food.phat.dto.response.CartResponse;
+import com.food.phat.dto.request.cart.CartItemRequest;
+import com.food.phat.dto.request.cart.CartRequest;
+import com.food.phat.dto.response.cart.CartItemResponse;
+import com.food.phat.dto.response.cart.CartDetailResponse;
+import com.food.phat.dto.response.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import com.food.phat.entity.Product;
@@ -44,26 +44,23 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartResponse getCart(Integer cartId) {
-        Cart cart = cartRepository.findById(cartId).get();
+    public CartResponse getCart(Integer userId) {
+        Cart cart = cartRepository.findByUser_UserId(userId);
 
-        Map<Restaurant, List<CartItem>> formatCartMap = new HashMap<>();
-        cart.getCartItem().forEach(cartItem -> {
-            formatCartMap.computeIfAbsent(cartItem.getProduct().getRestaurant(), k -> new ArrayList<>());
-            formatCartMap.get(cartItem.getProduct().getRestaurant()).add(cartItem);
-        });
+        return mapToCartResponse(cart);
+    }
 
-        CartResponse cartResponse = new CartResponse();
-        cartResponse.setCartId(cart.getCartId());
-        formatCartMap.forEach((res, cartItem) -> {
-            CartItemResponse cartItemResponse = new CartItemResponse();
-            cartItemResponse.setRestaurantId(res.getRestaurantId());
-            cartItemResponse.setRestaurantName(res.getName());
-            cartItem.forEach(cartItemz -> cartItemResponse.addCartDetailResponse(getCartDetailResponse(cartItemz)));
-            cartResponse.addCartItem(cartItemResponse);
-        });
 
-        return cartResponse;
+    @Override
+    @Transactional
+    public void updateCartItem(CartRequest cartRequest) {
+        cartItemRepository.save(mapToCartItem(cartRequest));
+    }
+
+    @Override
+    @Transactional
+    public void saveCartItem(CartRequest cartRequest) {
+        cartItemRepository.save(mapToCartItem(cartRequest));
     }
 
     @Override
@@ -72,39 +69,47 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteAllById(cartDetailId::listIterator);
     }
 
-    @Override
-    @Transactional
-    public void updateCartItem(CartRequest cartRequest) {
+    private CartItem mapToCartItem(CartRequest cartRequest) {
         CartItemRequest cartItemRequest = cartRequest.getCartItemRequest();
+
         CartItem cartItem = cartItemRepository.findById(cartItemRequest.getCartItemId()).orElse(new CartItem());
-
         cartItem.setQty(cartItemRequest.getQty());
         cartItem.setNote(cartItemRequest.getNote());
         cartItem.setModifierOptions(cartItemRequest
                 .getModifierOptionsId().stream()
                 .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
-        cartItemRepository.save(cartItem);
+
+        if(cartItem.getCartItemId() == null) {
+            cartItem.setProduct(productRepository.findById(cartItemRequest.getProductId()).get());
+            Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
+            cart.addCartItem(cartItem);
+        }
+
+        return cartItem;
     }
 
-    @Override
-    @Transactional
-    public void saveCartItem(CartRequest cartRequest) {
+    private CartResponse mapToCartResponse(Cart cart) {
+        CartResponse cartResponse = new CartResponse();
+        cartResponse.setCartId(cart.getCartId());
 
-        CartItem cartItem = new CartItem();
-        CartItemRequest cartItemRequest = new CartItemRequest();
-        Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
+        Map<Restaurant, List<CartItem>> formatCartMap = new HashMap<>();
+        cart.getCartItem().forEach(cartItem -> {
+            formatCartMap.computeIfAbsent(cartItem.getProduct().getRestaurant(), k -> new ArrayList<>());
+            formatCartMap.get(cartItem.getProduct().getRestaurant()).add(cartItem);
+        });
 
-        cartItem.setQty(cartItemRequest.getQty());
-        cartItem.setNote(cartItemRequest.getNote());
-        cartItem.setModifierOptions(cartItemRequest
-                .getModifierOptionsId().stream()
-                .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
-        cartItem.setProduct(productRepository.findById(cartItemRequest.getProductId()).get());
-        cart.addCartItem(cartItem);
-        cartItemRepository.save(cartItem);
+        formatCartMap.forEach((res, cartItem) -> {
+            CartDetailResponse cartDetailResponse = new CartDetailResponse();
+            cartDetailResponse.getRestaurantInfo().put("restaurantId", res.getRestaurantId());
+            cartDetailResponse.getRestaurantInfo().put("restaurantName", res.getName());
+            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(getCartItemResponse(cartItemz)));
+
+            cartResponse.addCartItem(cartDetailResponse);
+        });
+        return cartResponse;
     }
 
-    private static CartItemDetailResponse getCartDetailResponse(CartItem cartItem) {
+    private static CartItemResponse getCartItemResponse(CartItem cartItem) {
         Product prodEntity = cartItem.getProduct();
 
         List<Object[]> modifierObject = new ArrayList<>();
@@ -115,7 +120,7 @@ public class CartServiceImpl implements CartService {
             modifierObject.add(objectList.toArray());
         });
 
-        CartItemDetailResponse cartItemDetailResponse = new CartItemDetailResponse(
+        CartItemResponse cartItemResponse = new CartItemResponse(
                 prodEntity.getProductId(),
                 prodEntity.getName(),
                 prodEntity.getStatus(),
@@ -126,7 +131,7 @@ public class CartServiceImpl implements CartService {
                 prodEntity.getThumbnail(),
                 modifierObject,
                 prodEntity.getCategory());
-        return cartItemDetailResponse;
+        return cartItemResponse;
     }
 
 //    @Override
@@ -137,13 +142,13 @@ public class CartServiceImpl implements CartService {
 //        CartResponse cartResponse = new CartResponse();
 //
 //        restaurantList.forEach(res -> {
-//            CartItemResponse cartItemResponse = new CartItemResponse();
+//            CartDetailResponse cartItemResponse = new CartDetailResponse();
 //            cartItemResponse.setRestaurantId(res.getRestaurantId());
 //            cartItemResponse.setRestaurantName(res.getName());
 //
 //            cart.getCartItem().forEach(cartDetail -> {
 //                if(Objects.equals(cartDetail.getProduct().getRestaurant().getRestaurantId(), res.getRestaurantId())) {
-//                    CartItemDetailResponse cartDetailResponse = getCartDetailResponse(cartDetail);
+//                    CartItemResponse cartDetailResponse = getCartDetailResponse(cartDetail);
 //                    cartItemResponse.addCartDetailResponse(cartDetailResponse);
 //                }
 //            });

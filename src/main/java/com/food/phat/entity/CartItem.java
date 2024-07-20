@@ -21,7 +21,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="cart_item_id")
-    private Integer cartDetailId;
+    private Integer cartItemId;
 
     @Column(name="qty")
     private int qty;
@@ -40,7 +40,7 @@ public class CartItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="cart_fkey")
     private Cart cart;
 

@@ -1,7 +1,7 @@
 //package com.food.phat.repository.impl;
 //
-//import com.food.phat.dto.response.CartItemResponse;
-//import com.food.phat.dto.response.CartResponse;
+//import com.food.phat.dto.response.cart.CartDetailResponse;
+//import com.food.phat.dto.response.cart.CartResponse;
 //import com.food.phat.dto.response.ProductResponse;
 //import com.food.phat.repository.custom.CustomCartRepo;
 //import jakarta.persistence.EntityManager;
@@ -45,7 +45,7 @@
 //
 //
 //        restaurantIdList.forEach(id -> {
-//            CartItemResponse cartItemResponse = new CartItemResponse();
+//            CartDetailResponse cartItemResponse = new CartDetailResponse();
 //            cartItemResponse.setRestaurantId((Integer) id[0]);
 //            cartItemResponse.setRestaurantName((String) id[1]);
 //            //Get product

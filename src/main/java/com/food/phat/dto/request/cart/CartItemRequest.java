@@ -1,4 +1,4 @@
-package com.food.phat.dto.request;
+package com.food.phat.dto.request.cart;
 
 
 import lombok.Data;
@@ -16,5 +16,4 @@ public class CartItemRequest {
     private List<Integer> modifierOptionsId;
     private int qty;
     private String note;
-    private int cartId;
 }

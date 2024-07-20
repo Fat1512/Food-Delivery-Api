@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface CartRepository extends JpaRepository<Cart, Integer>, JpaSpecificationExecutor<Cart> {
-    Cart getCartByUser_UserId(Integer userId);
+//    @Query(value = "Select cart.* from cart where cart.user_fkey = ?1 ", nativeQuery = true)
+//    Cart findByUserId(Integer userId);
+    Cart findByUser_UserId(Integer userId);
 }

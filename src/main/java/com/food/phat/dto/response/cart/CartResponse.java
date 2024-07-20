@@ -1,4 +1,4 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto.response.cart;
 
 import lombok.Data;
 import lombok.Getter;
@@ -12,10 +12,10 @@ import java.util.List;
 @Getter
 public class CartResponse {
     int cartId;
-    List<CartItemResponse> list;
+    List<CartDetailResponse> list;
 
-    public void addCartItem(CartItemResponse cartItemResponse) {
+    public void addCartItem(CartDetailResponse cartDetailResponse) {
         if(list == null) list = new ArrayList<>();
-        list.add(cartItemResponse);
+        list.add(cartDetailResponse);
     }
 }

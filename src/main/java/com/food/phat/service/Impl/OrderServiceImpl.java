@@ -1,11 +1,13 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.request.OrderRequest;
-import com.food.phat.entity.Order;
-import com.food.phat.entity.OrderItem;
-import com.food.phat.entity.OrderStatus;
+import com.food.phat.dto.CustomerAddressDTO;
+import com.food.phat.dto.request.order.OrderRequest;
+import com.food.phat.dto.response.cart.CartItemResponse;
+import com.food.phat.dto.response.order.OrderResponse;
+import com.food.phat.entity.*;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,6 +36,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
+    public List<OrderResponse> getOrders(Integer userId) {
+        List<Order> orderList = orderRepository.findByCustomerAddress_User_UserId(userId);
+        List<OrderResponse> orderResponseList = new ArrayList<>();
+        orderList.forEach(order -> {
+            OrderResponse orderResponse = new OrderResponse();
+            orderResponse.setOrderId(order.getOrderId());
+            orderResponse.setShippingFee(order.getShippingFee());
+            orderResponse.setStatus(order.getOrderStatus());
+            CustomerAddressDTO customerAddressDTO = new CustomerAddressDTO();
+            customerAddressDTO.setAddress(order.getCustomerAddress().getAddress());
+            customerAddressDTO.setCountry(order.getCustomerAddress().getCountry());
+            customerAddressDTO.setCity(order.getCustomerAddress().getCity());
+            customerAddressDTO.setPhone(order.getCustomerAddress().getPhone());
+            orderResponse.setCustomerAddress(customerAddressDTO);
+            orderResponse.getRestaurantInfo().put("restaurantId", order.getRestaurant().getRestaurantId());
+            orderResponse.getRestaurantInfo().put("restaurantName", order.getRestaurant().getName());
+            order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(getCartItemResponse(orderItem)));
+            orderResponseList.add(orderResponse);
+        });
+        return orderResponseList;
+    }
+
+    @Override
     public void placeOrder(List<OrderRequest> orderRequests) {
         orderRequests.forEach(orderRequest -> {
             Order order = new Order();
@@ -57,8 +83,40 @@ public class OrderServiceImpl implements OrderService {
         });
     }
 
+
     @Override
-    public void deleteOrder(Integer orderId) {
-        orderRepository.deleteById(orderId);
+    public void modifyOrderStatus(Integer orderId, String status) {
+        Order order = orderRepository.findById(orderId).get();
+        order.setOrderStatus(OrderStatus.valueOf(status));
+    }
+
+    private OrderResponse mapToOrderResponse() {
+        return null;
+    }
+
+
+    private static CartItemResponse getCartItemResponse(OrderItem orderItem) {
+        Product prodEntity = orderItem.getProduct();
+
+        List<Object[]> modifierObject = new ArrayList<>();
+        orderItem.getModifierOptions().forEach(option -> {
+            List<Object> objectList = new ArrayList<>();
+            objectList.add(option.getModifier().getTitle());
+            objectList.add(option);
+            modifierObject.add(objectList.toArray());
+        });
+
+        CartItemResponse cartItemResponse = new CartItemResponse(
+                prodEntity.getProductId(),
+                prodEntity.getName(),
+                prodEntity.getStatus(),
+                prodEntity.getDescription(),
+                prodEntity.getPrice(),
+                orderItem.getQty(),
+                orderItem.getNote(),
+                prodEntity.getThumbnail(),
+                modifierObject,
+                prodEntity.getCategory());
+        return cartItemResponse;
     }
 }

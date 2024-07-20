@@ -1,14 +1,16 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.request.CartRequest;
-import com.food.phat.dto.response.CartResponse;
+import com.food.phat.dto.request.cart.CartRequest;
+import com.food.phat.dto.response.cart.CartResponse;
 import com.food.phat.service.CartService;
+import com.food.phat.service.Impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -16,14 +18,17 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class CartController {
     CartService cartService;
+    UserService userService;
     @Autowired
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, UserService userService) {
         this.cartService = cartService;
+        this.userService = userService;
     }
 
-    @GetMapping("/cart/{cartId}")
-    public ResponseEntity<CartResponse> getCart(@PathVariable(name="cartId") Integer cartId) {
-        return new ResponseEntity<>(cartService.getCart(cartId), HttpStatus.OK);
+    @GetMapping("/cart")
+    public ResponseEntity<CartResponse> getCart(Principal principal) {
+        return new ResponseEntity<>(cartService.getCart(userService.getUserByUsername(principal.getName()).getUserId()),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("/cart")

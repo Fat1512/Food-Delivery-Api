@@ -1,17 +1,16 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto.response.cart;
 
 import com.food.phat.entity.Category;
 import lombok.*;
 
 import java.util.List;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CartItemDetailResponse {
+public class CartItemResponse {
     private Integer productId;
     private String name;
     private Boolean status;

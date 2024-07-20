@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Table(name="order")
+@Table(name="order_tb")
 @Entity
 @Setter
 @Getter
@@ -39,7 +39,6 @@ public class Order {
 
     @OneToMany(
             mappedBy = "order",
-            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<OrderItem> orderItem;
 
@@ -47,4 +46,5 @@ public class Order {
         if(this.orderItem.isEmpty()) this.orderItem = new ArrayList<>();
         this.orderItem.add(orderItem);
         orderItem.setOrder(this);
-    }}
+    }
+}
