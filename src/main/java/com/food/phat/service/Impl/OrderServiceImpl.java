@@ -1,6 +1,7 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.dto.CustomerAddressDTO;
+import com.food.phat.dto.request.order.OrderItemRequest;
 import com.food.phat.dto.request.order.OrderRequest;
 import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.dto.response.order.OrderResponse;
@@ -41,19 +42,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orderList = orderRepository.findByCustomerAddress_User_UserId(userId);
         List<OrderResponse> orderResponseList = new ArrayList<>();
         orderList.forEach(order -> {
-            OrderResponse orderResponse = new OrderResponse();
-            orderResponse.setOrderId(order.getOrderId());
-            orderResponse.setShippingFee(order.getShippingFee());
-            orderResponse.setStatus(order.getOrderStatus());
-            CustomerAddressDTO customerAddressDTO = new CustomerAddressDTO();
-            customerAddressDTO.setAddress(order.getCustomerAddress().getAddress());
-            customerAddressDTO.setCountry(order.getCustomerAddress().getCountry());
-            customerAddressDTO.setCity(order.getCustomerAddress().getCity());
-            customerAddressDTO.setPhone(order.getCustomerAddress().getPhone());
-            orderResponse.setCustomerAddress(customerAddressDTO);
-            orderResponse.getRestaurantInfo().put("restaurantId", order.getRestaurant().getRestaurantId());
-            orderResponse.getRestaurantInfo().put("restaurantName", order.getRestaurant().getName());
-            order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(getCartItemResponse(orderItem)));
+            OrderResponse orderResponse = mapOrderToOrderResponse(order);
             orderResponseList.add(orderResponse);
         });
         return orderResponseList;
@@ -62,23 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void placeOrder(List<OrderRequest> orderRequests) {
         orderRequests.forEach(orderRequest -> {
-            Order order = new Order();
-            order.setOrderStatus(OrderStatus.PENDING);
-            orderRequest.getOrderItems().forEach(orderItemRequest -> {
-                OrderItem orderItem = new OrderItem();
-                orderItem.setQty(orderItemRequest.getQty());
-                orderItem.setPrice(orderItemRequest.getPrice());
-                orderItem.setNote(orderItemRequest.getNote());
-                orderItem.setNote(orderItemRequest.getNote());
-                orderItem.setProduct(productRepository.findById(orderItemRequest.getProductId()).get());
-                orderItem.setModifierOptions(orderItemRequest
-                        .getModifierOptionsId().stream()
-                        .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
-                order.addOrderItem(orderItem);
-            });
-
-            order.setRestaurant(restaurantRepository.findById(orderRequest.getRestaurantId()).get());
-            order.setCustomerAddress(customerAddressRepository.findById(orderRequest.getCustomerAddressId()).get());
+            Order order = mapOrderRequestToOrder(orderRequest);
             orderRepository.save(order);
         });
     }
@@ -90,12 +63,51 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(OrderStatus.valueOf(status));
     }
 
-    private OrderResponse mapToOrderResponse() {
-        return null;
+
+    private Order mapOrderRequestToOrder(OrderRequest orderRequest) {
+        Order order = new Order();
+        order.setOrderStatus(OrderStatus.PENDING);
+        orderRequest.getOrderItems().forEach(orderItemRequest -> {
+            OrderItem orderItem = mapOrderItemRequestToOrderItem(orderItemRequest);
+            order.addOrderItem(orderItem);
+        });
+
+        order.setRestaurant(restaurantRepository.findById(orderRequest.getRestaurantId()).get());
+        order.setCustomerAddress(customerAddressRepository.findById(orderRequest.getCustomerAddressId()).get());
+        return order;
     }
 
+    private OrderItem mapOrderItemRequestToOrderItem(OrderItemRequest orderItemRequest) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setQty(orderItemRequest.getQty());
+        orderItem.setPrice(orderItemRequest.getPrice());
+        orderItem.setNote(orderItemRequest.getNote());
+        orderItem.setNote(orderItemRequest.getNote());
+        orderItem.setProduct(productRepository.findById(orderItemRequest.getProductId()).get());
+        orderItem.setModifierOptions(orderItemRequest
+                .getModifierOptionsId().stream()
+                .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
+        return orderItem;
+    }
 
-    private static CartItemResponse getCartItemResponse(OrderItem orderItem) {
+    private OrderResponse mapOrderToOrderResponse(Order order) {
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setOrderId(order.getOrderId());
+        orderResponse.setShippingFee(order.getShippingFee());
+        orderResponse.setStatus(order.getOrderStatus());
+        CustomerAddressDTO customerAddressDTO = new CustomerAddressDTO();
+        customerAddressDTO.setAddress(order.getCustomerAddress().getAddress());
+        customerAddressDTO.setCountry(order.getCustomerAddress().getCountry());
+        customerAddressDTO.setCity(order.getCustomerAddress().getCity());
+        customerAddressDTO.setPhone(order.getCustomerAddress().getPhone());
+        orderResponse.setCustomerAddress(customerAddressDTO);
+        orderResponse.getRestaurantInfo().put("restaurantId", order.getRestaurant().getRestaurantId());
+        orderResponse.getRestaurantInfo().put("restaurantName", order.getRestaurant().getName());
+        order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(mapCartItemToCartItemResponse(orderItem)));
+        return orderResponse;
+    }
+
+    private static CartItemResponse mapCartItemToCartItemResponse(OrderItem orderItem) {
         Product prodEntity = orderItem.getProduct();
 
         List<Object[]> modifierObject = new ArrayList<>();
@@ -120,3 +132,120 @@ public class OrderServiceImpl implements OrderService {
         return cartItemResponse;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ *
+ *
+ * skuList = skurepo.findByProductId(prodId)
+ *  Map<int, boolean> queryOptionValue; co thi gan = true
+ *  Sku skutemp = null;
+ *
+ * skuList.forEach(sku -> {
+ *
+ *      List optionValue = sku.getOptionValue();
+ *      int cnt = 0;
+ *      optionValue.forEach(optionval -> {
+ *          if(queryOptionValue[optionval.getId()] == true) cnt++;
+ *      }
+ *      if(cnt == queryOptionValue.size()) {
+ *          skutemp = sku; break;
+ *      }
+ *      cnt = 0;
+ * })
+ *
+ *
+ *
+ *{
+ *     optionValueId: [1, 2, 3, 4]
+ *
+ *}
+ *
+ *
+ *
+ * Ao levent
+ *  const skuList = {
+ *      "1": [1, 2],
+ *       "2": [5, 2],
+ *       "3": [1, 6],
+ *       "4": [5, 6],
+ *  }
+ *
+ *
+ *
+ *  Mau sac : 1: do , 5: vang
+ *  Size    : 2: lon , 6: nho
+ *
+ *  state: color: 1, size: 2
+ *
+ * skulist.forEach(sku -> {
+ *
+ *
+ *
+ * })
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

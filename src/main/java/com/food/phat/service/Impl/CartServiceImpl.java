@@ -46,21 +46,19 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartResponse getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-
-        return mapToCartResponse(cart);
+        return mapCartToCartResponse(cart);
     }
-
 
     @Override
     @Transactional
     public void updateCartItem(CartRequest cartRequest) {
-        cartItemRepository.save(mapToCartItem(cartRequest));
+        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
     }
 
     @Override
     @Transactional
     public void saveCartItem(CartRequest cartRequest) {
-        cartItemRepository.save(mapToCartItem(cartRequest));
+        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
     }
 
     @Override
@@ -69,7 +67,7 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteAllById(cartDetailId::listIterator);
     }
 
-    private CartItem mapToCartItem(CartRequest cartRequest) {
+    private CartItem mapCartItemRequestToCartItem(CartRequest cartRequest) {
         CartItemRequest cartItemRequest = cartRequest.getCartItemRequest();
 
         CartItem cartItem = cartItemRepository.findById(cartItemRequest.getCartItemId()).orElse(new CartItem());
@@ -88,7 +86,7 @@ public class CartServiceImpl implements CartService {
         return cartItem;
     }
 
-    private CartResponse mapToCartResponse(Cart cart) {
+    private CartResponse mapCartToCartResponse(Cart cart) {
         CartResponse cartResponse = new CartResponse();
         cartResponse.setCartId(cart.getCartId());
 
@@ -102,14 +100,14 @@ public class CartServiceImpl implements CartService {
             CartDetailResponse cartDetailResponse = new CartDetailResponse();
             cartDetailResponse.getRestaurantInfo().put("restaurantId", res.getRestaurantId());
             cartDetailResponse.getRestaurantInfo().put("restaurantName", res.getName());
-            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(getCartItemResponse(cartItemz)));
+            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(mapCartItemToCartItemResponse(cartItemz)));
 
             cartResponse.addCartItem(cartDetailResponse);
         });
         return cartResponse;
     }
 
-    private static CartItemResponse getCartItemResponse(CartItem cartItem) {
+    private static CartItemResponse mapCartItemToCartItemResponse(CartItem cartItem) {
         Product prodEntity = cartItem.getProduct();
 
         List<Object[]> modifierObject = new ArrayList<>();
@@ -158,6 +156,15 @@ public class CartServiceImpl implements CartService {
 //        return cartResponse;
 //    }
 }
+
+
+
+
+
+
+
+
+
 
 
 
