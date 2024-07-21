@@ -26,9 +26,6 @@ public class CartItem {
     @Column(name="qty")
     private int qty;
 
-    @Column(name="price")
-    private float price;
-
     @Column(name="note")
     private String note;
 
@@ -40,7 +37,7 @@ public class CartItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="cart_fkey")
     private Cart cart;
 

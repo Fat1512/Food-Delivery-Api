@@ -40,7 +40,7 @@ public class Product {
     private String thumbnail;
 
     @JoinColumn(name="category_fkey")
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
     private Category category;
 
     @ManyToMany

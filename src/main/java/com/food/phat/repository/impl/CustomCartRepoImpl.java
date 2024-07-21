@@ -2,7 +2,7 @@
 //
 //import com.food.phat.dto.response.cart.CartDetailResponse;
 //import com.food.phat.dto.response.cart.CartResponse;
-//import com.food.phat.dto.response.ProductResponse;
+//import com.food.phat.dto.response.product.ProductResponse;
 //import com.food.phat.repository.custom.CustomCartRepo;
 //import jakarta.persistence.EntityManager;
 //import jakarta.persistence.PersistenceContext;

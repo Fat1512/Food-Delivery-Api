@@ -1,5 +1,6 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.request.product.ProductRequest;
 import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.service.ProductService;
@@ -46,9 +47,8 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product responseProduct = productService.save(product);
-
+    public ResponseEntity<Product> saveOrUpdateProduct(@RequestBody ProductRequest product) {
+        Product responseProduct = productService.saveOrUpdate(product);
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 }

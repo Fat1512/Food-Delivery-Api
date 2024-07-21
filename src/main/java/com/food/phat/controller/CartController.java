@@ -37,15 +37,9 @@ public class CartController {
         return null;
     }
 
-    @PatchMapping("/cart")
-    public ResponseEntity<String> updateCart(@RequestBody CartRequest cartRequest) {
-        cartService.updateCartItem(cartRequest);
-        return null;
-    }
-
     @PostMapping("/cart")
-    public ResponseEntity<String> saveCart(@RequestBody CartRequest cartRequest) {
-        cartService.saveCartItem(cartRequest);
+    public ResponseEntity<String> saveOrUpdateCart(@RequestBody CartRequest cartRequest) {
+        cartService.saveOrUpdateCartItem(cartRequest);
         return null;
     }
 }

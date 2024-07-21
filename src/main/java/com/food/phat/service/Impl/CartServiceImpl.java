@@ -1,9 +1,8 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.request.cart.CartItemRequest;
 import com.food.phat.dto.request.cart.CartRequest;
-import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.dto.response.cart.CartDetailResponse;
+import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.dto.response.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
@@ -51,13 +50,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void updateCartItem(CartRequest cartRequest) {
-        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
-    }
-
-    @Override
-    @Transactional
-    public void saveCartItem(CartRequest cartRequest) {
+    public void saveOrUpdateCartItem(CartRequest cartRequest) {
         cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
     }
 
@@ -68,19 +61,19 @@ public class CartServiceImpl implements CartService {
     }
 
     private CartItem mapCartItemRequestToCartItem(CartRequest cartRequest) {
-        CartItemRequest cartItemRequest = cartRequest.getCartItemRequest();
+        Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
 
-        CartItem cartItem = cartItemRepository.findById(cartItemRequest.getCartItemId()).orElse(new CartItem());
-        cartItem.setQty(cartItemRequest.getQty());
-        cartItem.setNote(cartItemRequest.getNote());
-        cartItem.setModifierOptions(cartItemRequest
+        CartItem cartItem = cartItemRepository.findById(cartRequest.getCartItemId()).orElse(new CartItem());
+        cartItem.setQty(cartRequest.getQty());
+        cartItem.setNote(cartRequest.getNote());
+        cartItem.setModifierOptions(cartRequest
                 .getModifierOptionsId().stream()
                 .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
+        cartItem.setCartItemId(cartRequest.getCartItemId());
+        cartItem.setCart(cart);
 
         if(cartItem.getCartItemId() == null) {
-            cartItem.setProduct(productRepository.findById(cartItemRequest.getProductId()).get());
-            Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
-            cart.addCartItem(cartItem);
+            cartItem.setProduct(productRepository.findById(cartRequest.getProductId()).get());
         }
 
         return cartItem;
@@ -111,6 +104,7 @@ public class CartServiceImpl implements CartService {
         Product prodEntity = cartItem.getProduct();
 
         List<Object[]> modifierObject = new ArrayList<>();
+
         cartItem.getModifierOptions().forEach(option -> {
             List<Object> objectList = new ArrayList<>();
             objectList.add(option.getModifier().getTitle());
