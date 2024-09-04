@@ -41,6 +41,11 @@ public class Restaurant {
     @JsonIgnore
     private User user;
 
+    @OneToOne(mappedBy = "restaurant")
+    @JsonIgnore
+    private Menu menu;
+
+
     @Override
     public int hashCode() {
         return this.restaurantId;

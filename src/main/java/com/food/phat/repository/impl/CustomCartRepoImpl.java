@@ -2,7 +2,7 @@
 //
 //import com.food.phat.dto.response.cart.CartDetailResponse;
 //import com.food.phat.dto.response.cart.CartResponse;
-//import com.food.phat.dto.response.product.ProductResponse;
+//import com.food.phat.dto.response.ProductDTO;
 //import com.food.phat.repository.custom.CustomCartRepo;
 //import jakarta.persistence.EntityManager;
 //import jakarta.persistence.PersistenceContext;
@@ -64,7 +64,7 @@
 //                cd.product_fkey = p.product_id
 //            """).setParameter(1, (Integer) id[0]).setParameter(2, cartID).getResultList();
 //
-//            List<ProductResponse> productResponseList  = productList.stream().map(prod -> {
+//            List<ProductDTO> productResponseList  = productList.stream().map(prod -> {
 //                List<Object[]> productModifier = em.createNativeQuery("""
 //                    select m.title, mo.title, mo.price from cart_detail cd, modifier m, modifier_option mo, cart_modifier cm
 //                    where
@@ -74,14 +74,14 @@
 //                    mo.modifier_fkey = m.modifier_id
 //                """).setParameter(1, prod[0]).getResultList();
 //
-//                ProductResponse prodRes = new ProductResponse();
+//                ProductDTO prodRes = new ProductDTO();
 //                prodRes.setProductId((Integer) prod[0]);
 //                prodRes.setName((String) prod[1]);
 //                prodRes.setDescription((String) prod[2]);
 //                prodRes.setStatus((Boolean) prod[3]);
 //                prodRes.setThumbnail((String) prod[4]);
 //                prodRes.setPrice((Float) prod[5]);
-//                prodRes.setModifiers(productModifier);
+//                prodRes.setModifierGroups(productModifier);
 //                return prodRes;
 //            }).collect(Collectors.toList());
 //

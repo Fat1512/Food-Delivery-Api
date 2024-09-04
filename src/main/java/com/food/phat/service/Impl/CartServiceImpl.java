@@ -1,13 +1,9 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.dto.request.cart.CartRequest;
-import com.food.phat.dto.response.cart.CartDetailResponse;
-import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.dto.response.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
-import com.food.phat.entity.Product;
-import com.food.phat.entity.Restaurant;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
 import com.food.phat.repository.ModifierOptionRepository;
@@ -18,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +39,8 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartResponse getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-        return mapCartToCartResponse(cart);
+//        return mapCartToCartResponse(cart);
+        return null;
     }
 
     @Override
@@ -66,7 +61,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemRepository.findById(cartRequest.getCartItemId()).orElse(new CartItem());
         cartItem.setQty(cartRequest.getQty());
         cartItem.setNote(cartRequest.getNote());
-        cartItem.setModifierOptions(cartRequest
+        cartItem.setModifiers(cartRequest
                 .getModifierOptionsId().stream()
                 .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
         cartItem.setCartItemId(cartRequest.getCartItemId());
@@ -78,53 +73,53 @@ public class CartServiceImpl implements CartService {
 
         return cartItem;
     }
-
-    private CartResponse mapCartToCartResponse(Cart cart) {
-        CartResponse cartResponse = new CartResponse();
-        cartResponse.setCartId(cart.getCartId());
-
-        Map<Restaurant, List<CartItem>> formatCartMap = new HashMap<>();
-        cart.getCartItem().forEach(cartItem -> {
-            formatCartMap.computeIfAbsent(cartItem.getProduct().getRestaurant(), k -> new ArrayList<>());
-            formatCartMap.get(cartItem.getProduct().getRestaurant()).add(cartItem);
-        });
-
-        formatCartMap.forEach((res, cartItem) -> {
-            CartDetailResponse cartDetailResponse = new CartDetailResponse();
-            cartDetailResponse.getRestaurantInfo().put("restaurantId", res.getRestaurantId());
-            cartDetailResponse.getRestaurantInfo().put("restaurantName", res.getName());
-            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(mapCartItemToCartItemResponse(cartItemz)));
-
-            cartResponse.addCartItem(cartDetailResponse);
-        });
-        return cartResponse;
-    }
-
-    private static CartItemResponse mapCartItemToCartItemResponse(CartItem cartItem) {
-        Product prodEntity = cartItem.getProduct();
-
-        List<Object[]> modifierObject = new ArrayList<>();
-
-        cartItem.getModifierOptions().forEach(option -> {
-            List<Object> objectList = new ArrayList<>();
-            objectList.add(option.getModifier().getTitle());
-            objectList.add(option);
-            modifierObject.add(objectList.toArray());
-        });
-
-        CartItemResponse cartItemResponse = new CartItemResponse(
-                prodEntity.getProductId(),
-                prodEntity.getName(),
-                prodEntity.getStatus(),
-                prodEntity.getDescription(),
-                prodEntity.getPrice(),
-                cartItem.getQty(),
-                cartItem.getNote(),
-                prodEntity.getThumbnail(),
-                modifierObject,
-                prodEntity.getCategory());
-        return cartItemResponse;
-    }
+//
+//    private CartResponse mapCartToCartResponse(Cart cart) {
+//        CartResponse cartResponse = new CartResponse();
+//        cartResponse.setCartId(cart.getCartId());
+//
+//        Map<Restaurant, List<CartItem>> formatCartMap = new HashMap<>();
+//        cart.getCartItem().forEach(cartItem -> {
+//            formatCartMap.computeIfAbsent(cartItem.getProduct().getRestaurant(), k -> new ArrayList<>());
+//            formatCartMap.get(cartItem.getProduct().getRestaurant()).add(cartItem);
+//        });
+//
+//        formatCartMap.forEach((res, cartItem) -> {
+//            CartDetailResponse cartDetailResponse = new CartDetailResponse();
+//            cartDetailResponse.getRestaurantInfo().put("restaurantId", res.getRestaurantId());
+//            cartDetailResponse.getRestaurantInfo().put("restaurantName", res.getName());
+//            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(mapCartItemToCartItemResponse(cartItemz)));
+//
+//            cartResponse.addCartItem(cartDetailResponse);
+//        });
+//        return cartResponse;
+//    }
+//
+//    private static CartItemResponse mapCartItemToCartItemResponse(CartItem cartItem) {
+//        Product prodEntity = cartItem.getProduct();
+//
+//        List<Object[]> modifierObject = new ArrayList<>();
+//
+//        cartItem.getModifiers().forEach(option -> {
+//            List<Object> objectList = new ArrayList<>();
+//            objectList.add(option.getModifierGroup().getTitle());
+//            objectList.add(option);
+//            modifierObject.add(objectList.toArray());
+//        });
+//
+//        CartItemResponse cartItemResponse = new CartItemResponse(
+//                prodEntity.getProductId(),
+//                prodEntity.getName(),
+//                prodEntity.getStatus(),
+//                prodEntity.getDescription(),
+//                prodEntity.getPrice(),
+//                cartItem.getQty(),
+//                cartItem.getNote(),
+//                prodEntity.getThumbnail(),
+//                modifierObject,
+//                prodEntity.getCategory());
+//        return cartItemResponse;
+//    }
 
 //    @Override
 //    @Transactional

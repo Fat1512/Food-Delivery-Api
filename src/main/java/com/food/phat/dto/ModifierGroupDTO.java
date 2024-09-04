@@ -1,11 +1,13 @@
 package com.food.phat.dto;
 
+
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class ModifierDTO {
+public class ModifierGroupDTO {
     private int modifierId;
     private String title;
-    private float price;
-    private boolean status;
+    List<ModifierDTO> modifiers;
 }

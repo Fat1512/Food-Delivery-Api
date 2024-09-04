@@ -1,6 +1,6 @@
 package com.food.phat.dao.impl;
 
-import com.food.phat.entity.Category;
+import com.food.phat.entity.ProductCategory;
 import com.food.phat.dao.CategoryDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -23,32 +23,32 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<ProductCategory> getAllCategories() {
         CriteriaBuilder b = em.getCriteriaBuilder();
-        CriteriaQuery<Category> q = b.createQuery(Category.class);
-        Root r = q.from(Category.class);
+        CriteriaQuery<ProductCategory> q = b.createQuery(ProductCategory.class);
+        Root r = q.from(ProductCategory.class);
         q.select(r);
 
         Query query = em.createQuery(q);
-        List<Category> categoryList = query.getResultList();
-        return categoryList;    }
+        List<ProductCategory> productCategoryList = query.getResultList();
+        return productCategoryList;    }
 
     @Override
-    public Category getCategoryById(int categoryId) {
-        Query q = em.createQuery("FROM Category WHERE productCategoryId = :categoryId");
+    public ProductCategory getCategoryById(int categoryId) {
+        Query q = em.createQuery("FROM ProductCategory WHERE productCategoryId = :categoryId");
         q.setParameter("categoryId", categoryId);
-        return (Category) q.getSingleResult();
+        return (ProductCategory) q.getSingleResult();
     }
 
     @Override
-    public Category getCategoryByName(String name) {
-        Query q = em.createQuery("FROM Category WHERE name = :name");
+    public ProductCategory getCategoryByName(String name) {
+        Query q = em.createQuery("FROM ProductCategory WHERE name = :name");
         q.setParameter("name", name);
-        return (Category) q.getSingleResult();
+        return (ProductCategory) q.getSingleResult();
     }
 
     @Override
-    public Category save(Category category) {
-        return em.merge(category);
+    public ProductCategory save(ProductCategory productCategory) {
+        return em.merge(productCategory);
     }
 }

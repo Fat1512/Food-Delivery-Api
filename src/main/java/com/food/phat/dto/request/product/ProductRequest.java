@@ -17,7 +17,7 @@ public class ProductRequest {
     private String description;
     private float price;
     private String thumbnail;
-    List<Integer> modifierIdList;
+    List<Integer> modifierGroupIdList;
     private int categoryId;
     private int restaurantId;
 }

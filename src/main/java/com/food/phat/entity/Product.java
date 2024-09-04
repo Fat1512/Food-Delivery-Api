@@ -39,18 +39,22 @@ public class Product {
     @Column(name="thumbnail")
     private String thumbnail;
 
-    @JoinColumn(name="category_fkey")
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
-    private Category category;
-
     @ManyToMany
     @JoinTable(
-            name="product_option",
+            name="product_modifier_group",
             joinColumns = @JoinColumn(name="product_fkey"),
-            inverseJoinColumns = @JoinColumn(name="modifier_fkey")
+            inverseJoinColumns = @JoinColumn(name="modifier_group_fkey")
     )
     @Nullable
-    private List<Modifier> modifiers;
+    private List<ModifierGroup> modifierGroups;
+
+    @ManyToOne
+    @JoinColumn(name="product_category_fkey")
+    private ProductCategory productCategory;
+
+    @ManyToOne
+    @JoinColumn(name="menu_category_fkey")
+    private MenuCategory menuCategory;
 
     @ManyToOne
     @JoinColumn(name="restaurant_fkey")

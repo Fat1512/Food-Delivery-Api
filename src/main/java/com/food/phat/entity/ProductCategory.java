@@ -1,6 +1,5 @@
 package com.food.phat.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,29 +7,27 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.List;
-
 @Getter
 @Setter
-@Table(name="category")
+@Table(name="product_category")
 @Entity @DynamicUpdate
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Category {
+public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="category_id")
-    private Integer categoryId;
+    @Column(name="product_category_id")
+    private Integer productCategoryId;
 
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy="category", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Product> products;
+//    @OneToMany(mappedBy="productCategory", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<Product> products;
 
-    public Category() {
+    public ProductCategory() {
 
     }
 }

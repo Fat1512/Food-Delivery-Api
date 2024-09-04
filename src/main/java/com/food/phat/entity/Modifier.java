@@ -6,14 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.List;
-
 @Entity @DynamicUpdate
 @Table(name="modifier")
 @Setter
 @Getter
 public class Modifier {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="modifier_id")
@@ -22,6 +19,14 @@ public class Modifier {
     @Column(name="title")
     private String title;
 
-    @OneToMany(mappedBy = "modifier")
-    private List<ModifierOption> modifierOption;
+    @Column(name="price")
+    private float price;
+
+    @Column(name="status")
+    private boolean status;
+
+//    @ManyToOne
+//    @JoinColumn(name="modifier_group_fkey")
+//    @JsonIgnore
+//    private ModifierGroup modifierGroup;
 }

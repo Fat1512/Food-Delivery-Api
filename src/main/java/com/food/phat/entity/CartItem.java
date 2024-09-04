@@ -26,12 +26,12 @@ public class CartItem {
     @Column(name="qty")
     private int qty;
 
-    @Column(name="note")
-    private String note;
-
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
+
+    @Column(name="note")
+    private String note;
 
     @ManyToOne
     @JoinColumn(name="product_fkey")
@@ -46,7 +46,7 @@ public class CartItem {
             name = "cart_modifier",
             joinColumns = {@JoinColumn(name = "cart_item_fkey")},
             inverseJoinColumns = {@JoinColumn(name = "modifier_option_fkey")})
-    private List<ModifierOption> modifierOptions;
+    private List<Modifier> modifiers;
 }
 
 

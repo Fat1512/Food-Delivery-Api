@@ -1,12 +1,12 @@
 package com.food.phat.dao;
 
-import com.food.phat.entity.Category;
+import com.food.phat.entity.ProductCategory;
 
 import java.util.List;
 
 public interface CategoryDAO {
-    List<Category> getAllCategories();
-    Category getCategoryById(int id);
-    Category getCategoryByName(String name);
-    Category save(Category category);
+    List<ProductCategory> getAllCategories();
+    ProductCategory getCategoryById(int id);
+    ProductCategory getCategoryByName(String name);
+    ProductCategory save(ProductCategory productCategory);
 }

@@ -14,7 +14,7 @@ public class CartRequest {
     private Integer cartId;
     private Integer cartItemId;
     private Integer productId;
-    private List<Integer> modifierOptionsId;
     private int qty;
     private String note;
+    private List<Integer> modifierOptionsId;
 }

@@ -1,6 +1,6 @@
 package com.food.phat.controller;
 
-import com.food.phat.entity.Category;
+import com.food.phat.entity.ProductCategory;
 import com.food.phat.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,14 @@ import java.util.List;
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<ProductCategory>> getAllCategories() {
+        List<ProductCategory> categories = categoryService.getAllCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @PostMapping("/category")
-    public ResponseEntity<Category> createProduct(@RequestBody Category category) {
-        Category responseCategory = categoryService.save(category);
-        return new ResponseEntity<>(responseCategory, HttpStatus.OK);
+    public ResponseEntity<ProductCategory> createProduct(@RequestBody ProductCategory productCategory) {
+        ProductCategory responseProductCategory = categoryService.save(productCategory);
+        return new ResponseEntity<>(responseProductCategory, HttpStatus.OK);
     }
 }

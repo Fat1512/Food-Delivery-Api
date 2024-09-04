@@ -20,5 +20,5 @@ public class CartModifier {
     @JoinColumn(name = "modifier_option_fkey", referencedColumnName = "modifier_option_id")
     @ManyToOne(optional = false)
     @Id
-    private ModifierOption modifierOption;
+    private Modifier modifier;
 }

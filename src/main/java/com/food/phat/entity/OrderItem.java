@@ -40,7 +40,7 @@ public class OrderItem {
             name = "order_modifier",
             joinColumns = {@JoinColumn(name = "order_item_fkey")},
             inverseJoinColumns = {@JoinColumn(name = "modifier_option_fkey")})
-    private List<ModifierOption> modifierOptions;
+    private List<Modifier> modifiers;
 
     @ManyToOne
     @JoinColumn(name="order_fkey")

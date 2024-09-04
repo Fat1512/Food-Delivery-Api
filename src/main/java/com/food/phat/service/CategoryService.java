@@ -1,11 +1,11 @@
 package com.food.phat.service;
 
-import com.food.phat.entity.Category;
+import com.food.phat.entity.ProductCategory;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
-    Category getCategoryById(int id);
-    Category save(Category category);
+    List<ProductCategory> getAllCategories();
+    ProductCategory getCategoryById(int id);
+    ProductCategory save(ProductCategory productCategory);
 }

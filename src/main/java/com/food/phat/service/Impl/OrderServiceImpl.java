@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setNote(orderItemRequest.getNote());
         orderItem.setNote(orderItemRequest.getNote());
         orderItem.setProduct(productRepository.findById(orderItemRequest.getProductId()).get());
-        orderItem.setModifierOptions(orderItemRequest
+        orderItem.setModifiers(orderItemRequest
                 .getModifierOptionsId().stream()
                 .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
         return orderItem;
@@ -111,9 +111,9 @@ public class OrderServiceImpl implements OrderService {
         Product prodEntity = orderItem.getProduct();
 
         List<Object[]> modifierObject = new ArrayList<>();
-        orderItem.getModifierOptions().forEach(option -> {
+        orderItem.getModifiers().forEach(option -> {
             List<Object> objectList = new ArrayList<>();
-            objectList.add(option.getModifier().getTitle());
+            objectList.add(option.getModifierGroup().getTitle());
             objectList.add(option);
             modifierObject.add(objectList.toArray());
         });
