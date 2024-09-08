@@ -104,22 +104,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product saveOrUpdate(ProductRequest productRequest) {
-        Product product = mapProductRequestToProduct(productRequest);
-        return productRepository.save(product);
+//        Product product = mapProductRequestToProduct(productRequest);
+//        return productRepository.save(product);
+        return null;
     }
 
-    private Product mapProductRequestToProduct(ProductRequest productRequest) {
-        Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
-        product.setName(productRequest.getName());
-        product.setStatus(productRequest.getStatus());
-        product.setDescription(productRequest.getDescription());
-        product.setPrice(productRequest.getPrice());
-        product.setThumbnail(productRequest.getThumbnail());
-        productRequest.getModifierIdList().stream()
-                .map(id -> modifierRepository.findById(id).get())
-                .collect(Collectors.toCollection(ArrayList::new));
-        product.setCategory(categoryRepository.findById(productRequest.getCategoryId()).get());
-        product.setRestaurant(restaurantRepository.findById(productRequest.getRestaurantId()).get());
-        return product;
-    }
+//    private Product mapProductRequestToProduct(ProductRequest productRequest) {
+//        Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
+//        product.setName(productRequest.getName());
+//        product.setStatus(productRequest.getStatus());
+//        product.setDescription(productRequest.getDescription());
+//        product.setPrice(productRequest.getPrice());
+//        product.setThumbnail(productRequest.getThumbnail());
+//        productRequest.getModifierIdList().stream()
+//                .map(id -> modifierRepository.findById(id).get())
+//                .collect(Collectors.toCollection(ArrayList::new));
+//        product.setCategory(categoryRepository.findById(productRequest.getCategoryId()).get());
+//        product.setRestaurant(restaurantRepository.findById(productRequest.getRestaurantId()).get());
+//        return product;
+//    }
 }

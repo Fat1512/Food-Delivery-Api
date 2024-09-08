@@ -23,6 +23,6 @@ public class ModifierGroup {
     private String title;
 
     @OneToMany
-    @JoinColumn(name="modifier_group_fkey", referencedColumnName = "modifierGroupId")
+    @JoinColumn(name="modifier_group_fkey", referencedColumnName = "modifier_group_id")
     private List<Modifier> modifier;
 }

@@ -103,34 +103,35 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setCustomerAddress(customerAddressDTO);
         orderResponse.getRestaurantInfo().put("restaurantId", order.getRestaurant().getRestaurantId());
         orderResponse.getRestaurantInfo().put("restaurantName", order.getRestaurant().getName());
-        order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(mapCartItemToCartItemResponse(orderItem)));
-        return orderResponse;
+//        order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(mapCartItemToCartItemResponse(orderItem)));
+//        return orderResponse;
+        return null;
     }
 
-    private static CartItemResponse mapCartItemToCartItemResponse(OrderItem orderItem) {
-        Product prodEntity = orderItem.getProduct();
-
-        List<Object[]> modifierObject = new ArrayList<>();
-        orderItem.getModifiers().forEach(option -> {
-            List<Object> objectList = new ArrayList<>();
-            objectList.add(option.getModifierGroup().getTitle());
-            objectList.add(option);
-            modifierObject.add(objectList.toArray());
-        });
-
-        CartItemResponse cartItemResponse = new CartItemResponse(
-                prodEntity.getProductId(),
-                prodEntity.getName(),
-                prodEntity.getStatus(),
-                prodEntity.getDescription(),
-                prodEntity.getPrice(),
-                orderItem.getQty(),
-                orderItem.getNote(),
-                prodEntity.getThumbnail(),
-                modifierObject,
-                prodEntity.getCategory());
-        return cartItemResponse;
-    }
+//    private static CartItemResponse mapCartItemToCartItemResponse(OrderItem orderItem) {
+//        Product prodEntity = orderItem.getProduct();
+//
+//        List<Object[]> modifierObject = new ArrayList<>();
+//        orderItem.getModifiers().forEach(option -> {
+//            List<Object> objectList = new ArrayList<>();
+//            objectList.add(option.getModifierGroup().getTitle());
+//            objectList.add(option);
+//            modifierObject.add(objectList.toArray());
+//        });
+//
+//        CartItemResponse cartItemResponse = new CartItemResponse(
+//                prodEntity.getProductId(),
+//                prodEntity.getName(),
+//                prodEntity.getStatus(),
+//                prodEntity.getDescription(),
+//                prodEntity.getPrice(),
+//                orderItem.getQty(),
+//                orderItem.getNote(),
+//                prodEntity.getThumbnail(),
+//                modifierObject,
+//                prodEntity.getCategory());
+//        return cartItemResponse;
+//    }
 }
 
 

@@ -18,7 +18,7 @@ public class Menu {
     @Column(name="menu_id")
     private Integer menuId;
 
-    @Column(name="menu")
+    @Column(name="name")
     private String name;
 
     @OneToOne
