@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProductDTO {
+public class ProductReponse {
     private Integer productId;
     private String name;
     private Boolean status;
@@ -18,6 +18,7 @@ public class ProductDTO {
     private String thumbnail;
     private Integer restaurantId;
     List<ModifierGroupDTO> modifierGroups;
+
 }
 
 //Doesn't have qty, note when compared to CartItemResponse

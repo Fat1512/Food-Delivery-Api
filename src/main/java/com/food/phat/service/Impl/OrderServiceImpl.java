@@ -3,7 +3,6 @@ package com.food.phat.service.Impl;
 import com.food.phat.dto.CustomerAddressDTO;
 import com.food.phat.dto.request.order.OrderItemRequest;
 import com.food.phat.dto.request.order.OrderRequest;
-import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.dto.response.order.OrderResponse;
 import com.food.phat.entity.*;
 import com.food.phat.repository.*;
@@ -22,18 +21,18 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository;
     private RestaurantRepository restaurantRepository;
     private CustomerAddressRepository customerAddressRepository;
-    private ModifierOptionRepository modifierOptionRepository;
+    private ModifierRepository modifierRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository
             , ProductRepository productRepository
             , RestaurantRepository restaurantRepository
             , CustomerAddressRepository customerAddressRepository
-            , ModifierOptionRepository modifierOptionRepository) {
+            , ModifierRepository modifierRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.restaurantRepository = restaurantRepository;
         this.customerAddressRepository = customerAddressRepository;
-        this.modifierOptionRepository = modifierOptionRepository;
+        this.modifierRepository = modifierRepository;
     }
 
     @Override
@@ -86,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
         orderItem.setProduct(productRepository.findById(orderItemRequest.getProductId()).get());
         orderItem.setModifiers(orderItemRequest
                 .getModifierOptionsId().stream()
-                .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
+                .map(id -> modifierRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
         return orderItem;
     }
 

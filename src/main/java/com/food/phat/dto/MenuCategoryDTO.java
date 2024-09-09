@@ -5,5 +5,5 @@ import java.util.List;
 public class MenuCategoryDTO {
     private int menuCategoryId;
     private String name;
-    private List<ProductDTO> products;
+    private List<ProductReponse> products;
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class ModifierGroupDTO {
-    private int modifierId;
+    private int modifierGroupId;
     private String title;
     List<ModifierDTO> modifiers;
 }

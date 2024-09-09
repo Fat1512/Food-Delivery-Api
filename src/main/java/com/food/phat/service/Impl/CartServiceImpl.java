@@ -6,7 +6,7 @@ import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
-import com.food.phat.repository.ModifierOptionRepository;
+import com.food.phat.repository.ModifierRepository;
 import com.food.phat.repository.ProductRepository;
 import com.food.phat.service.CartService;
 import jakarta.transaction.Transactional;
@@ -23,15 +23,15 @@ public class CartServiceImpl implements CartService {
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
     private ProductRepository productRepository;
-    private ModifierOptionRepository modifierOptionRepository;
+    private ModifierRepository modifierRepository;
     @Autowired
     public CartServiceImpl(CartRepository cartRepository
             , CartItemRepository cartItemRepository
-            , ModifierOptionRepository modifierOptionRepository
+            , ModifierRepository modifierRepository
             , ProductRepository productRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.modifierOptionRepository = modifierOptionRepository;
+        this.modifierRepository = modifierRepository;
         this.productRepository = productRepository;
     }
 
@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
         cartItem.setNote(cartRequest.getNote());
         cartItem.setModifiers(cartRequest
                 .getModifierOptionsId().stream()
-                .map(id -> modifierOptionRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
+                .map(id -> modifierRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
         cartItem.setCartItemId(cartRequest.getCartItemId());
         cartItem.setCart(cart);
 

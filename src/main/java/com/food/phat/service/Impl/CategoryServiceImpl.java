@@ -1,7 +1,7 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.entity.ProductCategory;
-import com.food.phat.repository.CategoryRepository;
+import com.food.phat.repository.ProductCategoryRepository;
 import com.food.phat.service.CategoryService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,30 +14,30 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private ProductCategoryRepository productCategoryRepository;
     @PersistenceContext
     private EntityManager em;
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, EntityManager entityManager) {
-        this.categoryRepository = categoryRepository;
+    public CategoryServiceImpl(ProductCategoryRepository productCategoryRepository, EntityManager entityManager) {
+        this.productCategoryRepository = productCategoryRepository;
         this.em = entityManager;
     }
 
     @Override
     @Transactional
     public List<ProductCategory> getAllCategories() {
-        return categoryRepository.findAll();
+        return productCategoryRepository.findAll();
     }
 
     @Override
     @Transactional
     public ProductCategory getCategoryById(int id) {
-        return categoryRepository.findById(id).orElse(null);
+        return productCategoryRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
     public ProductCategory save(ProductCategory productCategory) {
-        return categoryRepository.save(productCategory);
+        return productCategoryRepository.save(productCategory);
     }
 }

@@ -4,6 +4,7 @@ import com.food.phat.dto.request.product.ProductRequest;
 import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
