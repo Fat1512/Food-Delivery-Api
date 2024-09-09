@@ -34,5 +34,4 @@ public class Cart {
         this.cartItem.add(cartItem);
         cartItem.setCart(this);
     }
-
 }

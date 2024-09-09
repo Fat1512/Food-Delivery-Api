@@ -1,9 +1,9 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.request.order.OrderRequest;
-import com.food.phat.dto.response.cart.CartResponse;
-import com.food.phat.dto.response.order.OrderResponse;
+import com.food.phat.dto.request.OrderRequest;
+import com.food.phat.dto.response.CartResponse;
+import com.food.phat.dto.response.OrderResponse;
 import com.food.phat.service.Impl.UserService;
 import com.food.phat.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;

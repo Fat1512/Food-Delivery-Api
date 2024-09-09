@@ -23,10 +23,6 @@ public class ProductCategory {
     @Column(name="name")
     private String name;
 
-//    @OneToMany(mappedBy="productCategory", fetch = FetchType.LAZY)
-//    @JsonIgnore
-//    private List<Product> products;
-
     public ProductCategory() {
 
     }

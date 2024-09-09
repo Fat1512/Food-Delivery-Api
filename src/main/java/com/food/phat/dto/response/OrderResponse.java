@@ -1,7 +1,6 @@
-package com.food.phat.dto.response.order;
+package com.food.phat.dto.response;
 
 import com.food.phat.dto.CustomerAddressDTO;
-import com.food.phat.dto.response.cart.CartItemResponse;
 import com.food.phat.entity.OrderStatus;
 import lombok.Data;
 

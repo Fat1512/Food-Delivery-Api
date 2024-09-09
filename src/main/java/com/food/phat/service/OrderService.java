@@ -1,7 +1,7 @@
 package com.food.phat.service;
 
-import com.food.phat.dto.request.order.OrderRequest;
-import com.food.phat.dto.response.order.OrderResponse;
+import com.food.phat.dto.request.OrderRequest;
+import com.food.phat.dto.response.OrderResponse;
 
 import java.util.List;
 

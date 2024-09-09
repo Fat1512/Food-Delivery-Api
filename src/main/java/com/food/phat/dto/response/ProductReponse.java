@@ -1,5 +1,7 @@
-package com.food.phat.dto;
+package com.food.phat.dto.response;
 
+import com.food.phat.dto.ModifierGroupDTO;
+import com.food.phat.dto.ProductCategoryDTO;
 import lombok.*;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class ProductReponse {
     private float price;
     private String thumbnail;
     private Integer restaurantId;
-    List<ModifierGroupDTO> modifierGroups;
-
+    private List<ModifierGroupDTO> modifierGroups;
+    private List<ProductCategoryDTO> productCategories;
 }
 
 //Doesn't have qty, note when compared to CartItemResponse

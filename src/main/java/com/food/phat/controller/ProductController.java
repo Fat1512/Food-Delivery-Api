@@ -1,10 +1,10 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.request.product.ProductRequest;
+import com.food.phat.dto.response.ProductReponse;
+import com.food.phat.dto.request.ProductRequest;
 import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.service.ProductService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,13 +43,12 @@ public class ProductController {
         filteredConditions.put("fromPrice", fromPrice);
         filteredConditions.put("toPrice", toPrice);
 
-        PageResponse<Product> products = productService.getAllProducts(filteredConditions);
-        return products;
+        return productService.getAllProducts(filteredConditions);
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> saveOrUpdateProduct(@RequestBody ProductRequest product) {
-        Product responseProduct = productService.saveOrUpdate(product);
+    public ResponseEntity<ProductReponse> saveOrUpdateProduct(@RequestBody ProductRequest product) {
+        ProductReponse responseProduct = productService.saveOrUpdate(product);
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 }

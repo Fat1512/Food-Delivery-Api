@@ -1,7 +1,7 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.ProductReponse;
-import com.food.phat.dto.request.product.ProductRequest;
+import com.food.phat.dto.response.ProductReponse;
+import com.food.phat.dto.request.ProductRequest;
 import com.food.phat.dto.response.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.mapstruct.ProductMapper;
@@ -13,7 +13,6 @@ import com.food.phat.specification.SearchSpecification;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +30,6 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
     MenuCategoryRepository menuCategoryRepository;
     RestaurantRepository restaurantRepository;
-    ProductCategoryRepository productCategoryRepository;
     ModifierRepository modifierRepository;
     ProductMapper mapper;
 
@@ -112,11 +110,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product saveOrUpdate(ProductRequest productRequest) {
+    public ProductReponse saveOrUpdate(ProductRequest productRequest) {
         Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
         mapper.updateEntity(productRequest, product);
         productRepository.save(product);
-        ProductReponse productReponse = mapper.toDto(product);
-        return product;
+        return mapper.toDto(product);
     }
 }

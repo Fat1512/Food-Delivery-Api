@@ -1,9 +1,9 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.dto.CustomerAddressDTO;
-import com.food.phat.dto.request.order.OrderItemRequest;
-import com.food.phat.dto.request.order.OrderRequest;
-import com.food.phat.dto.response.order.OrderResponse;
+import com.food.phat.dto.request.OrderItemRequest;
+import com.food.phat.dto.request.OrderRequest;
+import com.food.phat.dto.response.OrderResponse;
 import com.food.phat.entity.*;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;

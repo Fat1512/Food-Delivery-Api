@@ -1,4 +1,4 @@
-package com.food.phat.dto.response.cart;
+package com.food.phat.dto.response;
 
 import com.food.phat.dto.ModifierGroupDTO;
 import lombok.*;
@@ -14,9 +14,7 @@ public class CartItemResponse {
     private Integer productId;
     private String name;
     private Boolean status;
-    private float price;
     private int qty;
-    private String note;
     private String thumbnail;
-    List<ModifierGroupDTO> modifierGroupList;
+    List<ModifierGroupDTO> modifierGroups;
 }

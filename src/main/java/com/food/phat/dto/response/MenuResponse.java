@@ -1,4 +1,4 @@
-package com.food.phat.dto;
+package com.food.phat.dto.response;
 
 import lombok.Data;
 import lombok.Getter;
@@ -6,15 +6,13 @@ import lombok.Setter;
 
 import java.util.List;
 
-
-
 @Data
 @Setter
 @Getter
-public class MenuDTO {
+public class MenuResponse {
     private Integer menuId;
 
     private String name;
 
-    private List<MenuCategoryDTO> menuCategory;
+    private List<MenuCategoryResponse> menuCategory;
 }

@@ -1,7 +1,7 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.request.cart.CartRequest;
-import com.food.phat.dto.response.cart.CartResponse;
+import com.food.phat.dto.request.CartRequest;
+import com.food.phat.dto.response.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import com.food.phat.repository.CartItemRepository;
@@ -39,7 +39,6 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartResponse getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-//        return mapCartToCartResponse(cart);
         return null;
     }
 
@@ -55,26 +54,25 @@ public class CartServiceImpl implements CartService {
         cartItemRepository.deleteAllById(cartDetailId::listIterator);
     }
 
-    private CartItem mapCartItemRequestToCartItem(CartRequest cartRequest) {
-        Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
-
-        CartItem cartItem = cartItemRepository.findById(cartRequest.getCartItemId()).orElse(new CartItem());
-        cartItem.setQty(cartRequest.getQty());
-        cartItem.setNote(cartRequest.getNote());
-        cartItem.setModifiers(cartRequest
-                .getModifierOptionsId().stream()
-                .map(id -> modifierRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
-        cartItem.setCartItemId(cartRequest.getCartItemId());
-        cartItem.setCart(cart);
-
-        if(cartItem.getCartItemId() == null) {
-            cartItem.setProduct(productRepository.findById(cartRequest.getProductId()).get());
-        }
-
-        return cartItem;
-    }
+//    private CartItem mapCartItemRequestToCartItem(CartRequest cartRequest) {
+//        Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
 //
-//    private CartResponse mapCartToCartResponse(Cart cart) {
+//        CartItem cartItem = cartItemRepository.findById(cartRequest.getCartItemId()).orElse(new CartItem());
+//        cartItem.setQty(cartRequest.getQty());
+//        cartItem.setNote(cartRequest.getNote());
+//        cartItem.setModifiers(cartRequest
+//                .getModifierOptionsId().stream()
+//                .map(id -> modifierRepository.findById(id).get()).collect(Collectors.toCollection(ArrayList::new)));
+//        cartItem.setCartItemId(cartRequest.getCartItemId());
+//        cartItem.setCart(cart);
+//
+//        if(cartItem.getCartItemId() == null) {
+//            cartItem.setProduct(productRepository.findById(cartRequest.getProductId()).get());
+//        }
+//
+//        return cartItem;
+//    }
+//        private CartResponse mapCartToCartResponse(Cart cart) {
 //        CartResponse cartResponse = new CartResponse();
 //        cartResponse.setCartId(cart.getCartId());
 //

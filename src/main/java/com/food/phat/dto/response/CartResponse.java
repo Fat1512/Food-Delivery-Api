@@ -1,8 +1,10 @@
-package com.food.phat.dto.response.cart;
+package com.food.phat.dto.response;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +26,11 @@ public class CartResponse {
     @Setter
     @Getter
     private class CartItemGroup {
-        private Map<String, String> restaurantInfo = new HashMap<>();
-        private List<CartItemResponse> products;
+        @Autowired
+        private RestaurantCartReponse restaurant;
+        private List<CartItemResponse> products = new ArrayList<>();
 
         public void addCartItemResponse(CartItemResponse cartItemResponse) {
-            if(products == null) products = new ArrayList<>();
             products.add(cartItemResponse);
         }
     }

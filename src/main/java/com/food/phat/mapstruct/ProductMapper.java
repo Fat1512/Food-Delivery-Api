@@ -1,14 +1,14 @@
 package com.food.phat.mapstruct;
 
-import com.food.phat.dto.ProductReponse;
-import com.food.phat.dto.request.product.ProductRequest;
+import com.food.phat.dto.response.ProductReponse;
+import com.food.phat.dto.request.ProductRequest;
 import com.food.phat.entity.Product;
 import com.food.phat.repository.*;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@Mapper(componentModel = "spring", uses = ModifierMapper.class)
+@Mapper(componentModel = "spring", uses = ModifierGroupMapper.class)
 @DecoratedWith(ProductDecorator.class)
 public interface ProductMapper {
     @Mapping(target = "productId", ignore = true)
