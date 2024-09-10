@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ModifierMapper.class, injectionStrategy = InjectionStrategy.FIELD)
 @DecoratedWith(CartItemDecorator.class)
 public interface CartItemMapper {
     @Mapping(target = "productId", source="product.productId")
@@ -31,6 +31,7 @@ abstract class CartItemDecorator implements CartItemMapper {
     @Qualifier("delegate")
     @Autowired
     private CartItemMapper delegate;
+
 
     @Override
     public CartItemResponse toDto(CartItem cartItem) {

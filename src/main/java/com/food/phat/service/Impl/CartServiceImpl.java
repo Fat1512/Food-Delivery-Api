@@ -4,6 +4,7 @@ import com.food.phat.dto.request.CartRequest;
 import com.food.phat.dto.response.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
+import com.food.phat.mapstruct.CartMapper;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
 import com.food.phat.service.CartService;
@@ -18,19 +19,22 @@ public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
-
+    private CartMapper cartMapper;
     @Autowired
     public CartServiceImpl(CartRepository cartRepository
-            , CartItemRepository cartItemRepository) {
+            , CartItemRepository cartItemRepository
+            ,CartMapper cartMapper) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
+        this.cartMapper = cartMapper;
     }
 
     @Override
     @Transactional
-    public Cart getCart(Integer userId) {
+    public CartResponse getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-        return cart;
+        CartResponse cartResponse = cartMapper.toDto(cart);
+        return cartResponse;
     }
 
     @Override

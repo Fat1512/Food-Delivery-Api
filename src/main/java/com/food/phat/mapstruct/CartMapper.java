@@ -17,10 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CartItemMapper.class)
 @DecoratedWith(CartDecorator.class)
 public interface CartMapper {
     CartResponse toDto(Cart cart);
+    List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems);
 }
 
 @Mapper
@@ -30,7 +31,12 @@ abstract class CartDecorator implements CartMapper {
     @Autowired
     private CartMapper delegate;
 
-    private final CartItemMapper cartItemMapper = Mappers.getMapper(CartItemMapper.class);
+    private final RestaurantMapper restaurantMapper = Mappers.getMapper(RestaurantMapper.class);
+
+    @Autowired
+    private CartItemMapper cartItemMapper;
+//    = Mappers.getMapper(CartItemMapper.class);
+
     @Override
     public CartResponse toDto(Cart cart) {
         CartResponse cartResponse = delegate.toDto(cart);
@@ -38,9 +44,8 @@ abstract class CartDecorator implements CartMapper {
         return cartResponse;
     }
 
-    private final RestaurantMapper restaurantMapper = Mappers.getMapper(RestaurantMapper.class);
 
-    protected List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems) {
+    public List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems) {
         Map<Integer, RestaurantCartResponse> restaurantMp = new HashMap<>();
         Map<Integer, List<CartItemResponse>> cartItemResponseMp = new HashMap<>();
 

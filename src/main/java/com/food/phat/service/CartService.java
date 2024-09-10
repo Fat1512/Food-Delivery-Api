@@ -7,7 +7,7 @@ import com.food.phat.entity.Cart;
 import java.util.List;
 
 public interface CartService {
-    Cart getCart(Integer userId);
+    CartResponse getCart(Integer userId);
     void deleteCartItem(List<Integer> cartDetailId);
     void saveOrUpdateCartItem(CartRequest cartRequest);
 }
