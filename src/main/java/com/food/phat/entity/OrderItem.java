@@ -35,14 +35,6 @@ public class OrderItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "order_modifier",
-            joinColumns = {@JoinColumn(name = "order_item_fkey")},
-            inverseJoinColumns = {@JoinColumn(name = "modifier_option_fkey")})
-    private List<Modifier> modifiers;
-
-    @ManyToOne
-    @JoinColumn(name="order_fkey")
-    private Order order;
+    @OneToMany(cascade = CascadeType.MERGE)
+    private List<OrderModifier> modifiers;
 }

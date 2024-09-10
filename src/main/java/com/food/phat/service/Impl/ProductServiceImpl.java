@@ -98,14 +98,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product getProductById(int id) {
-        return productRepository.findById(id).get();
-    }
-
-    @Override
-    @Transactional
-    public Product getProductByName(String name) {
-        return productRepository.findByName(name);
+    public ProductReponse getProductById(int id) {
+        Product product = productRepository.findById(id).get();
+        return mapper.toDto(product);
     }
 
     @Override
@@ -115,5 +110,10 @@ public class ProductServiceImpl implements ProductService {
         mapper.updateEntity(productRequest, product);
         productRepository.save(product);
         return mapper.toDto(product);
+    }
+
+    @Override
+    public void deleteProductById(int id) {
+        productRepository.deleteById(id);
     }
 }

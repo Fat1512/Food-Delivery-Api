@@ -37,14 +37,7 @@ public class Order {
     @JoinColumn(name="restaurant_fkey")
     private Restaurant restaurant;
 
-    @OneToMany(
-            mappedBy = "order",
-            fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="order_fkey")
     private List<OrderItem> orderItem;
-
-    public void addOrderItem(OrderItem orderItem) {
-        if(this.orderItem.isEmpty()) this.orderItem = new ArrayList<>();
-        this.orderItem.add(orderItem);
-        orderItem.setOrder(this);
-    }
 }

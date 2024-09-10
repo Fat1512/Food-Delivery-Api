@@ -37,15 +37,16 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartResponse getCart(Integer userId) {
+    public Cart getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-        return null;
+        return cart;
     }
 
     @Override
     @Transactional
     public void saveOrUpdateCartItem(CartRequest cartRequest) {
-        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
+//        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
+//        return null;
     }
 
     @Override

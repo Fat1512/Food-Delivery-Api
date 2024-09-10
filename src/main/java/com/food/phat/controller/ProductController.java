@@ -1,5 +1,6 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.response.APIResponse;
 import com.food.phat.dto.response.ProductReponse;
 import com.food.phat.dto.request.ProductRequest;
 import com.food.phat.dto.response.PageResponse;
@@ -50,5 +51,11 @@ public class ProductController {
     public ResponseEntity<ProductReponse> saveOrUpdateProduct(@RequestBody ProductRequest product) {
         ProductReponse responseProduct = productService.saveOrUpdate(product);
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity<APIResponse> deleteProduct(@PathVariable Integer productId) {
+        productService.deleteProductById(productId);
+        return new ResponseEntity<>(new APIResponse(Boolean.TRUE, "successfully deleted"), HttpStatus.OK);
     }
 }

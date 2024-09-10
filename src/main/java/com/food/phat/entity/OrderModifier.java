@@ -1,7 +1,6 @@
 package com.food.phat.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,33 +10,32 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
 
-@Table(name="cart_modifier")
+@Table(name="order_modifier")
 @Entity
 @DynamicUpdate
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartModifier {
+public class OrderModifier {
 
     @EmbeddedId
-    private CartModifierId cartModifierId;
+    private OrderModifierId OrderModifierid;
 
-    public CartModifier(CartItem cartItem, ModifierGroup modifierGroup, Modifier modifier) {
-        this.cartModifierId = new CartModifierId(
-                cartItem.getCartItemId(),
+    public OrderModifier(OrderItem orderItem, ModifierGroup modifierGroup, Modifier modifier) {
+        OrderModifierid = new OrderModifierId(
+                orderItem.getOrderItemId(),
                 modifierGroup.getModifierGroupId(),
                 modifier.getModifierId());
-        this.cartItem = cartItem;
+        this.orderItem = orderItem;
         this.modifierGroup = modifierGroup;
         this.modifier = modifier;
     }
 
-    @JoinColumn(name = "cart_item_fkey")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @MapsId("cartItemId")
-    @JsonIgnore
-    private CartItem cartItem;
+    @JoinColumn(name = "order_item_fkey")
+    @ManyToOne(optional = false)
+    @MapsId("orderItemId")
+    private OrderItem orderItem;
 
     @JoinColumn(name = "modifier_group_fkey", referencedColumnName = "modifier_group_id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -53,9 +51,9 @@ public class CartModifier {
     @Setter
     @Getter
     @AllArgsConstructor
-    public static class CartModifierId implements Serializable {
-        @Column(name="cart_item_fkey")
-        private int cartItemId;
+    public static class OrderModifierId implements Serializable {
+        @Column(name="order_item_fkey")
+        private int orderItemId;
 
         @Column(name="modifier_group_fkey")
         private int modifierGroupId;
@@ -63,7 +61,7 @@ public class CartModifier {
         @Column(name="modifier_fkey")
         private int modifierId;
 
-        public CartModifierId() {
+        public OrderModifierId() {
 
         }
     }

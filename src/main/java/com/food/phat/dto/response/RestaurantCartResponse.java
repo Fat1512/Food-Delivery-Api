@@ -3,7 +3,7 @@ package com.food.phat.dto.response;
 import lombok.Data;
 
 @Data
-public class RestaurantCartReponse {
+public class RestaurantCartResponse {
     private Integer restaurantId;
     private String name;
     private String address;

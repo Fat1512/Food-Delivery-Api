@@ -3,6 +3,7 @@ package com.food.phat.controller;
 
 import com.food.phat.dto.request.CartRequest;
 import com.food.phat.dto.response.CartResponse;
+import com.food.phat.entity.Cart;
 import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<CartResponse> getCart(Principal principal) {
+    public ResponseEntity<Cart> getCart(Principal principal) {
         return new ResponseEntity<>(cartService.getCart(userService.getUserByUsername(principal.getName()).getUserId()),
                 HttpStatus.OK);
     }

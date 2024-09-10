@@ -30,23 +30,12 @@ public class CartItem {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
 
-    @Column(name="note")
-    private String note;
-
     @ManyToOne
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="cart_fkey")
-    private Cart cart;
-
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "cart_modifier",
-            joinColumns = {@JoinColumn(name = "cart_item_fkey")},
-            inverseJoinColumns = {@JoinColumn(name = "modifier_option_fkey")})
-    private List<Modifier> modifiers;
+    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.MERGE)
+    private List<CartModifier> modifiers;
 }
 
 
