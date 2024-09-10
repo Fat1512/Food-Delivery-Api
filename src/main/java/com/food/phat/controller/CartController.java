@@ -27,7 +27,7 @@ public class CartController {
     }
 
     @GetMapping("/cart")
-    public ResponseEntity<Cart> getCart(Principal principal) {
+    public ResponseEntity<Cart> getCartByUserId(Principal principal) {
         return new ResponseEntity<>(cartService.getCart(userService.getUserByUsername(principal.getName()).getUserId()),
                 HttpStatus.OK);
     }

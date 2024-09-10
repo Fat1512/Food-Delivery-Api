@@ -2,6 +2,8 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Integer x = 2;
+        Integer y = 2;
+        System.out.println(x.hashCode() == y.hashCode());
     }
 }

@@ -1,7 +1,6 @@
 package com.food.phat.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +35,6 @@ public class CartModifier {
     @JoinColumn(name = "cart_item_fkey")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId("cartItemId")
-    @JsonIgnore
     private CartItem cartItem;
 
     @JoinColumn(name = "modifier_group_fkey", referencedColumnName = "modifier_group_id")

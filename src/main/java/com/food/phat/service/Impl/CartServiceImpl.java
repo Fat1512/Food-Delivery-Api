@@ -6,33 +6,24 @@ import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
-import com.food.phat.repository.ModifierRepository;
-import com.food.phat.repository.ProductRepository;
 import com.food.phat.service.CartService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
     private CartItemRepository cartItemRepository;
-    private ProductRepository productRepository;
-    private ModifierRepository modifierRepository;
+
     @Autowired
     public CartServiceImpl(CartRepository cartRepository
-            , CartItemRepository cartItemRepository
-            , ModifierRepository modifierRepository
-            , ProductRepository productRepository) {
+            , CartItemRepository cartItemRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
-        this.modifierRepository = modifierRepository;
-        this.productRepository = productRepository;
     }
 
     @Override
@@ -45,8 +36,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void saveOrUpdateCartItem(CartRequest cartRequest) {
-//        cartItemRepository.save(mapCartItemRequestToCartItem(cartRequest));
-//        return null;
+
     }
 
     @Override
@@ -54,6 +44,40 @@ public class CartServiceImpl implements CartService {
     public void deleteCartItem(List<Integer> cartDetailId) {
         cartItemRepository.deleteAllById(cartDetailId::listIterator);
     }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    private CartItem mapCartItemRequestToCartItem(CartRequest cartRequest) {
 //        Cart cart = cartRepository.findById(cartRequest.getCartId()).get();
@@ -143,36 +167,3 @@ public class CartServiceImpl implements CartService {
 //        });
 //        return cartResponse;
 //    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,8 +1,7 @@
 package com.food.phat.dto.response;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,9 @@ public class CartResponse {
     @Data
     @Setter
     @Getter
-    static class CartItemGroup {
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CartItemGroup {
         private RestaurantCartResponse restaurant;
         private List<CartItemResponse> products = new ArrayList<>();
 
@@ -30,3 +31,18 @@ public class CartResponse {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -11,10 +11,40 @@ import java.util.List;
 @Getter
 @Setter
 public class CartItemResponse {
+    private Integer cartItemId;//
     private Integer productId;
+    private Integer restaurantId;
     private String name;
     private Boolean status;
-    private int qty;
+    private int qty;//
     private String thumbnail;
     List<ModifierGroupDTO> modifierGroups;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
