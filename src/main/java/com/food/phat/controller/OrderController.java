@@ -4,6 +4,9 @@ package com.food.phat.controller;
 import com.food.phat.dto.order.OrderRequest;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.dto.order.OrderResponse;
+import com.food.phat.dto.order.OrderStatusPut;
+import com.food.phat.entity.OrderStatus;
+import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
 import com.food.phat.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +21,13 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class OrderController {
     private final OrderService orderService;
+    private final CartService cartService;
     private final UserService userService;
     @Autowired
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService, UserService userService, CartService cartService) {
         this.orderService = orderService;
         this.userService = userService;
+        this.cartService = cartService;
     }
 
     @GetMapping("/order")
@@ -36,7 +41,6 @@ public class OrderController {
         return null;
     }
 
-
     @PostMapping("/order")
     public ResponseEntity<CartResponse> placeOrder(List<OrderRequest> orderRequests) {
         orderService.placeOrder(orderRequests);
@@ -45,15 +49,16 @@ public class OrderController {
 
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity<CartResponse> cancelOrder(@PathVariable Integer orderId) {
-        orderService.modifyOrderStatus(orderId, "CANCELLED");
+        orderService.modifyOrderStatus(orderId, OrderStatus.CANCELLED);
         return null;
     }
 
-    @PatchMapping("/order/{orderId}")
-    public ResponseEntity<CartResponse> modifyOrderStatus(
-            @PathVariable Integer orderId,
-            @RequestParam(name="status", defaultValue = "CONFIRMED") String status) {
-        orderService.modifyOrderStatus(orderId, status);
+    @PostMapping("/order/{orderId}")
+    public ResponseEntity<CartResponse> modifyOrderStatus(@RequestBody OrderStatusPut orderStatusPut) {
+
+        orderService.modifyOrderStatus(
+                orderStatusPut.getOrderId(),
+                OrderStatus.valueOf(orderStatusPut.getStatus()));
         return null;
     }
 }

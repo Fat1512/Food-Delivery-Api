@@ -1,18 +1,18 @@
 package com.food.phat.mapstruct;
 
-import com.food.phat.dto.modifier.ModifierGroupDTO;
+import com.food.phat.dto.cart.CartItemRequest;
+import com.food.phat.dto.modifier.ModifierGroupCartPut;
+import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.dto.cart.CartItemResponse;
-import com.food.phat.entity.CartItem;
-import com.food.phat.entity.CartModifier;
+import com.food.phat.entity.*;
+import com.food.phat.repository.ModifierGroupRepository;
+import com.food.phat.repository.ModifierRepository;
+import com.food.phat.repository.ProductRepository;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Mapper(componentModel = "spring", uses = ModifierMapper.class, injectionStrategy = InjectionStrategy.FIELD)
 @DecoratedWith(CartItemDecorator.class)
@@ -24,6 +24,7 @@ public interface CartItemMapper {
     @Mapping(target = "thumbnail", source="product.thumbnail")
     @Mapping(target = "modifierGroups", ignore = true)
     CartItemResponse toDto(CartItem cartItem);
+    CartItem toEntity(CartItemRequest cartItemRequest);
 }
 
 @Mapper
@@ -31,24 +32,56 @@ abstract class CartItemDecorator implements CartItemMapper {
     @Qualifier("delegate")
     @Autowired
     private CartItemMapper delegate;
+    @Autowired
+    private ModifierMapper modifierMapper;
+    @Autowired
+    private ModifierGroupRepository modifierGroupRepository;
+    @Autowired
+    private ModifierRepository modifierRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @Override
     public CartItemResponse toDto(CartItem cartItem) {
-        List<ModifierGroupDTO> modifierGroups = this.cartModifierToModifierGroupDto(cartItem.getModifiers());
+        List<ModifierGroupResponse> modifierGroups = this.cartModifierToModifierGroupDto(cartItem.getModifiers());
         CartItemResponse cartItemResponse = delegate.toDto(cartItem);
         cartItemResponse.setModifierGroups(modifierGroups);
         return cartItemResponse;
     }
 
-    private final ModifierMapper modifierMapper = Mappers.getMapper(ModifierMapper.class);
+    @Override
+    public CartItem toEntity(CartItemRequest cartItemRequest) {
+        CartItem cartItem = delegate.toEntity(cartItemRequest);
 
-    private List<ModifierGroupDTO> cartModifierToModifierGroupDto(List<CartModifier> cartModifiers) {
-        Map<Integer, ModifierGroupDTO> modifierGroupMp = new HashMap<>();
+        List<CartModifier> modifiers = modifierGroupDtoToCartModifier(cartItem, cartItemRequest.getModifierGroups());
+        Product product = productRepository.findById(cartItemRequest.getProductId()).get();
+        cartItem.setProduct(product);
+        cartItem.setModifiers(modifiers);
+        return cartItem;
+    }
+
+    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupCartPut> modifierGroupCarts) {
+        return modifierGroupCarts.stream().map(modifierGroupCart -> {
+            ModifierGroup modifierGroup = modifierGroupRepository.findById(modifierGroupCart.getModifierGroupId()).get();
+            List<Modifier> modifiers = modifierRepository.findAllById(modifierGroupCart.getModifiers());
+
+            return modifiers.stream().map(modifier -> {
+                CartModifier cartModifier = new CartModifier();
+                cartModifier.setCartItem(cartItem);
+                cartModifier.setModifierGroup(modifierGroup);
+                cartModifier.setModifier(modifier);
+                return cartModifier;
+            }).toList();
+        }).flatMap(Collection::stream).toList();
+    }
+
+    private List<ModifierGroupResponse> cartModifierToModifierGroupDto(List<CartModifier> cartModifiers) {
+        Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
 
         cartModifiers.forEach(cartModifier -> {
             Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
-            modifierGroupMp.putIfAbsent(modifierGroupId, new ModifierGroupDTO());
+            modifierGroupMp.putIfAbsent(modifierGroupId, new ModifierGroupResponse());
             modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
         });
 

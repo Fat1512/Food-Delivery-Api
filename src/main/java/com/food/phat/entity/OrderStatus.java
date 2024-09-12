@@ -1,5 +1,5 @@
 package com.food.phat.entity;
 
 public enum OrderStatus {
-    PENDING, CONFIRMED, DELIVERING, DELIVERED, CANCELLED
+    PENDING, ACCEPTED, DELIVERING, DELIVERED, CANCELLED, REJECTED
 }

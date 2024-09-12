@@ -21,9 +21,13 @@ public class Order {
     @Column(name="shipping_fee")
     private float shippingFee;
 
-    @Column(name="created_at")
+    @Column(name="submit_time")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private Date submitTime;
+
+    @Column(name="complete_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date completeTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

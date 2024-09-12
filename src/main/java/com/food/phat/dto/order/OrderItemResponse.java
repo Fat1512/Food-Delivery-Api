@@ -1,6 +1,6 @@
 package com.food.phat.dto.order;
 
-import com.food.phat.dto.modifier.ModifierGroupDTO;
+import com.food.phat.dto.modifier.ModifierGroupResponse;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +20,5 @@ public class OrderItemResponse {
     private String thumbnail;
     private double price;
     private String note;
-    List<ModifierGroupDTO> modifierGroups;
+    List<ModifierGroupResponse> modifierGroups;
 }

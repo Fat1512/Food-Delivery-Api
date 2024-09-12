@@ -1,7 +1,7 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.cart.CartRequest;
+import com.food.phat.dto.cart.CartItemRequest;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
@@ -32,14 +32,19 @@ public class CartController {
     }
 
     @DeleteMapping("/cart")
-    public ResponseEntity<String> deleteCartItem(@RequestBody Map<String, Integer[]> cartDetailIdList) {
-        cartService.deleteCartItem(Arrays.stream(cartDetailIdList.get("idList")).toList());
+    public ResponseEntity<String> deleteCartItem(Principal principal, @RequestBody Map<String, Integer[]> cartDetailIdList) {
+        cartService.deleteCartItem(
+                Arrays.stream(cartDetailIdList.get("idList")).toList(),
+                userService.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<String> saveOrUpdateCart(@RequestBody CartRequest cartRequest) {
-        cartService.saveOrUpdateCartItem(cartRequest);
+    public ResponseEntity<String> saveCartItem(Principal principal, @RequestBody CartItemRequest cartItemRequest) {
+        cartService.saveCartItem(cartItemRequest, userService.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
+
+    @PutMapping("/cart")
+    public ResponseEntity<String> updateCartItem()
 }

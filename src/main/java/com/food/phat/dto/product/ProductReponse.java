@@ -1,6 +1,6 @@
 package com.food.phat.dto.product;
 
-import com.food.phat.dto.modifier.ModifierGroupDTO;
+import com.food.phat.dto.modifier.ModifierGroupResponse;
 import lombok.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class ProductReponse {
     private float price;
     private String thumbnail;
     private Integer restaurantId;
-    private List<ModifierGroupDTO> modifierGroups;
+    private List<ModifierGroupResponse> modifierGroups;
     private List<ProductCategoryDTO> productCategories;
 }
 

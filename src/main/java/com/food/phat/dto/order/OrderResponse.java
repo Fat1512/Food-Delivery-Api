@@ -11,10 +11,11 @@ import java.util.List;
 
 @Data
 public class OrderResponse {
-    private int orderId;
-    private double shippingFee;
-    private OrderStatus status;
-    private Date orderTime;
+    private int orderId;//
+    private double shippingFee;//
+    private OrderStatus status;//
+    private Date submitTime;//
+    private Date completeTime;//
     private CustomerAddressDTO customerAddress;
     private RestaurantCheckoutResponse restaurant;
     private List<OrderItemResponse> orderItems = new ArrayList<>();

@@ -49,11 +49,10 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-
     @Override
-    public void modifyOrderStatus(Integer orderId, String status) {
+    public void modifyOrderStatus(Integer orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId).get();
-        order.setOrderStatus(OrderStatus.valueOf(status));
+        order.setOrderStatus(status);
     }
 }
 

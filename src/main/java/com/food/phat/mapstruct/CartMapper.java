@@ -29,9 +29,8 @@ abstract class CartDecorator implements CartMapper {
     @Qualifier("delegate")
     @Autowired
     private CartMapper delegate;
-
-    private final RestaurantMapper restaurantMapper = Mappers.getMapper(RestaurantMapper.class);
-
+    @Autowired
+    private RestaurantMapper restaurantMapper;
     @Autowired
     private CartItemMapper cartItemMapper;
 

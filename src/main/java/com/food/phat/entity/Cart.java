@@ -15,7 +15,6 @@ import java.util.List;
 @Table(name="cart")
 @Entity @DynamicUpdate
 public class Cart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="cart_id")
@@ -28,6 +27,10 @@ public class Cart {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="cart_fkey")
     private List<CartItem> cartItem;
+
+    public void addCartItem(CartItem cartItem) {
+        this.cartItem.add(cartItem);
+    }
 }
 
 

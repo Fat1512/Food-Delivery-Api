@@ -1,6 +1,6 @@
 package com.food.phat.dto.cart;
 
-import com.food.phat.dto.modifier.ModifierGroupDTO;
+import com.food.phat.dto.modifier.ModifierGroupResponse;
 import lombok.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class CartItemResponse {
     private Boolean status;
     private int qty;//
     private String thumbnail;
-    List<ModifierGroupDTO> modifierGroups;
+    List<ModifierGroupResponse> modifierGroups;
 }
 
 

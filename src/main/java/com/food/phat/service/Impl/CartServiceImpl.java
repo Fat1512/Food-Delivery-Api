@@ -1,8 +1,10 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.cart.CartRequest;
+import com.food.phat.dto.cart.CartItemRequest;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
+import com.food.phat.entity.CartItem;
+import com.food.phat.mapstruct.CartItemMapper;
 import com.food.phat.mapstruct.CartMapper;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
@@ -16,38 +18,43 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService {
 
-    private CartRepository cartRepository;
-    private CartItemRepository cartItemRepository;
-    private CartMapper cartMapper;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartMapper cartMapper;
+    private final CartItemMapper cartItemMapper;
+
     @Autowired
     public CartServiceImpl(CartRepository cartRepository
             , CartItemRepository cartItemRepository
-            ,CartMapper cartMapper) {
+            , CartMapper cartMapper
+            , CartItemMapper cartItemMapper) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.cartMapper = cartMapper;
+        this.cartItemMapper = cartItemMapper;
     }
 
     @Override
     @Transactional
     public CartResponse getCart(Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-        CartResponse cartResponse = cartMapper.toDto(cart);
-        return cartResponse;
+        return cartMapper.toDto(cart);
     }
 
     @Override
     @Transactional
-    public void saveOrUpdateCartItem(CartRequest cartRequest) {
-
+    public void saveCartItem(CartItemRequest cartItemRequest, Integer userId) {
+        Cart cart = cartRepository.findByUser_UserId(userId);
+        CartItem cartItem = cartItemMapper.toEntity(cartItemRequest);
+        cart.addCartItem(cartItem);
+        cartRepository.save(cart);
     }
 
     @Override
     @Transactional
-    public void deleteCartItem(List<Integer> cartDetailId) {
+    public void deleteCartItem(List<Integer> cartDetailId, Integer userId) {
         cartItemRepository.deleteAllById(cartDetailId::listIterator);
     }
-
 }
 
 
