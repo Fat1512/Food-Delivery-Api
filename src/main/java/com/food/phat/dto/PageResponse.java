@@ -1,4 +1,4 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto;
 
 import lombok.*;
 

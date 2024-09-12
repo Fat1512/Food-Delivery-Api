@@ -1,14 +1,9 @@
-package com.food.phat.dto.response;
-
+package com.food.phat.dto.restaurant;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
-@Getter
-@Setter
-public class RestaurantResponse {
+public class RestaurantCheckoutResponse {
     private Integer restaurantId;
     private String name;
     private String address;
@@ -16,5 +11,4 @@ public class RestaurantResponse {
     private String backgroundImage;
     private String city;
     private String country;
-    private MenuResponse menuResponse;
 }

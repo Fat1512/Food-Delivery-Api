@@ -1,7 +1,7 @@
 package com.food.phat.mapstruct;
 
-import com.food.phat.dto.ModifierGroupDTO;
-import com.food.phat.dto.response.CartItemResponse;
+import com.food.phat.dto.modifier.ModifierGroupDTO;
+import com.food.phat.dto.cart.CartItemResponse;
 import com.food.phat.entity.CartItem;
 import com.food.phat.entity.CartModifier;
 import org.mapstruct.*;

@@ -27,6 +27,9 @@ public class CustomerAddress {
     @Column(name="phone")
     private String phone;
 
+    @Column(name="note")
+    private String note;
+
     @ManyToOne
     @JoinColumn(name="user_fkey")
     private User user;

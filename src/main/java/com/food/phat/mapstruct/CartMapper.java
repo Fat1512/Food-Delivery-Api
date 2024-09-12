@@ -1,9 +1,8 @@
 package com.food.phat.mapstruct;
 
-import com.food.phat.dto.ModifierGroupDTO;
-import com.food.phat.dto.response.CartItemResponse;
-import com.food.phat.dto.response.CartResponse;
-import com.food.phat.dto.response.RestaurantCartResponse;
+import com.food.phat.dto.cart.CartItemResponse;
+import com.food.phat.dto.cart.CartResponse;
+import com.food.phat.dto.restaurant.RestaurantCheckoutResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import org.mapstruct.DecoratedWith;
@@ -35,7 +34,6 @@ abstract class CartDecorator implements CartMapper {
 
     @Autowired
     private CartItemMapper cartItemMapper;
-//    = Mappers.getMapper(CartItemMapper.class);
 
     @Override
     public CartResponse toDto(Cart cart) {
@@ -46,18 +44,18 @@ abstract class CartDecorator implements CartMapper {
 
 
     public List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems) {
-        Map<Integer, RestaurantCartResponse> restaurantMp = new HashMap<>();
+        Map<Integer, RestaurantCheckoutResponse> restaurantMp = new HashMap<>();
         Map<Integer, List<CartItemResponse>> cartItemResponseMp = new HashMap<>();
 
         cartItems.forEach(cartItem -> {
             CartItemResponse cartItemResponse = cartItemMapper.toDto(cartItem);
-            RestaurantCartResponse restaurantCartResponse = restaurantMapper
+            RestaurantCheckoutResponse restaurantCheckoutResponse = restaurantMapper
                     .toRestaurantCartResponseDto(cartItem.getProduct().getRestaurant());
 
-            restaurantMp.putIfAbsent(restaurantCartResponse.getRestaurantId(), restaurantCartResponse);
-            cartItemResponseMp.putIfAbsent(restaurantCartResponse.getRestaurantId(), new ArrayList<>());
+            restaurantMp.putIfAbsent(restaurantCheckoutResponse.getRestaurantId(), restaurantCheckoutResponse);
+            cartItemResponseMp.putIfAbsent(restaurantCheckoutResponse.getRestaurantId(), new ArrayList<>());
 
-            cartItemResponseMp.get(restaurantCartResponse.getRestaurantId()).add(cartItemResponse);
+            cartItemResponseMp.get(restaurantCheckoutResponse.getRestaurantId()).add(cartItemResponse);
         });
         return restaurantMp.entrySet().stream().map(entry ->
                 new CartResponse.CartItemGroup(entry.getValue(), cartItemResponseMp.get(entry.getKey()))).toList();

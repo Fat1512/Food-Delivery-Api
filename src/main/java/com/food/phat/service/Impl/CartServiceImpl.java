@@ -1,9 +1,8 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.request.CartRequest;
-import com.food.phat.dto.response.CartResponse;
+import com.food.phat.dto.cart.CartRequest;
+import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
-import com.food.phat.entity.CartItem;
 import com.food.phat.mapstruct.CartMapper;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
@@ -115,7 +114,7 @@ public class CartServiceImpl implements CartService {
 //            CartDetailResponse cartDetailResponse = new CartDetailResponse();
 //            cartDetailResponse.getRestaurantInfo().put("restaurantId", res.getRestaurantId());
 //            cartDetailResponse.getRestaurantInfo().put("restaurantName", res.getName());
-//            cartItem.forEach(cartItemz -> cartDetailResponse.addCartItemResponse(mapCartItemToCartItemResponse(cartItemz)));
+//            cartItem.forEach(cartItemz -> cartDetailResponse.addOrderItemResponse(mapCartItemToCartItemResponse(cartItemz)));
 //
 //            cartResponse.addCartItem(cartDetailResponse);
 //        });

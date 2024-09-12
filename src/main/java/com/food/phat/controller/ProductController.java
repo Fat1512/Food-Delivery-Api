@@ -1,9 +1,9 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.response.APIResponse;
-import com.food.phat.dto.response.ProductReponse;
-import com.food.phat.dto.request.ProductRequest;
-import com.food.phat.dto.response.PageResponse;
+import com.food.phat.dto.APIResponse;
+import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductRequest;
+import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.response.ProductReponse;
-import com.food.phat.dto.request.ProductRequest;
-import com.food.phat.dto.response.PageResponse;
+import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductRequest;
+import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
 import com.food.phat.mapstruct.ProductMapper;
 import com.food.phat.repository.*;

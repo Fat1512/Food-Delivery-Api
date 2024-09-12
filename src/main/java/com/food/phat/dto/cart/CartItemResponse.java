@@ -1,6 +1,6 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto.cart;
 
-import com.food.phat.dto.ModifierGroupDTO;
+import com.food.phat.dto.modifier.ModifierGroupDTO;
 import lombok.*;
 
 import java.util.List;

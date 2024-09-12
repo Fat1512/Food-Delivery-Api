@@ -1,9 +1,7 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.CustomerAddressDTO;
-import com.food.phat.dto.request.OrderItemRequest;
-import com.food.phat.dto.request.OrderRequest;
-import com.food.phat.dto.response.OrderResponse;
+import com.food.phat.dto.order.OrderRequest;
+import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.*;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
@@ -12,16 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
-    private ProductRepository productRepository;
-    private RestaurantRepository restaurantRepository;
-    private CustomerAddressRepository customerAddressRepository;
-    private ModifierRepository modifierRepository;
+
 
     public OrderServiceImpl(OrderRepository orderRepository
             , ProductRepository productRepository
@@ -29,10 +23,10 @@ public class OrderServiceImpl implements OrderService {
             , CustomerAddressRepository customerAddressRepository
             , ModifierRepository modifierRepository) {
         this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.customerAddressRepository = customerAddressRepository;
-        this.modifierRepository = modifierRepository;
+//        this.productRepository = productRepository;
+//        this.restaurantRepository = restaurantRepository;
+//        this.customerAddressRepository = customerAddressRepository;
+//        this.modifierRepository = modifierRepository;
     }
 
     @Override
@@ -40,19 +34,19 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderResponse> getOrders(Integer userId) {
         List<Order> orderList = orderRepository.findByCustomerAddress_User_UserId(userId);
         List<OrderResponse> orderResponseList = new ArrayList<>();
-//        orderList.forEach(order -> {
-//            OrderResponse orderResponse = mapOrderToOrderResponse(order);
-//            orderResponseList.add(orderResponse);
-//        });
+
         return orderResponseList;
     }
 
     @Override
+    public OrderResponse getOrder(Integer orderId) {
+        orderRepository.findById(orderId);
+        return null;
+    }
+
+    @Override
     public void placeOrder(List<OrderRequest> orderRequests) {
-//        orderRequests.forEach(orderRequest -> {
-//            Order order = mapOrderRequestToOrder(orderRequest);
-//            orderRepository.save(order);
-//        });
+
     }
 
 
@@ -61,6 +55,25 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).get();
         order.setOrderStatus(OrderStatus.valueOf(status));
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //    private Order mapOrderRequestToOrder(OrderRequest orderRequest) {
@@ -102,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
 //        orderResponse.setCustomerAddress(customerAddressDTO);
 //        orderResponse.getRestaurantInfo().put("restaurantId", order.getRestaurant().getRestaurantId());
 //        orderResponse.getRestaurantInfo().put("restaurantName", order.getRestaurant().getName());
-////        order.getOrderItem().forEach(orderItem -> orderResponse.addCartItemResponse(mapCartItemToCartItemResponse(orderItem)));
+////        order.getOrderItem().forEach(orderItem -> orderResponse.addOrderItemResponse(mapCartItemToCartItemResponse(orderItem)));
 ////        return orderResponse;
 //        return null;
 //    }
@@ -131,25 +144,6 @@ public class OrderServiceImpl implements OrderService {
 //                prodEntity.getCategory());
 //        return cartItemResponse;
 //    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  *
  *

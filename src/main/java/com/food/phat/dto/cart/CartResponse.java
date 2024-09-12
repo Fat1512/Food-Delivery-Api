@@ -1,5 +1,6 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto.cart;
 
+import com.food.phat.dto.restaurant.RestaurantCheckoutResponse;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -23,11 +24,11 @@ public class CartResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CartItemGroup {
-        private RestaurantCartResponse restaurant;
-        private List<CartItemResponse> products = new ArrayList<>();
+        private RestaurantCheckoutResponse restaurant;
+        private List<CartItemResponse> cartItems = new ArrayList<>();
 
         public void addCartItemResponse(CartItemResponse cartItemResponse) {
-            products.add(cartItemResponse);
+            cartItems.add(cartItemResponse);
         }
     }
 }

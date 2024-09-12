@@ -1,9 +1,8 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.request.CartRequest;
-import com.food.phat.dto.response.CartResponse;
-import com.food.phat.entity.Cart;
+import com.food.phat.dto.cart.CartRequest;
+import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1")
 public class CartController {
-    CartService cartService;
-    UserService userService;
+    private final CartService cartService;
+    private final UserService userService;
     @Autowired
     public CartController(CartService cartService, UserService userService) {
         this.cartService = cartService;

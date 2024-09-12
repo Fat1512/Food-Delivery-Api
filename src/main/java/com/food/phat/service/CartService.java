@@ -1,8 +1,7 @@
 package com.food.phat.service;
 
-import com.food.phat.dto.request.CartRequest;
-import com.food.phat.dto.response.CartResponse;
-import com.food.phat.entity.Cart;
+import com.food.phat.dto.cart.CartRequest;
+import com.food.phat.dto.cart.CartResponse;
 
 import java.util.List;
 

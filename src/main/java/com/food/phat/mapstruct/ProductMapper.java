@@ -1,7 +1,7 @@
 package com.food.phat.mapstruct;
 
-import com.food.phat.dto.response.ProductReponse;
-import com.food.phat.dto.request.ProductRequest;
+import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.entity.Product;
 import com.food.phat.repository.*;
 import org.mapstruct.*;
@@ -46,7 +46,6 @@ abstract class ProductDecorator implements ProductMapper {
 
     @Override
     public ProductReponse toDto(Product product) {
-        ProductReponse productReponse = delegate.toDto(product);
-        return productReponse;
+        return delegate.toDto(product);
     }
 }

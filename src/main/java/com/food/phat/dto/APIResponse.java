@@ -1,9 +1,8 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 public class APIResponse  {
     @JsonIgnore

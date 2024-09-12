@@ -1,9 +1,9 @@
 package com.food.phat.controller;
 
 
-import com.food.phat.dto.request.OrderRequest;
-import com.food.phat.dto.response.CartResponse;
-import com.food.phat.dto.response.OrderResponse;
+import com.food.phat.dto.order.OrderRequest;
+import com.food.phat.dto.cart.CartResponse;
+import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.service.Impl.UserService;
 import com.food.phat.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 public class OrderController {
-    private OrderService orderService;
-    private UserService userService;
+    private final OrderService orderService;
+    private final UserService userService;
     @Autowired
     public OrderController(OrderService orderService, UserService userService) {
         this.orderService = orderService;
@@ -26,9 +26,16 @@ public class OrderController {
     }
 
     @GetMapping("/order")
-    public ResponseEntity<List<OrderResponse>> getOrder(Principal principal) {
+    public ResponseEntity<List<OrderResponse>> getOrderByUser(Principal principal) {
         return new ResponseEntity<>(orderService.getOrders(userService.getUserByUsername(principal.getName()).getUserId()), HttpStatus.OK);
     }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<OrderResponse>> getOrderById(@PathVariable Integer orderId) {
+
+        return null;
+    }
+
 
     @PostMapping("/order")
     public ResponseEntity<CartResponse> placeOrder(List<OrderRequest> orderRequests) {
@@ -37,7 +44,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/order/{orderId}")
-    public ResponseEntity<CartResponse> deleteOrder(@PathVariable Integer orderId) {
+    public ResponseEntity<CartResponse> cancelOrder(@PathVariable Integer orderId) {
         orderService.modifyOrderStatus(orderId, "CANCELLED");
         return null;
     }

@@ -1,4 +1,6 @@
-package com.food.phat.dto.response;
+package com.food.phat.dto.menu;
+
+import com.food.phat.dto.product.ProductReponse;
 
 import java.util.List;
 
