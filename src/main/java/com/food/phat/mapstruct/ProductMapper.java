@@ -33,6 +33,7 @@ abstract class ProductDecorator implements ProductMapper {
     @Autowired
     private ModifierGroupRepository modifierGroupRepository;
 
+
     @Override
     public void updateEntity(ProductRequest productRequest, Product product) {
         delegate.updateEntity(productRequest, product);

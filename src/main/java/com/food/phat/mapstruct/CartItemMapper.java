@@ -1,7 +1,8 @@
 package com.food.phat.mapstruct;
 
+import com.food.phat.dto.cart.CartItemPut;
 import com.food.phat.dto.cart.CartItemRequest;
-import com.food.phat.dto.modifier.ModifierGroupCartPut;
+import com.food.phat.dto.modifier.ModifierGroupCartRequest;
 import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.dto.cart.CartItemResponse;
 import com.food.phat.entity.*;
@@ -24,7 +25,11 @@ public interface CartItemMapper {
     @Mapping(target = "thumbnail", source="product.thumbnail")
     @Mapping(target = "modifierGroups", ignore = true)
     CartItemResponse toDto(CartItem cartItem);
+
     CartItem toEntity(CartItemRequest cartItemRequest);
+
+    @Mapping(target ="cartItemId", ignore = true)
+    void updateEntity(CartItemPut cartItemPut, @MappingTarget CartItem cartItem);
 }
 
 @Mapper
@@ -61,7 +66,12 @@ abstract class CartItemDecorator implements CartItemMapper {
         return cartItem;
     }
 
-    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupCartPut> modifierGroupCarts) {
+    @Override
+    public void updateEntity(CartItemPut cartItemPut, CartItem cartItem) {
+
+    }
+
+    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupCartRequest> modifierGroupCarts) {
         return modifierGroupCarts.stream().map(modifierGroupCart -> {
             ModifierGroup modifierGroup = modifierGroupRepository.findById(modifierGroupCart.getModifierGroupId()).get();
             List<Modifier> modifiers = modifierRepository.findAllById(modifierGroupCart.getModifiers());

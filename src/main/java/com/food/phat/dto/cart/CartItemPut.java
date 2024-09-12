@@ -1,7 +1,7 @@
 package com.food.phat.dto.cart;
 
 
-import com.food.phat.dto.modifier.ModifierGroupCartPut;
+import com.food.phat.dto.modifier.ModifierGroupCartRequest;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +14,5 @@ import java.util.List;
 public class CartItemPut {
     private int cartItemId;
     private int qty;
-    private List<ModifierGroupCartPut> modifierGroups;
+    private List<ModifierGroupCartRequest> modifierGroups;
 }

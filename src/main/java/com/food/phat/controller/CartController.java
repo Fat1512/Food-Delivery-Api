@@ -1,8 +1,11 @@
 package com.food.phat.controller;
 
 
+import com.food.phat.dto.cart.CartItemPut;
 import com.food.phat.dto.cart.CartItemRequest;
 import com.food.phat.dto.cart.CartResponse;
+import com.food.phat.entity.CartItem;
+import com.food.phat.repository.CartItemRepository;
 import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +22,13 @@ import java.util.Map;
 public class CartController {
     private final CartService cartService;
     private final UserService userService;
+    private final CartItemRepository cartItemRepository;
+
     @Autowired
-    public CartController(CartService cartService, UserService userService) {
+    public CartController(CartService cartService, UserService userService, CartItemRepository cartItemRepository) {
         this.cartService = cartService;
         this.userService = userService;
+        this.cartItemRepository = cartItemRepository;
     }
 
     @GetMapping("/cart")
@@ -46,5 +52,7 @@ public class CartController {
     }
 
     @PutMapping("/cart")
-    public ResponseEntity<String> updateCartItem()
+    public ResponseEntity<String> updateCartItem(Principal principal, @RequestBody CartItemPut cartItemPut) {
+
+    }
 }

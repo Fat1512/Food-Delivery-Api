@@ -1,5 +1,6 @@
 package com.food.phat.service.Impl;
 
+import com.food.phat.dto.cart.CartItemPut;
 import com.food.phat.dto.cart.CartItemRequest;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
@@ -51,9 +52,17 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public void updateCartItem(CartItemPut cartItemPut, Integer userId) {
+        CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), userId);
+        cartItem.setQty(cartItemPut.getQty());
+
+    }
+
+    @Override
     @Transactional
-    public void deleteCartItem(List<Integer> cartDetailId, Integer userId) {
-        cartItemRepository.deleteAllById(cartDetailId::listIterator);
+    public void deleteCartItem(List<Integer> cartItemIds, Integer userId) {
+        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds, userId);
+        cartItemRepository.deleteAllInBatch(cartItems);
     }
 }
 
