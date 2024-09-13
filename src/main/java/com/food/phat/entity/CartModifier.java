@@ -33,17 +33,17 @@ public class CartModifier {
     }
 
     @JoinColumn(name = "cart_item_fkey")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY,cascade = CascadeType.DETACH)
     @MapsId("cartItemId")
     private CartItem cartItem;
 
     @JoinColumn(name = "modifier_group_fkey", referencedColumnName = "modifier_group_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @MapsId("modifierGroupId")
     private ModifierGroup modifierGroup;
 
     @JoinColumn(name = "modifier_fkey", referencedColumnName = "modifier_id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @MapsId("modifierId")
     private Modifier modifier;
 

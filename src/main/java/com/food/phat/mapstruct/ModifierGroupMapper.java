@@ -8,6 +8,9 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 @Mapper(componentModel = "spring", uses = ModifierMapper.class)
 @DecoratedWith(ModifierGroupDecorator.class)
 public interface ModifierGroupMapper {
@@ -25,7 +28,7 @@ abstract class ModifierGroupDecorator implements ModifierGroupMapper {
     @Override
     public ModifierGroupResponse toDto(ModifierGroup modifierGroup) {
         ModifierGroupResponse modifierGroupResponse = delegate.toDto(modifierGroup);
-        modifierGroupResponse.setModifiers(modifierGroup.getModifier().stream().map(modifierMapper::toDto).toList());
+        modifierGroupResponse.setModifiers(modifierGroup.getModifier().stream().map(modifierMapper::toDto).collect(Collectors.toCollection(ArrayList::new)));
         return modifierGroupResponse;
     }
 }

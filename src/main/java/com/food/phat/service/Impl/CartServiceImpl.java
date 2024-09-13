@@ -1,13 +1,15 @@
 package com.food.phat.service.Impl;
 
 import com.food.phat.dto.cart.CartItemPut;
-import com.food.phat.dto.cart.CartItemRequest;
+import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
+import com.food.phat.entity.CartModifier;
 import com.food.phat.mapstruct.CartItemMapper;
 import com.food.phat.mapstruct.CartMapper;
 import com.food.phat.repository.CartItemRepository;
+import com.food.phat.repository.CartModifierRepository;
 import com.food.phat.repository.CartRepository;
 import com.food.phat.service.CartService;
 import jakarta.transaction.Transactional;
@@ -21,6 +23,8 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartModifierRepository cartModifierRepository;
+
     private final CartMapper cartMapper;
     private final CartItemMapper cartItemMapper;
 
@@ -28,11 +32,13 @@ public class CartServiceImpl implements CartService {
     public CartServiceImpl(CartRepository cartRepository
             , CartItemRepository cartItemRepository
             , CartMapper cartMapper
-            , CartItemMapper cartItemMapper) {
+            , CartItemMapper cartItemMapper
+            , CartModifierRepository cartModifierRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.cartMapper = cartMapper;
         this.cartItemMapper = cartItemMapper;
+        this.cartModifierRepository = cartModifierRepository;
     }
 
     @Override
@@ -44,25 +50,47 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void saveCartItem(CartItemRequest cartItemRequest, Integer userId) {
+    public void saveCartItem(CartItemPost cartItemPost, Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
-        CartItem cartItem = cartItemMapper.toEntity(cartItemRequest);
+        CartItem cartItem = cartItemMapper.toEntity(cartItemPost);
+
         cart.addCartItem(cartItem);
-        cartRepository.save(cart);
+//        cartItemRepository.save(cartItem);
+//        cartRepository.save(cart);
+//        cartRepository.flush();
+        cartItemRepository.save(cartItem);
+        int x = 2;
     }
 
     @Override
+    @Transactional
     public void updateCartItem(CartItemPut cartItemPut, Integer userId) {
         CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), userId);
-        cartItem.setQty(cartItemPut.getQty());
 
+        if(cartItem == null) throw new Error("Item cart doesn't matching with current user id");
+
+        cartItemMapper.updateEntity(cartItemPut, cartItem);
+        cartItemRepository.save(cartItem);
     }
 
     @Override
     @Transactional
     public void deleteCartItem(List<Integer> cartItemIds, Integer userId) {
         List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds, userId);
-        cartItemRepository.deleteAllInBatch(cartItems);
+        //Deleting all the entities/tables referencing to CartItem
+        cartItems.forEach(cartItem -> cartModifierRepository.deleteAll(cartItem.getModifiers()));
+        cartModifierRepository.flush();
+        if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
+
+        cartItemRepository.deleteAll(cartItems);
+    }
+
+    private void removeAllCartModifiers(CartModifier cartModifier) {
+        cartModifier.setCartItem(null);
+        cartModifier.setModifier(null);
+        cartModifier.setModifierGroup(null);
+        cartModifier.setCartModifierId(null);
+
     }
 }
 

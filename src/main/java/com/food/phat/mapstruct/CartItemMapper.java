@@ -1,8 +1,9 @@
 package com.food.phat.mapstruct;
 
 import com.food.phat.dto.cart.CartItemPut;
-import com.food.phat.dto.cart.CartItemRequest;
-import com.food.phat.dto.modifier.ModifierGroupCartRequest;
+import com.food.phat.dto.cart.CartItemPost;
+import com.food.phat.dto.modifier.ModifierGet;
+import com.food.phat.dto.modifier.ModifierGroupGet;
 import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.dto.cart.CartItemResponse;
 import com.food.phat.entity.*;
@@ -26,7 +27,7 @@ public interface CartItemMapper {
     @Mapping(target = "modifierGroups", ignore = true)
     CartItemResponse toDto(CartItem cartItem);
 
-    CartItem toEntity(CartItemRequest cartItemRequest);
+    CartItem toEntity(CartItemPost cartItemPost);
 
     @Mapping(target ="cartItemId", ignore = true)
     void updateEntity(CartItemPut cartItemPut, @MappingTarget CartItem cartItem);
@@ -40,12 +41,14 @@ abstract class CartItemDecorator implements CartItemMapper {
     @Autowired
     private ModifierMapper modifierMapper;
     @Autowired
+    private ModifierGroupMapper modifierGroupMapper;
+
+    @Autowired
     private ModifierGroupRepository modifierGroupRepository;
     @Autowired
     private ModifierRepository modifierRepository;
     @Autowired
     private ProductRepository productRepository;
-
 
     @Override
     public CartItemResponse toDto(CartItem cartItem) {
@@ -56,11 +59,11 @@ abstract class CartItemDecorator implements CartItemMapper {
     }
 
     @Override
-    public CartItem toEntity(CartItemRequest cartItemRequest) {
-        CartItem cartItem = delegate.toEntity(cartItemRequest);
+    public CartItem toEntity(CartItemPost cartItemPost) {
+        CartItem cartItem = delegate.toEntity(cartItemPost);
 
-        List<CartModifier> modifiers = modifierGroupDtoToCartModifier(cartItem, cartItemRequest.getModifierGroups());
-        Product product = productRepository.findById(cartItemRequest.getProductId()).get();
+        List<CartModifier> modifiers = modifierGroupDtoToCartModifier(cartItem, cartItemPost.getModifierGroups());
+        Product product = productRepository.findById(cartItemPost.getProductId()).get();
         cartItem.setProduct(product);
         cartItem.setModifiers(modifiers);
         return cartItem;
@@ -68,13 +71,19 @@ abstract class CartItemDecorator implements CartItemMapper {
 
     @Override
     public void updateEntity(CartItemPut cartItemPut, CartItem cartItem) {
-
+        delegate.updateEntity(cartItemPut, cartItem);
+        List<CartModifier> cartModifiers = modifierGroupDtoToCartModifier(cartItem, cartItemPut.getModifierGroups());
+        cartItem.setModifiers(cartModifiers);
+        cartItem.setQty(cartItemPut.getQty());
     }
 
-    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupCartRequest> modifierGroupCarts) {
+    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupGet> modifierGroupCarts) {
         return modifierGroupCarts.stream().map(modifierGroupCart -> {
             ModifierGroup modifierGroup = modifierGroupRepository.findById(modifierGroupCart.getModifierGroupId()).get();
-            List<Modifier> modifiers = modifierRepository.findAllById(modifierGroupCart.getModifiers());
+            List<Modifier> modifiers = modifierRepository.findAllById(
+                    modifierGroupCart.getModifiers()
+                            .stream()
+                            .map(ModifierGet::getModifierId).toList());
 
             return modifiers.stream().map(modifier -> {
                 CartModifier cartModifier = new CartModifier();
@@ -91,7 +100,12 @@ abstract class CartItemDecorator implements CartItemMapper {
 
         cartModifiers.forEach(cartModifier -> {
             Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
-            modifierGroupMp.putIfAbsent(modifierGroupId, new ModifierGroupResponse());
+
+            boolean isExisted = true;
+            if(!modifierGroupMp.containsKey(modifierGroupId)) isExisted = false;
+            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
+
+            if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
             modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
         });
 

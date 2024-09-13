@@ -7,7 +7,6 @@ import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

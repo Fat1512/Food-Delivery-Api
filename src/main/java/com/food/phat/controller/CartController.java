@@ -2,9 +2,8 @@ package com.food.phat.controller;
 
 
 import com.food.phat.dto.cart.CartItemPut;
-import com.food.phat.dto.cart.CartItemRequest;
+import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartResponse;
-import com.food.phat.entity.CartItem;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
@@ -22,13 +21,11 @@ import java.util.Map;
 public class CartController {
     private final CartService cartService;
     private final UserService userService;
-    private final CartItemRepository cartItemRepository;
 
     @Autowired
-    public CartController(CartService cartService, UserService userService, CartItemRepository cartItemRepository) {
+    public CartController(CartService cartService, UserService userService) {
         this.cartService = cartService;
         this.userService = userService;
-        this.cartItemRepository = cartItemRepository;
     }
 
     @GetMapping("/cart")
@@ -46,13 +43,14 @@ public class CartController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<String> saveCartItem(Principal principal, @RequestBody CartItemRequest cartItemRequest) {
-        cartService.saveCartItem(cartItemRequest, userService.getUserByUsername(principal.getName()).getUserId());
+    public ResponseEntity<String> saveCartItem(Principal principal, @RequestBody CartItemPost cartItemPost) {
+        cartService.saveCartItem(cartItemPost, userService.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
 
     @PutMapping("/cart")
     public ResponseEntity<String> updateCartItem(Principal principal, @RequestBody CartItemPut cartItemPut) {
-
+        cartService.updateCartItem(cartItemPut, userService.getUserByUsername(principal.getName()).getUserId());
+        return null;
     }
 }

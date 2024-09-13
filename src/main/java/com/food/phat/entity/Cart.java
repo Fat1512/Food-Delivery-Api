@@ -24,8 +24,8 @@ public class Cart {
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="cart_fkey")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="cart_fkey", nullable = false)
     private List<CartItem> cartItem;
 
     public void addCartItem(CartItem cartItem) {

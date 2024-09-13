@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Setter
 @Getter
-public class ModifierGroupCartRequest {
+public class ModifierGroupGet {
     private int modifierGroupId;
-    private List<Integer> modifiers;
+    private List<ModifierGet> modifiers;
 }

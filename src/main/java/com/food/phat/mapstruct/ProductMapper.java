@@ -33,7 +33,6 @@ abstract class ProductDecorator implements ProductMapper {
     @Autowired
     private ModifierGroupRepository modifierGroupRepository;
 
-
     @Override
     public void updateEntity(ProductRequest productRequest, Product product) {
         delegate.updateEntity(productRequest, product);
@@ -41,6 +40,7 @@ abstract class ProductDecorator implements ProductMapper {
         product.setMenuCategory(menuCategoryRepository.findById(productRequest.getMenuCategoryId()).orElse(null));
         product.setProductCategory(productCategoryRepository.findById(productRequest.getProductCategoryId()).orElse(null));
         product.setRestaurant(restaurantRepository.findById(productRequest.getRestaurantId()).orElse(null));
+
         if(productRequest.getModifierGroup() != null)
             product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroup()));
     }
