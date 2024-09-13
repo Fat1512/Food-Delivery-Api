@@ -35,8 +35,13 @@ public class CartItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartModifier> modifiers;
+
+    public void modifyCartModifier(List<CartModifier> cartModifiers) {
+        this.modifiers.clear();
+        this.modifiers.addAll(cartModifiers);
+    }
 }
 
 

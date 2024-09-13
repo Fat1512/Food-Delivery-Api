@@ -74,7 +74,7 @@ abstract class CartItemDecorator implements CartItemMapper {
     public void updateEntity(CartItemPut cartItemPut, CartItem cartItem) {
         delegate.updateEntity(cartItemPut, cartItem);
         List<CartModifier> cartModifiers = modifierGroupDtoToCartModifier(cartItem, cartItemPut.getModifierGroups());
-        cartItem.setModifiers(cartModifiers);
+        cartItem.modifyCartModifier(cartModifiers);
         cartItem.setQty(cartItemPut.getQty());
     }
 

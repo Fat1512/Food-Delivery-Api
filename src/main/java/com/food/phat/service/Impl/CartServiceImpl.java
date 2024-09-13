@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,7 +54,6 @@ public class CartServiceImpl implements CartService {
     public void saveCartItem(CartItemPost cartItemPost, Integer userId) {
         Cart cart = cartRepository.findByUser_UserId(userId);
         CartItem cartItem = cartItemMapper.toEntity(cartItemPost);
-
         cart.addCartItem(cartItem);
         cartItemRepository.save(cartItem);
     }
@@ -62,24 +62,17 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void updateCartItem(CartItemPut cartItemPut, Integer userId) {
         CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), userId);
-
-        if(cartItem == null) throw new Error("cart item doesn't match with current user id");
-
         cartItemMapper.updateEntity(cartItemPut, cartItem);
-
         cartItemRepository.save(cartItem);
+//        if(cartItem == null) throw new Error("cart item doesn't match with current user id");
     }
 
     @Override
     @Transactional
     public void deleteCartItem(List<Integer> cartItemIds, Integer userId) {
         List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds, userId);
-        //Deleting all the entities/tables referencing to CartItem
-        cartItems.forEach(cartItem -> cartModifierRepository.deleteAll(cartItem.getModifiers()));
-        cartModifierRepository.flush();
-        if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
-
         cartItemRepository.deleteAll(cartItems);
+//        if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
     }
 }
 
