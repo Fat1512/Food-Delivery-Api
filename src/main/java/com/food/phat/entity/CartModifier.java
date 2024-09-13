@@ -33,17 +33,17 @@ public class CartModifier {
     }
 
     @JoinColumn(name = "cart_item_fkey")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY,cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId("cartItemId")
     private CartItem cartItem;
 
     @JoinColumn(name = "modifier_group_fkey", referencedColumnName = "modifier_group_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId("modifierGroupId")
     private ModifierGroup modifierGroup;
 
     @JoinColumn(name = "modifier_fkey", referencedColumnName = "modifier_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId("modifierId")
     private Modifier modifier;
 
@@ -53,13 +53,13 @@ public class CartModifier {
     @AllArgsConstructor
     public static class CartModifierId implements Serializable {
         @Column(name="cart_item_fkey")
-        private int cartItemId;
+        private Integer cartItemId;
 
         @Column(name="modifier_group_fkey")
-        private int modifierGroupId;
+        private Integer modifierGroupId;
 
         @Column(name="modifier_fkey")
-        private int modifierId;
+        private Integer modifierId;
 
         public CartModifierId() {
 

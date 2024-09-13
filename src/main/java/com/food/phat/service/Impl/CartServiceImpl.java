@@ -55,11 +55,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemMapper.toEntity(cartItemPost);
 
         cart.addCartItem(cartItem);
-//        cartItemRepository.save(cartItem);
-//        cartRepository.save(cart);
-//        cartRepository.flush();
         cartItemRepository.save(cartItem);
-        int x = 2;
     }
 
     @Override
@@ -67,9 +63,10 @@ public class CartServiceImpl implements CartService {
     public void updateCartItem(CartItemPut cartItemPut, Integer userId) {
         CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), userId);
 
-        if(cartItem == null) throw new Error("Item cart doesn't matching with current user id");
+        if(cartItem == null) throw new Error("cart item doesn't match with current user id");
 
         cartItemMapper.updateEntity(cartItemPut, cartItem);
+
         cartItemRepository.save(cartItem);
     }
 
@@ -83,14 +80,6 @@ public class CartServiceImpl implements CartService {
         if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
 
         cartItemRepository.deleteAll(cartItems);
-    }
-
-    private void removeAllCartModifiers(CartModifier cartModifier) {
-        cartModifier.setCartItem(null);
-        cartModifier.setModifier(null);
-        cartModifier.setModifierGroup(null);
-        cartModifier.setCartModifierId(null);
-
     }
 }
 

@@ -12,14 +12,15 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
         select cart_item.* from cart, cart_item where
             cart.user_fkey = ?2 and
             cart.cart_id = cart_item.cart_fkey and
-            cart_item.cart_item_id in ?1""", nativeQuery = true)
+            cart_item.cart_item_id in ?1
+            """, nativeQuery = true)
     List<CartItem> findAllById(Iterable<Integer> cartItemIds, Integer userId);
 
     @Query(value= """
         select cart_item.* from cart, cart_item where
             cart.user_fkey = ?2 and
             cart.cart_id = cart_item.cart_fkey and
-            cart_item.cart_item_id in ?1
+            cart_item.cart_item_id = ?1
     """, nativeQuery = true)
     CartItem findByIdAndUserId(Integer cartItemId, Integer userId);
 }

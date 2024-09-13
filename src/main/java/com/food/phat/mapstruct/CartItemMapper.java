@@ -15,10 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = ModifierMapper.class, injectionStrategy = InjectionStrategy.FIELD)
 @DecoratedWith(CartItemDecorator.class)
-public interface CartItemMapper {
+public interface  CartItemMapper {
     @Mapping(target = "productId", source="product.productId")
     @Mapping(target = "restaurantId", source="product.restaurant.restaurantId")
     @Mapping(target = "name", source="product.name")
@@ -85,14 +86,22 @@ abstract class CartItemDecorator implements CartItemMapper {
                             .stream()
                             .map(ModifierGet::getModifierId).toList());
 
+
             return modifiers.stream().map(modifier -> {
+
+                CartModifier.CartModifierId cartModifierId = new CartModifier.CartModifierId();
+                cartModifierId.setModifierId(modifier.getModifierId());
+                cartModifierId.setModifierGroupId(modifierGroup.getModifierGroupId());
+                cartModifierId.setCartItemId(cartItem.getCartItemId());
+
                 CartModifier cartModifier = new CartModifier();
+                cartModifier.setCartModifierId(cartModifierId);
                 cartModifier.setCartItem(cartItem);
                 cartModifier.setModifierGroup(modifierGroup);
                 cartModifier.setModifier(modifier);
                 return cartModifier;
             }).toList();
-        }).flatMap(Collection::stream).toList();
+        }).flatMap(Collection::stream).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private List<ModifierGroupResponse> cartModifierToModifierGroupDto(List<CartModifier> cartModifiers) {

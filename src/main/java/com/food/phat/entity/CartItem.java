@@ -11,7 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "cart_item")
-@Entity @DynamicUpdate
+@Entity
+@DynamicUpdate
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class CartItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-//    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL)
     private List<CartModifier> modifiers;
 }
 
