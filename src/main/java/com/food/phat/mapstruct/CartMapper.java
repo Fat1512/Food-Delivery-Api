@@ -48,7 +48,7 @@ abstract class CartDecorator implements CartMapper {
         cartItems.forEach(cartItem -> {
             CartItemResponse cartItemResponse = cartItemMapper.toDto(cartItem);
             RestaurantCheckoutResponse restaurantCheckoutResponse = restaurantMapper
-                    .toRestaurantCartResponseDto(cartItem.getProduct().getRestaurant());
+                    .toRestaurantCheckoutResponse(cartItem.getProduct().getRestaurant());
 
             restaurantMp.putIfAbsent(restaurantCheckoutResponse.getRestaurantId(), restaurantCheckoutResponse);
             cartItemResponseMp.putIfAbsent(restaurantCheckoutResponse.getRestaurantId(), new ArrayList<>());
@@ -59,3 +59,17 @@ abstract class CartDecorator implements CartMapper {
                 new CartResponse.CartItemGroup(entry.getValue(), cartItemResponseMp.get(entry.getKey()))).toList();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

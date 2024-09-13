@@ -12,13 +12,13 @@ import java.util.List;
 @Getter
 public class OrderItemResponse {
     private Integer orderItemId;//
-    private Integer productId;
-    private Integer restaurantId;
-    private String name;
-    private Boolean status;
     private int qty;//
-    private String thumbnail;
-    private double price;
-    private String note;
+    private double price;//tay
+    private String note;//
+    private String thumbnail;//tay
+    private String name;//tay
+    private Integer productId;//tay
+    private Integer restaurantId;//tay
+    private Boolean status;//tay
     List<ModifierGroupResponse> modifierGroups;
 }

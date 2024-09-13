@@ -40,20 +40,13 @@ abstract class CartItemDecorator implements CartItemMapper {
     @Autowired
     private CartItemMapper delegate;
     @Autowired
-    private ModifierMapper modifierMapper;
-    @Autowired
-    private ModifierGroupMapper modifierGroupMapper;
-
-    @Autowired
-    private ModifierGroupRepository modifierGroupRepository;
-    @Autowired
-    private ModifierRepository modifierRepository;
-    @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CartModifierMapper cartModifierMapper;
 
     @Override
     public CartItemResponse toDto(CartItem cartItem) {
-        List<ModifierGroupResponse> modifierGroups = this.cartModifierToModifierGroupDto(cartItem.getModifiers());
+        List<ModifierGroupResponse> modifierGroups = cartModifierMapper.toDto(cartItem.getModifiers());
         CartItemResponse cartItemResponse = delegate.toDto(cartItem);
         cartItemResponse.setModifierGroups(modifierGroups);
         return cartItemResponse;
@@ -63,7 +56,7 @@ abstract class CartItemDecorator implements CartItemMapper {
     public CartItem toEntity(CartItemPost cartItemPost) {
         CartItem cartItem = delegate.toEntity(cartItemPost);
 
-        List<CartModifier> modifiers = modifierGroupDtoToCartModifier(cartItem, cartItemPost.getModifierGroups());
+        List<CartModifier> modifiers = cartModifierMapper.toEntity(cartItem, cartItemPost.getModifierGroups());
         Product product = productRepository.findById(cartItemPost.getProductId()).get();
         cartItem.setProduct(product);
         cartItem.setModifiers(modifiers);
@@ -73,52 +66,9 @@ abstract class CartItemDecorator implements CartItemMapper {
     @Override
     public void updateEntity(CartItemPut cartItemPut, CartItem cartItem) {
         delegate.updateEntity(cartItemPut, cartItem);
-        List<CartModifier> cartModifiers = modifierGroupDtoToCartModifier(cartItem, cartItemPut.getModifierGroups());
+        List<CartModifier> cartModifiers = cartModifierMapper.toEntity(cartItem, cartItemPut.getModifierGroups());
         cartItem.modifyCartModifier(cartModifiers);
         cartItem.setQty(cartItemPut.getQty());
-    }
-
-    private List<CartModifier> modifierGroupDtoToCartModifier(CartItem cartItem, List<ModifierGroupGet> modifierGroupCarts) {
-        return modifierGroupCarts.stream().map(modifierGroupCart -> {
-            ModifierGroup modifierGroup = modifierGroupRepository.findById(modifierGroupCart.getModifierGroupId()).get();
-            List<Modifier> modifiers = modifierRepository.findAllById(
-                    modifierGroupCart.getModifiers()
-                            .stream()
-                            .map(ModifierGet::getModifierId).toList());
-
-
-            return modifiers.stream().map(modifier -> {
-
-                CartModifier.CartModifierId cartModifierId = new CartModifier.CartModifierId();
-                cartModifierId.setModifierId(modifier.getModifierId());
-                cartModifierId.setModifierGroupId(modifierGroup.getModifierGroupId());
-                cartModifierId.setCartItemId(cartItem.getCartItemId());
-
-                CartModifier cartModifier = new CartModifier();
-                cartModifier.setCartModifierId(cartModifierId);
-                cartModifier.setCartItem(cartItem);
-                cartModifier.setModifierGroup(modifierGroup);
-                cartModifier.setModifier(modifier);
-                return cartModifier;
-            }).toList();
-        }).flatMap(Collection::stream).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private List<ModifierGroupResponse> cartModifierToModifierGroupDto(List<CartModifier> cartModifiers) {
-        Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
-
-        cartModifiers.forEach(cartModifier -> {
-            Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
-
-            boolean isExisted = true;
-            if(!modifierGroupMp.containsKey(modifierGroupId)) isExisted = false;
-            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
-
-            if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
-            modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
-        });
-
-        return new ArrayList<>(modifierGroupMp.values());
     }
 }
 

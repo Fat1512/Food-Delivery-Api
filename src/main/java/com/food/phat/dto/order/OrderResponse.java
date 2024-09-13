@@ -13,9 +13,9 @@ import java.util.List;
 public class OrderResponse {
     private int orderId;//
     private double shippingFee;//
-    private OrderStatus status;//
     private Date submitTime;//
     private Date completeTime;//
+    private OrderStatus status;//
     private CustomerAddressDTO customerAddress;
     private RestaurantCheckoutResponse restaurant;
     private List<OrderItemResponse> orderItems = new ArrayList<>();

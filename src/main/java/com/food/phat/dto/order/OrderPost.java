@@ -5,10 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrderRequest {
-    private Integer orderId;
-    private Integer restaurantId;
+public class OrderPost {
     private Integer customerAddressId;
     private float shippingFee;
-    private List<OrderItemRequest> orderItems;
+    private List<OrderItemPost> orderItems;
 }

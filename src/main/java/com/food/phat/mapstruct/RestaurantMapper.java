@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
-    RestaurantCheckoutResponse toRestaurantCartResponseDto(Restaurant restaurant);
+    RestaurantCheckoutResponse toRestaurantCheckoutResponse(Restaurant restaurant);
 }

@@ -1,52 +1,71 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.order.OrderRequest;
+import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.*;
+import com.food.phat.mapstruct.CustomerAddressMapper;
+import com.food.phat.mapstruct.OrderMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
+    private final CustomerAddressRepository customerAddressRepository;
+    private final OrderMapper orderMapper;
+    private final CartItemRepository cartItemRepository;
 
-
-    public OrderServiceImpl(OrderRepository orderRepository
-            , ProductRepository productRepository
-            , RestaurantRepository restaurantRepository
-            , CustomerAddressRepository customerAddressRepository
-            , ModifierRepository modifierRepository) {
+    @Autowired
+    public OrderServiceImpl(
+            OrderRepository orderRepository,
+            CartRepository cartRepository,
+            CustomerAddressRepository customerAddressRepository,
+            OrderMapper orderMapper, CartItemRepository cartItemRepository) {
         this.orderRepository = orderRepository;
-//        this.productRepository = productRepository;
-//        this.restaurantRepository = restaurantRepository;
-//        this.customerAddressRepository = customerAddressRepository;
-//        this.modifierRepository = modifierRepository;
+        this.cartRepository = cartRepository;
+        this.customerAddressRepository = customerAddressRepository;
+        this.orderMapper = orderMapper;
+        this.cartItemRepository = cartItemRepository;
     }
 
     @Override
     @Transactional
     public List<OrderResponse> getOrders(Integer userId) {
         List<Order> orderList = orderRepository.findByCustomerAddress_User_UserId(userId);
-        List<OrderResponse> orderResponseList = new ArrayList<>();
-
-        return orderResponseList;
+        return orderList.stream().map(orderMapper::toDto).toList();
     }
 
     @Override
+    @Transactional
     public OrderResponse getOrder(Integer orderId) {
-        orderRepository.findById(orderId);
-        return null;
+        Order order = orderRepository.findById(orderId).get();
+        return orderMapper.toDto(order);
     }
 
     @Override
-    public void placeOrder(List<OrderRequest> orderRequests) {
+    public void placeOrder(List<OrderPost> orderPosts) {
+        orderPosts.forEach(orderPost -> {
+            CustomerAddress customerAddress = customerAddressRepository.findById(orderPost.getCustomerAddressId()).get();
+            Map<Integer, String> notes = new HashMap<>();
 
+            List<Integer> cartItemIds = orderPost.getOrderItems().stream().map(item -> {
+                notes.put(item.getCartItemId() ,item.getNote());
+                return item.getCartItemId();
+            }).toList();
+
+            List<CartItem> cartItem = cartItemRepository.findAllById(cartItemIds);
+
+        })
     }
 
     @Override
