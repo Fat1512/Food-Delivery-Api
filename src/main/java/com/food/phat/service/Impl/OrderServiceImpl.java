@@ -64,7 +64,6 @@ public class OrderServiceImpl implements OrderService {
             }).toList();
 
             List<CartItem> cartItem = cartItemRepository.findAllById(cartItemIds);
-
         })
     }
 

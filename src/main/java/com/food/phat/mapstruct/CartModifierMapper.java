@@ -40,7 +40,6 @@ abstract class CartModifierDecorator implements CartModifierMapper {
     @Autowired
     private ModifierRepository modifierRepository;
 
-
     @Override
     public ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroupCarts) {
         return modifierGroupCarts.stream().map(modifierGroupCart -> {
@@ -58,6 +57,7 @@ abstract class CartModifierDecorator implements CartModifierMapper {
                 cartModifierId.setCartItemId(cartItem.getCartItemId());
 
                 CartModifier cartModifier = new CartModifier();
+
                 cartModifier.setCartModifierId(cartModifierId);
                 cartModifier.setCartItem(cartItem);
                 cartModifier.setModifierGroup(modifierGroup);
