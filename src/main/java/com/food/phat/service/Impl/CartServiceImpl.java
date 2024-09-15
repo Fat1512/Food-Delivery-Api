@@ -70,7 +70,7 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public void deleteCartItem(List<Integer> cartItemIds, Integer userId) {
-        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemIds, userId);
+        List<CartItem> cartItems = cartItemRepository.findAllByIdAndUserId(cartItemIds, userId);
         cartItemRepository.deleteAll(cartItems);
 //        if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
     }

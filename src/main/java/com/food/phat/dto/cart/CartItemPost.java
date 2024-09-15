@@ -1,6 +1,5 @@
 package com.food.phat.dto.cart;
 
-
 import com.food.phat.dto.modifier.ModifierGroupGet;
 import lombok.Data;
 import lombok.Getter;
@@ -17,3 +16,22 @@ public class CartItemPost {
     private String note;
     private List<ModifierGroupGet> modifierGroups;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

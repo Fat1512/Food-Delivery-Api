@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 @DecoratedWith(CartModifierDecorator.class)
 public interface CartModifierMapper {
-    ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroupCarts);
+    ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroups);
     ArrayList<ModifierGroupResponse> toDto(List<CartModifier> cartModifiers);
 }
 
@@ -41,8 +41,9 @@ abstract class CartModifierDecorator implements CartModifierMapper {
     private ModifierRepository modifierRepository;
 
     @Override
-    public ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroupCarts) {
-        return modifierGroupCarts.stream().map(modifierGroupCart -> {
+    public ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroups) {
+        return modifierGroups.stream().map(modifierGroupCart -> {
+
             ModifierGroup modifierGroup = modifierGroupRepository.findById(modifierGroupCart.getModifierGroupId()).get();
             List<Modifier> modifiers = modifierRepository.findAllById(
                     modifierGroupCart.getModifiers()
@@ -74,8 +75,7 @@ abstract class CartModifierDecorator implements CartModifierMapper {
         cartModifiers.forEach(cartModifier -> {
             Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
 
-            boolean isExisted = true;
-            if(!modifierGroupMp.containsKey(modifierGroupId)) isExisted = false;
+            boolean isExisted = modifierGroupMp.containsKey(modifierGroupId);
             modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
 
             if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
@@ -85,3 +85,24 @@ abstract class CartModifierDecorator implements CartModifierMapper {
         return new ArrayList<>(modifierGroupMp.values());
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,5 +42,20 @@ public class Order {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="order_fkey")
-    private List<OrderItem> orderItem;
+    private List<OrderItem> orderItems;
+
+    public void addOrderItem(List<OrderItem> orderItem) {
+        orderItems.addAll(orderItem);
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+    }
 }
+
+
+
+
+
+
+

@@ -1,9 +1,9 @@
 package com.food.phat.service.Impl;
 
+import com.food.phat.dto.order.OrderItemPost;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.*;
-import com.food.phat.mapstruct.CustomerAddressMapper;
 import com.food.phat.mapstruct.OrderMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
@@ -11,29 +11,20 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final CartRepository cartRepository;
-    private final CustomerAddressRepository customerAddressRepository;
     private final OrderMapper orderMapper;
     private final CartItemRepository cartItemRepository;
 
     @Autowired
     public OrderServiceImpl(
             OrderRepository orderRepository,
-            CartRepository cartRepository,
-            CustomerAddressRepository customerAddressRepository,
             OrderMapper orderMapper, CartItemRepository cartItemRepository) {
         this.orderRepository = orderRepository;
-        this.cartRepository = cartRepository;
-        this.customerAddressRepository = customerAddressRepository;
         this.orderMapper = orderMapper;
         this.cartItemRepository = cartItemRepository;
     }
@@ -53,18 +44,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void placeOrder(List<OrderPost> orderPosts) {
+    @Transactional
+    public void placeOrder(List<OrderPost> orderPosts, Integer userId) {
         orderPosts.forEach(orderPost -> {
-            CustomerAddress customerAddress = customerAddressRepository.findById(orderPost.getCustomerAddressId()).get();
-            Map<Integer, String> notes = new HashMap<>();
+            Order order = orderMapper.toEntity(orderPost);
 
-            List<Integer> cartItemIds = orderPost.getOrderItems().stream().map(item -> {
-                notes.put(item.getCartItemId() ,item.getNote());
-                return item.getCartItemId();
-            }).toList();
+            List<Integer> productIds = orderPost.getOrderItems().stream()
+                    .map(OrderItemPost::getProductId).toList();
 
-            List<CartItem> cartItem = cartItemRepository.findAllById(cartItemIds);
-        })
+            cartItemRepository.deleteAllByProductIdAndUserId(productIds, userId);
+            orderRepository.save(order);
+        });
     }
 
     @Override

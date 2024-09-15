@@ -1,6 +1,5 @@
 package com.food.phat.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,3 +37,10 @@ public class OrderItem {
     @OneToMany(cascade = CascadeType.MERGE)
     private List<OrderModifier> modifiers;
 }
+
+
+
+
+
+
+

@@ -18,8 +18,8 @@ public class ProductRequest {
     private float price;
     private String thumbnail;
 
-    List<Integer> modifierGroup;
     private int productCategoryId;
     private int menuCategoryId;
     private int restaurantId;
+    List<Integer> modifierGroup;
 }

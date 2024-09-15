@@ -19,7 +19,6 @@ import java.util.Map;
 @DecoratedWith(CartDecorator.class)
 public interface CartMapper {
     CartResponse toDto(Cart cart);
-    List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems);
 }
 
 @Mapper
@@ -41,7 +40,7 @@ abstract class CartDecorator implements CartMapper {
     }
 
 
-    public List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems) {
+    private List<CartResponse.CartItemGroup> cartItemToCartItemGroupDto(List<CartItem> cartItems) {
         Map<Integer, RestaurantCheckoutResponse> restaurantMp = new HashMap<>();
         Map<Integer, List<CartItemResponse>> cartItemResponseMp = new HashMap<>();
 

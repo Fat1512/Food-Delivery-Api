@@ -7,15 +7,12 @@ import com.food.phat.dto.modifier.ModifierGroupGet;
 import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.dto.cart.CartItemResponse;
 import com.food.phat.entity.*;
-import com.food.phat.repository.ModifierGroupRepository;
-import com.food.phat.repository.ModifierRepository;
 import com.food.phat.repository.ProductRepository;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = ModifierMapper.class, injectionStrategy = InjectionStrategy.FIELD)
 @DecoratedWith(CartItemDecorator.class)
@@ -67,7 +64,7 @@ abstract class CartItemDecorator implements CartItemMapper {
     public void updateEntity(CartItemPut cartItemPut, CartItem cartItem) {
         delegate.updateEntity(cartItemPut, cartItem);
         List<CartModifier> cartModifiers = cartModifierMapper.toEntity(cartItem, cartItemPut.getModifierGroups());
-        cartItem.modifyCartModifier(cartModifiers);
+        cartItem.updateCartModifier(cartModifiers);
         cartItem.setQty(cartItemPut.getQty());
     }
 }

@@ -43,7 +43,8 @@ public class OrderController {
 
     @PostMapping("/order")
     public ResponseEntity<CartResponse> placeOrder(List<OrderPost> orderPosts) {
-        orderService.placeOrder(orderPosts);
+        int x = 2;
+        orderService.placeOrder(orderPosts, x);
         return null;
     }
 
