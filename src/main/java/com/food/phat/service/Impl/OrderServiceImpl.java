@@ -1,9 +1,11 @@
 package com.food.phat.service.Impl;
 
+import com.food.phat.dto.order.OrderCancelPost;
 import com.food.phat.dto.order.OrderItemPost;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.*;
+import com.food.phat.mapstruct.OrderCancelMapper;
 import com.food.phat.mapstruct.OrderMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
@@ -17,23 +19,28 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
     private final CartItemRepository cartItemRepository;
+    private final OrderMapper orderMapper;
+    private final OrderCancelMapper orderCancelMapper;
 
     @Autowired
     public OrderServiceImpl(
             OrderRepository orderRepository,
-            OrderMapper orderMapper, CartItemRepository cartItemRepository) {
+            OrderMapper orderMapper,
+            CartItemRepository cartItemRepository,
+            OrderCancelMapper orderCancelMapper) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.cartItemRepository = cartItemRepository;
+        this.orderCancelMapper = orderCancelMapper;
     }
 
     @Override
     @Transactional
     public List<OrderResponse> getOrders(Integer userId) {
-        List<Order> orderList = orderRepository.findByCustomerAddress_User_UserId(userId);
-        return orderList.stream().map(orderMapper::toDto).toList();
+//        List<Order> orderList = orderRepository.findByUser_UserID(userId);
+//        return orderList.stream().map(orderMapper::toDto).toList();
+        return null;
     }
 
     @Override
@@ -58,9 +65,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void cancelOrder(OrderCancelPost orderCancelPost, Integer userId) {
+        OrderCancel orderCancel = orderCancelMapper.toEntity(orderCancelPost);
+    }
+
+    @Override
     public void modifyOrderStatus(Integer orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId).get();
         order.setOrderStatus(status);
+        orderRepository.save(order);
     }
 }
 

@@ -1,6 +1,6 @@
 package com.food.phat.controller;
 
-
+import com.food.phat.dto.order.OrderCancelPost;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.dto.order.OrderResponse;
@@ -37,21 +37,21 @@ public class OrderController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<List<OrderResponse>> getOrderById(@PathVariable Integer orderId) {
-        return null;
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer orderId) {
+        OrderResponse orderResponse = orderService.getOrder(orderId);
+        return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
     @PostMapping("/order")
-    public ResponseEntity<CartResponse> placeOrder(List<OrderPost> orderPosts) {
-        int x = 2;
-        orderService.placeOrder(orderPosts, x);
-        return null;
+    public ResponseEntity<?> placeOrder(Principal principal, List<OrderPost> orderPosts) {
+        orderService.placeOrder(orderPosts, userService.getUserByUsername(principal.getName()).getUserId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/order/{orderId}")
-    public ResponseEntity<CartResponse> cancelOrder(@PathVariable Integer orderId) {
-        orderService.modifyOrderStatus(orderId, OrderStatus.CANCELLED);
-        return null;
+    @DeleteMapping("/order")
+    public ResponseEntity<?> cancelOrder(Principal principal, OrderCancelPost orderCancelPost) {
+        orderService.cancelOrder(orderCancelPost, userService.getUserByUsername(principal.getName()).getUserId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/order/{orderId}")

@@ -1,5 +1,6 @@
 package com.food.phat.service;
 
+import com.food.phat.dto.order.OrderCancelPost;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.OrderStatus;
@@ -12,4 +13,5 @@ public interface OrderService {
     OrderResponse getOrder(Integer orderId);
     void placeOrder(List<OrderPost> orderPosts, Integer userId);
     void modifyOrderStatus(Integer orderId, OrderStatus status);
+    void cancelOrder(OrderCancelPost orderCancelPost, Integer userId);
 }

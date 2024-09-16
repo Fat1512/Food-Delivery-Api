@@ -3,9 +3,10 @@ package com.food.phat.repository;
 import com.food.phat.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
     @Query(value = """
         select distinct res.*

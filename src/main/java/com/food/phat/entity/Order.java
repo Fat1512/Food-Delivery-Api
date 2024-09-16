@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +40,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="restaurant_fkey")
     private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name="user_fkey")
+    private User user;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="order_fkey")

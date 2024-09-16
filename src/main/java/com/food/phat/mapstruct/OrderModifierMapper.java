@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 @DecoratedWith(OrderModifierDecorator.class)
 public interface OrderModifierMapper {
-    List<OrderModifier> toEntity(OrderItem orderItem, List<ModifierGroupGet> modifierGroups);
-    List<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers);
+    ArrayList<OrderModifier> toEntity(OrderItem orderItem, List<ModifierGroupGet> modifierGroups);
+    ArrayList<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers);
 }
 
 
@@ -67,7 +67,7 @@ abstract class OrderModifierDecorator implements OrderModifierMapper {
     }
 
     @Override
-    public List<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers) {
+    public ArrayList<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers) {
         Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
 
         orderModifiers.forEach(cartModifier -> {

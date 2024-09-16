@@ -24,7 +24,6 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final CartModifierRepository cartModifierRepository;
 
     private final CartMapper cartMapper;
     private final CartItemMapper cartItemMapper;
@@ -33,13 +32,11 @@ public class CartServiceImpl implements CartService {
     public CartServiceImpl(CartRepository cartRepository
             , CartItemRepository cartItemRepository
             , CartMapper cartMapper
-            , CartItemMapper cartItemMapper
-            , CartModifierRepository cartModifierRepository) {
+            , CartItemMapper cartItemMapper) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.cartMapper = cartMapper;
         this.cartItemMapper = cartItemMapper;
-        this.cartModifierRepository = cartModifierRepository;
     }
 
     @Override
