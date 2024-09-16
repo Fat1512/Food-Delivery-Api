@@ -17,5 +17,4 @@ public class RestaurantResponse {
     private String backgroundImage;
     private String city;
     private String country;
-    private MenuResponse menuResponse;
 }

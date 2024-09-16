@@ -45,7 +45,7 @@ public class Product {
             joinColumns = @JoinColumn(name="product_fkey"),
             inverseJoinColumns = @JoinColumn(name="modifier_group_fkey")
     )
-    @Nullable
+//    @Nullable
     private List<ModifierGroup> modifierGroups;
 
     @ManyToOne

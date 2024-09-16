@@ -38,9 +38,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<OrderResponse> getOrders(Integer userId) {
-//        List<Order> orderList = orderRepository.findByUser_UserID(userId);
-//        return orderList.stream().map(orderMapper::toDto).toList();
-        return null;
+        List<Order> orderList = orderRepository.findByUser_UserId(userId);
+        return orderList.stream().map(orderMapper::toDto).toList();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void cancelOrder(OrderCancelPost orderCancelPost, Integer userId) {
-        OrderCancel orderCancel = orderCancelMapper.toEntity(orderCancelPost);
+
     }
 
     @Override

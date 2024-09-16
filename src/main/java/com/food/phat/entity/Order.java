@@ -21,6 +21,9 @@ public class Order {
     @Column(name="shipping_fee")
     private float shippingFee;
 
+    @Column(name="note")
+    private String note;
+
     @Column(name="submit_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date submitTime;

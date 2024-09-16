@@ -28,4 +28,12 @@ public class Menu {
     @OneToMany
     @JoinColumn(name="menu_fkey")
     private List<MenuCategory> menuCategory;
+
+    @ManyToMany
+    @JoinTable(
+            name="menu_selling_time",
+            joinColumns = @JoinColumn(name="menu_fkey"),
+            inverseJoinColumns = @JoinColumn(name="selling_time_fkey")
+    )
+    private List<SellingTime> sellingTimes;
 }

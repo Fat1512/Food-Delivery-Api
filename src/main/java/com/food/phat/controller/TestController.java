@@ -2,7 +2,7 @@ package com.food.phat.controller;
 
 
 import com.food.phat.service.CartService;
-import com.food.phat.service.CategoryService;
+import com.food.phat.service.ProductCategoryService;
 import com.food.phat.service.ProductService;
 import com.food.phat.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TestController {
     ProductService productService;
 
     @Autowired
-    CategoryService categoryService;
+    ProductCategoryService productCategoryService;
 
 
     @GetMapping("/getting")

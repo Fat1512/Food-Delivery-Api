@@ -6,7 +6,6 @@ import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.dto.order.OrderStatusPut;
 import com.food.phat.entity.OrderStatus;
-import com.food.phat.service.CartService;
 import com.food.phat.service.Impl.UserService;
 import com.food.phat.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,12 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class OrderController {
     private final OrderService orderService;
-    private final CartService cartService;
     private final UserService userService;
 
     @Autowired
-    public OrderController(OrderService orderService, UserService userService, CartService cartService) {
+    public OrderController(OrderService orderService, UserService userService) {
         this.orderService = orderService;
         this.userService = userService;
-        this.cartService = cartService;
     }
 
     @GetMapping("/order")
@@ -48,8 +45,8 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/order")
-    public ResponseEntity<?> cancelOrder(Principal principal, OrderCancelPost orderCancelPost) {
+    @PostMapping("/order/cancel")
+    public ResponseEntity<?> cancelOrder(Principal principal, @RequestBody OrderCancelPost orderCancelPost) {
         orderService.cancelOrder(orderCancelPost, userService.getUserByUsername(principal.getName()).getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -62,6 +59,14 @@ public class OrderController {
         return null;
     }
 }
+
+
+
+
+
+
+
+
 
 
 

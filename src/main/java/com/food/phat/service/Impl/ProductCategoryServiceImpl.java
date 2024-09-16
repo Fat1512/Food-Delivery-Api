@@ -2,9 +2,7 @@ package com.food.phat.service.Impl;
 
 import com.food.phat.entity.ProductCategory;
 import com.food.phat.repository.ProductCategoryRepository;
-import com.food.phat.service.CategoryService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.food.phat.service.ProductCategoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,15 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     private ProductCategoryRepository productCategoryRepository;
-    @PersistenceContext
-    private EntityManager em;
     @Autowired
-    public CategoryServiceImpl(ProductCategoryRepository productCategoryRepository, EntityManager entityManager) {
+    public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository) {
         this.productCategoryRepository = productCategoryRepository;
-        this.em = entityManager;
     }
 
     @Override
