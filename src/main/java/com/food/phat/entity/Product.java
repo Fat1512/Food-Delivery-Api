@@ -39,13 +39,16 @@ public class Product {
     @Column(name="thumbnail")
     private String thumbnail;
 
+    @ManyToOne
+    @JoinColumn(name="restaurant_fkey")
+    private Restaurant restaurant;
+
     @ManyToMany
     @JoinTable(
             name="product_modifier_group",
             joinColumns = @JoinColumn(name="product_fkey"),
             inverseJoinColumns = @JoinColumn(name="modifier_group_fkey")
     )
-//    @Nullable
     private List<ModifierGroup> modifierGroups;
 
     @ManyToOne
@@ -55,8 +58,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name="menu_category_fkey")
     private MenuCategory menuCategory;
-
-    @ManyToOne
-    @JoinColumn(name="restaurant_fkey")
-    private Restaurant restaurant;
 }

@@ -1,4 +1,4 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.modifier;
 
 
 import com.food.phat.dto.modifier.ModifierResponse;

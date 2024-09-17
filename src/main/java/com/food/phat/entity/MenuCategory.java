@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Table(name="menu_category")
@@ -21,4 +23,7 @@ public class MenuCategory {
 
     @Column(name="name")
     private String name;
+
+    @OneToMany(mappedBy = "menuCategory", cascade = CascadeType.DETACH)
+    private List<Product> products;
 }

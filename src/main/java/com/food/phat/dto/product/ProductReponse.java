@@ -19,7 +19,7 @@ public class ProductReponse {
     private String thumbnail;
     private Integer restaurantId;
     private List<ModifierGroupResponse> modifierGroups;
-    private List<ProductCategoryDTO> productCategories;
+    private ProductCategoryResponse productCategory;
 }
 
 //Doesn't have qty, note when compared to CartItemResponse

@@ -1,4 +1,4 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.cart.decorator;
 
 import com.food.phat.dto.modifier.ModifierGet;
 import com.food.phat.dto.modifier.ModifierGroupGet;
@@ -7,30 +7,25 @@ import com.food.phat.entity.CartItem;
 import com.food.phat.entity.CartModifier;
 import com.food.phat.entity.Modifier;
 import com.food.phat.entity.ModifierGroup;
+import com.food.phat.mapstruct.cart.CartModifierMapper;
+import com.food.phat.mapstruct.modifier.ModifierGroupMapper;
+import com.food.phat.mapstruct.modifier.ModifierMapper;
 import com.food.phat.repository.ModifierGroupRepository;
 import com.food.phat.repository.ModifierRepository;
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-@DecoratedWith(CartModifierDecorator.class)
-public interface CartModifierMapper {
-    ArrayList<CartModifier> toEntity(CartItem cartItem, List<ModifierGroupGet> modifierGroups);
-    ArrayList<ModifierGroupResponse> toDto(List<CartModifier> cartModifiers);
-}
-
 @Mapper
-abstract class CartModifierDecorator implements CartModifierMapper {
+public abstract class CartModifierDecorator implements CartModifierMapper {
 
     @Qualifier("delegate")
     @Autowired
     private CartModifierMapper delegate;
+
     @Autowired
     private ModifierMapper modifierMapper;
     @Autowired
@@ -85,24 +80,3 @@ abstract class CartModifierDecorator implements CartModifierMapper {
         return new ArrayList<>(modifierGroupMp.values());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

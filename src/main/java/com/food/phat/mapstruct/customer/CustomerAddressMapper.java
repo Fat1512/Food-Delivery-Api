@@ -1,4 +1,4 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.customer;
 
 import com.food.phat.dto.customer.CustomerAddressDTO;
 import com.food.phat.entity.CustomerAddress;

@@ -34,7 +34,7 @@ public class OrderItem {
     @JoinColumn(name="product_fkey")
     private Product product;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.MERGE)
     private List<OrderModifier> modifiers;
 }
 

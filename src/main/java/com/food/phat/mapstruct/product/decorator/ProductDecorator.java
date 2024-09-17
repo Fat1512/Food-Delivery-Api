@@ -1,25 +1,19 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.product.decorator;
 
 import com.food.phat.dto.product.ProductReponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.entity.Product;
-import com.food.phat.repository.*;
-import org.mapstruct.*;
+import com.food.phat.mapstruct.product.ProductMapper;
+import com.food.phat.repository.MenuCategoryRepository;
+import com.food.phat.repository.ModifierGroupRepository;
+import com.food.phat.repository.ProductCategoryRepository;
+import com.food.phat.repository.RestaurantRepository;
+import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@Mapper(componentModel = "spring", uses = ModifierGroupMapper.class)
-@DecoratedWith(ProductDecorator.class)
-public interface ProductMapper {
-    @Mapping(target = "productId", ignore = true)
-    void updateEntity(ProductRequest productRequest, @MappingTarget Product product);
-
-    @Mapping(target = "restaurantId", source = "restaurant.restaurantId")
-    ProductReponse toDto(Product product);
-}
-
 @Mapper
-abstract class ProductDecorator implements ProductMapper {
+public abstract class ProductDecorator implements ProductMapper {
 
     @Qualifier("delegate")
     @Autowired
@@ -43,10 +37,5 @@ abstract class ProductDecorator implements ProductMapper {
 
         if(productRequest.getModifierGroup() != null)
             product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroup()));
-    }
-
-    @Override
-    public ProductReponse toDto(Product product) {
-        return delegate.toDto(product);
     }
 }

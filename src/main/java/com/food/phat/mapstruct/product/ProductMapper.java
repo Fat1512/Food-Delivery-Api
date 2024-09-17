@@ -1,0 +1,29 @@
+package com.food.phat.mapstruct.product;
+
+import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductRequest;
+import com.food.phat.entity.Product;
+import com.food.phat.mapstruct.modifier.ModifierGroupMapper;
+import com.food.phat.mapstruct.product.decorator.ProductDecorator;
+import org.mapstruct.*;
+
+@Mapper(componentModel = "spring", uses = {ModifierGroupMapper.class, ProductCategoryMapper.class})
+@DecoratedWith(ProductDecorator.class)
+public interface ProductMapper {
+    @Mapping(target = "productId", ignore = true)
+    void updateEntity(ProductRequest productRequest, @MappingTarget Product product);
+
+    @Mapping(target = "restaurantId", source = "restaurant.restaurantId")
+    ProductReponse toDto(Product product);
+}
+
+
+
+
+
+
+
+
+
+
+

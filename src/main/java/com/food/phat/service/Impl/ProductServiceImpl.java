@@ -4,7 +4,7 @@ import com.food.phat.dto.product.ProductReponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
-import com.food.phat.mapstruct.ProductMapper;
+import com.food.phat.mapstruct.product.ProductMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.ProductService;
 import com.food.phat.specification.FilterRequest;

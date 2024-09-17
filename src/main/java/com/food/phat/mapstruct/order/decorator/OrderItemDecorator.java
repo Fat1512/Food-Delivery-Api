@@ -1,35 +1,22 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.order.decorator;
 
 import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.dto.order.OrderItemPost;
 import com.food.phat.dto.order.OrderItemResponse;
-import com.food.phat.dto.order.OrderPost;
-import com.food.phat.entity.*;
+import com.food.phat.entity.OrderItem;
+import com.food.phat.entity.OrderModifier;
+import com.food.phat.entity.Product;
+import com.food.phat.mapstruct.order.OrderItemMapper;
+import com.food.phat.mapstruct.order.OrderModifierMapper;
 import com.food.phat.repository.ProductRepository;
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
-@DecoratedWith(OrderItemDecorator.class)
-public interface OrderItemMapper {
-    @Mapping(target="price", source="product.price")
-    @Mapping(target="thumbnail", source="product.thumbnail")
-    @Mapping(target="name", source="product.name")
-    @Mapping(target="productId", source="product.productId")
-    @Mapping(target="restaurantId", source="product.restaurant.restaurantId")
-    @Mapping(target="status", source="product.status")
-    @Mapping(target = "modifierGroups", ignore = true)
-    OrderItemResponse toDto(OrderItem orderItem);
-    OrderItem toEntity(OrderItemPost orderItem);
-}
-
 @Mapper
-abstract class OrderItemDecorator implements OrderItemMapper {
+public abstract class OrderItemDecorator implements OrderItemMapper {
 
     @Qualifier("delegate")
     @Autowired

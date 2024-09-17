@@ -1,13 +1,17 @@
-package com.food.phat.mapstruct;
-
+package com.food.phat.mapstruct.order.decorator;
 
 import com.food.phat.dto.modifier.ModifierGet;
 import com.food.phat.dto.modifier.ModifierGroupGet;
 import com.food.phat.dto.modifier.ModifierGroupResponse;
-import com.food.phat.entity.*;
+import com.food.phat.entity.Modifier;
+import com.food.phat.entity.ModifierGroup;
+import com.food.phat.entity.OrderItem;
+import com.food.phat.entity.OrderModifier;
+import com.food.phat.mapstruct.modifier.ModifierGroupMapper;
+import com.food.phat.mapstruct.modifier.ModifierMapper;
+import com.food.phat.mapstruct.order.OrderModifierMapper;
 import com.food.phat.repository.ModifierGroupRepository;
 import com.food.phat.repository.ModifierRepository;
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,16 +19,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
-@DecoratedWith(OrderModifierDecorator.class)
-public interface OrderModifierMapper {
-    ArrayList<OrderModifier> toEntity(OrderItem orderItem, List<ModifierGroupGet> modifierGroups);
-    ArrayList<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers);
-}
-
-
 @Mapper
-abstract class OrderModifierDecorator implements OrderModifierMapper {
+public abstract class OrderModifierDecorator implements OrderModifierMapper {
 
     @Qualifier("delegate")
     @Autowired
@@ -83,16 +79,3 @@ abstract class OrderModifierDecorator implements OrderModifierMapper {
         return new ArrayList<>(modifierGroupMp.values());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

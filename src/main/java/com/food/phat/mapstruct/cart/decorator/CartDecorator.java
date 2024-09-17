@@ -1,11 +1,13 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.cart.decorator;
 
 import com.food.phat.dto.cart.CartItemResponse;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.dto.restaurant.RestaurantCheckoutResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
-import org.mapstruct.DecoratedWith;
+import com.food.phat.mapstruct.restaurant.RestaurantMapper;
+import com.food.phat.mapstruct.cart.CartItemMapper;
+import com.food.phat.mapstruct.cart.CartMapper;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,14 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapper(componentModel = "spring", uses = CartItemMapper.class)
-@DecoratedWith(CartDecorator.class)
-public interface CartMapper {
-    CartResponse toDto(Cart cart);
-}
-
 @Mapper
-abstract class CartDecorator implements CartMapper {
+public abstract class CartDecorator implements CartMapper {
 
     @Qualifier("delegate")
     @Autowired
@@ -58,17 +54,3 @@ abstract class CartDecorator implements CartMapper {
                 new CartResponse.CartItemGroup(entry.getValue(), cartItemResponseMp.get(entry.getKey()))).toList();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

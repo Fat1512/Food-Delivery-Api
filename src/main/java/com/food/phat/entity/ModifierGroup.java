@@ -24,5 +24,5 @@ public class ModifierGroup {
 
     @OneToMany
     @JoinColumn(name="modifier_group_fkey", referencedColumnName = "modifier_group_id")
-    private List<Modifier> modifier;
+    private List<Modifier> modifiers;
 }

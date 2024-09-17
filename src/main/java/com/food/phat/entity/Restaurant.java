@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Entity @DynamicUpdate
 @Table(name="restaurant")
 @Getter
@@ -41,9 +43,9 @@ public class Restaurant {
     @JsonIgnore
     private User user;
 
-    @OneToOne(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant")
     @JsonIgnore
-    private Menu menu;
+    private List<Menu> menus;
 
 
     @Override
@@ -55,5 +57,10 @@ public class Restaurant {
     public boolean equals(Object obj) {
         Restaurant res = (Restaurant) obj;
         return res.getRestaurantId().equals(this.restaurantId);
+    }
+
+    public void addMemu(Menu menu) {
+        this.menus.add(menu);
+        menu.setRestaurant(this);
     }
 }

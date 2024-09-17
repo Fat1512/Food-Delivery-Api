@@ -25,8 +25,4 @@ public class Modifier {
     @Column(name="status")
     private boolean status;
 
-//    @ManyToOne
-//    @JoinColumn(name="modifier_group_fkey")
-//    @JsonIgnore
-//    private ModifierGroup modifierGroup;
 }

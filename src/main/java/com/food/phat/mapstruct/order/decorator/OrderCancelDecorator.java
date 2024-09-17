@@ -1,21 +1,15 @@
-package com.food.phat.mapstruct;
+package com.food.phat.mapstruct.order.decorator;
 
 import com.food.phat.dto.order.OrderCancelPost;
 import com.food.phat.entity.OrderCancel;
+import com.food.phat.mapstruct.order.OrderCancelMapper;
 import com.food.phat.repository.OrderCancelRepository;
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@Mapper(componentModel = "spring")
-@DecoratedWith(OrderCancelDecorator.class)
-public interface OrderCancelMapper {
-    OrderCancel toEntity(OrderCancelPost orderCancelPost);
-}
-
 @Mapper
-abstract class OrderCancelDecorator implements OrderCancelMapper {
+public abstract class OrderCancelDecorator implements OrderCancelMapper {
     @Qualifier("delegate")
     @Autowired
     private OrderCancelMapper delegate;

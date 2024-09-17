@@ -5,18 +5,15 @@ import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
-import com.food.phat.entity.CartModifier;
-import com.food.phat.mapstruct.CartItemMapper;
-import com.food.phat.mapstruct.CartMapper;
+import com.food.phat.mapstruct.cart.CartItemMapper;
+import com.food.phat.mapstruct.cart.CartMapper;
 import com.food.phat.repository.CartItemRepository;
-import com.food.phat.repository.CartModifierRepository;
 import com.food.phat.repository.CartRepository;
 import com.food.phat.service.CartService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
