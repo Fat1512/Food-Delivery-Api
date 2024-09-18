@@ -19,7 +19,7 @@ public class ProductRequest {
     private String thumbnail;
 
     private int productCategoryId;
-    private int menuCategoryId;
     private int restaurantId;
-    List<Integer> modifierGroup;
+    private List<Integer> menuCategoryIds;
+    private List<Integer> modifierGroupIds;
 }

@@ -23,23 +23,23 @@ public class MenuController {
 
     @GetMapping("/{restaurantId}/menus")
     public ResponseEntity<?> getMenus(@PathVariable Integer restaurantId) {
-        List<MenuResponse> menuResponse = menuService.getMenu(restaurantId);
+        List<MenuResponse> menuResponse = menuService.getMenus(restaurantId);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{restaurantId}/menu/{menuId}")
+    @GetMapping("/{restaurantId}/menus/{menuId}")
     public ResponseEntity<?> getMenu(@PathVariable Integer restaurantId, @PathVariable Integer menuId) {
-        MenuResponse menuResponse = menuService.getMenu(restaurantId, menuId);
+        MenuResponse menuResponse = menuService.getMenu(menuId);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{restaurantId}/menu/{menuId}")
+    @DeleteMapping("/{restaurantId}/menus/{menuId}")
     public ResponseEntity<?> deleteMenu(@PathVariable Integer restaurantId, @PathVariable Integer menuId) {
-        menuService.deleteMenu(restaurantId, menuId);
+        menuService.deleteMenu(menuId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{restaurantId}/menu")
+    @PostMapping("/{restaurantId}/menus")
     public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuPost menuPost) {
         menuService.createMenu(restaurantId, menuPost);
         return new ResponseEntity<>(HttpStatus.OK);

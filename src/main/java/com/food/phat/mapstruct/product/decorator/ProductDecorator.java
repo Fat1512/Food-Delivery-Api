@@ -1,6 +1,5 @@
 package com.food.phat.mapstruct.product.decorator;
 
-import com.food.phat.dto.product.ProductReponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.entity.Product;
 import com.food.phat.mapstruct.product.ProductMapper;
@@ -31,11 +30,11 @@ public abstract class ProductDecorator implements ProductMapper {
     public void updateEntity(ProductRequest productRequest, Product product) {
         delegate.updateEntity(productRequest, product);
 
-        product.setMenuCategory(menuCategoryRepository.findById(productRequest.getMenuCategoryId()).orElse(null));
+        product.setMenuCategories(menuCategoryRepository.findAllById(productRequest.getMenuCategoryIds()));
         product.setProductCategory(productCategoryRepository.findById(productRequest.getProductCategoryId()).orElse(null));
         product.setRestaurant(restaurantRepository.findById(productRequest.getRestaurantId()).orElse(null));
 
-        if(productRequest.getModifierGroup() != null)
-            product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroup()));
+        if(productRequest.getModifierGroupIds() != null)
+            product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroupIds()));
     }
 }

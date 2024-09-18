@@ -17,7 +17,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     """,nativeQuery = true)
     Menu findByRestauranIdAndMenuId(Integer restaurantId, Integer menuId);
 
-
     @Query(value = "select * from menu where menu.restaurant_fkey=?1", nativeQuery = true)
     List<Menu> findAllByRestaurantId(Integer restaurantId);
 

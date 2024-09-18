@@ -24,6 +24,47 @@ public class MenuCategory {
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy = "menuCategory", cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name="menu_category_has_product",
+            joinColumns = @JoinColumn(name="menu_category_fkey"),
+            inverseJoinColumns  = @JoinColumn(name="product_fkey")
+    )
     private List<Product> products;
+
+    @ManyToMany(mappedBy="menuCategories", cascade = CascadeType.MERGE)
+    private List<Menu> menus;
+
+    public void addProduct(List<Product> products) {
+        this.products.addAll(products);
+    }
+
+    public void addProduct(Product product) {
+        products.add(product);
+        product.addMenuCategeory(this);
+    }
+
+    public void removeProduct(List<Integer> productIds) {
+        this.products.removeIf(product -> {
+            if(productIds.contains(product.getProductId())) {
+                product.removeCategory(this.getMenuCategoryId());
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public void updateMenu(List<Menu> menus) {
+        this.menus.clear();
+        this.menus.addAll(menus);
+    }
 }
+
+
+
+
+
+
+
+
+

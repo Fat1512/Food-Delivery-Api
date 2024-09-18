@@ -6,8 +6,8 @@ import com.food.phat.dto.menu.MenuResponse;
 import java.util.List;
 
 public interface MenuService {
-    MenuResponse getMenu(Integer restaurantId, Integer menuId);
+    MenuResponse getMenu(Integer menuId);
     List<MenuResponse> getMenus(Integer restaurantId);
-    void deleteMenu(Integer restaurantId, Integer menuId);
+    void deleteMenu(Integer menuId);
     void createMenu(Integer restaurantId, MenuPost menuPost);
 }

@@ -55,7 +55,14 @@ public class Product {
     @JoinColumn(name="product_category_fkey")
     private ProductCategory productCategory;
 
-    @ManyToOne
-    @JoinColumn(name="menu_category_fkey")
-    private MenuCategory menuCategory;
+    @ManyToMany(mappedBy = "products")
+    private List<MenuCategory> menuCategories;
+
+    public void addMenuCategeory(MenuCategory menuCategory) {
+        this.menuCategories.add(menuCategory);
+    }
+
+    public void removeCategory(Integer categoryId) {
+        this.menuCategories.removeIf(menuCategory -> menuCategory.getMenuCategoryId() == categoryId);
+    }
 }

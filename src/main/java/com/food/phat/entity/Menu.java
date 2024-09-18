@@ -37,6 +37,8 @@ public class Menu {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="menu_fkey", nullable = false)
     private List<SellingTime> sellingTimes;
+
+    public void updateMenuCategory(List<MenuCategory>)
 }
 
 

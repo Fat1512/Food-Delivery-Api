@@ -26,7 +26,7 @@ public class MenuServiceImpl implements MenuService {
     public MenuServiceImpl(
             MenuRepository menuRepository,
             MenuMapper menuMapper,
-            RestaurantRepository restaurantRepository, MenuCategoryRepository menuCategoryRepository) {
+            RestaurantRepository restaurantRepository) {
         this.menuRepository = menuRepository;
         this.menuMapper = menuMapper;
         this.restaurantRepository = restaurantRepository;
@@ -34,22 +34,22 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public MenuResponse getMenu(Integer restaurantId, Integer menuId) {
-        Menu menu = menuRepository.findByRestauranIdAndMenuId(restaurantId, menuId);
+    public MenuResponse getMenu(Integer menuId) {
+        Menu menu = menuRepository.findById(menuId).get();
         return menuMapper.toDto(menu);
     }
 
     @Override
+    @Transactional
     public List<MenuResponse> getMenus(Integer restaurantId) {
         List<Menu> menus = menuRepository.findAllByRestaurantId(restaurantId);
-        List<MenuResponse> menuResponses = menus.stream().map(menuMapper::toDto).toList();
-        return menuResponses;
+        return menus.stream().map(menuMapper::toDto).toList();
     }
 
     @Override
     @Transactional
-    public void deleteMenu(Integer restaurantId, Integer menuId) {
-        menuRepository.deleteByRestaurantIdAndMenuId(restaurantId, menuId);
+    public void deleteMenu(Integer menuId) {
+        menuRepository.deleteById(menuId);
     }
 
     @Override
