@@ -136,13 +136,12 @@ DROP TABLE IF EXISTS `comment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comment` (
   `comment_id` int NOT NULL,
-  `parent_comment_fkey` int NOT NULL,
   `user_fkey` int NOT NULL,
-  `content` varchar(45) DEFAULT NULL,
+  `content` varchar(1000) DEFAULT NULL,
+  `lft` int DEFAULT NULL,
+  `rgt` int DEFAULT NULL,
   PRIMARY KEY (`comment_id`),
-  KEY `fk_review_review1_idx` (`parent_comment_fkey`),
   KEY `fk_review_user1_idx` (`user_fkey`),
-  CONSTRAINT `fk_review_review1` FOREIGN KEY (`parent_comment_fkey`) REFERENCES `comment` (`comment_id`),
   CONSTRAINT `fk_review_user1` FOREIGN KEY (`user_fkey`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -239,7 +238,7 @@ CREATE TABLE `menu_category` (
 
 LOCK TABLES `menu_category` WRITE;
 /*!40000 ALTER TABLE `menu_category` DISABLE KEYS */;
-INSERT INTO `menu_category` VALUES (1,'thuc an',NULL,NULL),(3,'Menu iii',NULL,NULL);
+INSERT INTO `menu_category` VALUES (1,'thuc an',NULL,6),(3,'Menu2 2',NULL,6);
 /*!40000 ALTER TABLE `menu_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +265,7 @@ CREATE TABLE `menu_category_has_product` (
 
 LOCK TABLES `menu_category_has_product` WRITE;
 /*!40000 ALTER TABLE `menu_category_has_product` DISABLE KEYS */;
-INSERT INTO `menu_category_has_product` VALUES (1,3),(3,3),(1,4);
+INSERT INTO `menu_category_has_product` VALUES (1,3),(3,3),(1,4),(3,4);
 /*!40000 ALTER TABLE `menu_category_has_product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,7 +292,7 @@ CREATE TABLE `menu_has_category` (
 
 LOCK TABLES `menu_has_category` WRITE;
 /*!40000 ALTER TABLE `menu_has_category` DISABLE KEYS */;
-INSERT INTO `menu_has_category` VALUES (1,1);
+INSERT INTO `menu_has_category` VALUES (1,3);
 /*!40000 ALTER TABLE `menu_has_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -566,7 +565,7 @@ CREATE TABLE `period_time` (
   PRIMARY KEY (`period_time_id`),
   KEY `fk_period_time_1_idx` (`selling_time_fkey`),
   CONSTRAINT `fk_period_time_1` FOREIGN KEY (`selling_time_fkey`) REFERENCES `selling_time` (`selling_time_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -575,7 +574,7 @@ CREATE TABLE `period_time` (
 
 LOCK TABLES `period_time` WRITE;
 /*!40000 ALTER TABLE `period_time` DISABLE KEYS */;
-INSERT INTO `period_time` VALUES (43,'06:00:00','06:00:00',100),(44,'06:00:00','06:00:00',101),(45,'06:00:00','06:00:00',102),(46,'06:00:00','06:00:00',103),(47,'06:00:00','06:00:00',104),(48,'06:00:00','06:00:00',105),(49,'06:00:00','07:00:00',106);
+INSERT INTO `period_time` VALUES (197,'06:00:00','06:00:00',254),(198,'06:00:00','06:00:00',255),(199,'06:00:00','06:00:00',256),(200,'06:00:00','06:00:00',257),(201,'06:00:00','06:00:00',258),(202,'06:00:00','06:00:00',259),(203,'06:00:00','07:00:00',260);
 /*!40000 ALTER TABLE `period_time` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -818,7 +817,7 @@ CREATE TABLE `selling_time` (
   PRIMARY KEY (`selling_time_id`),
   KEY `fk_selling_time_1_idx` (`menu_fkey`),
   CONSTRAINT `fk_selling_time_1` FOREIGN KEY (`menu_fkey`) REFERENCES `menu` (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=261 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -827,7 +826,7 @@ CREATE TABLE `selling_time` (
 
 LOCK TABLES `selling_time` WRITE;
 /*!40000 ALTER TABLE `selling_time` DISABLE KEYS */;
-INSERT INTO `selling_time` VALUES (100,0,NULL,NULL,_binary '',1),(101,1,NULL,NULL,_binary '',1),(102,2,NULL,NULL,_binary '',1),(103,3,NULL,NULL,_binary '',1),(104,4,NULL,NULL,_binary '',1),(105,5,NULL,NULL,_binary '',1),(106,6,NULL,NULL,_binary '',1);
+INSERT INTO `selling_time` VALUES (254,0,NULL,NULL,_binary '',1),(255,1,NULL,NULL,_binary '',1),(256,2,NULL,NULL,_binary '',1),(257,3,NULL,NULL,_binary '',1),(258,4,NULL,NULL,_binary '',1),(259,5,NULL,NULL,_binary '',1),(260,6,NULL,NULL,_binary '',1);
 /*!40000 ALTER TABLE `selling_time` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -854,7 +853,7 @@ CREATE TABLE `user` (
   `last_accessed` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -863,7 +862,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (2,'12',NULL,NULL,NULL,NULL,NULL,'123','$2a$12$UfB93uFqTYLpyBJe/GIH.O4RGvqSQhFVVGwNizoBN7ERFQZGQLh2y',NULL,NULL,NULL,NULL);
+INSERT INTO `user` VALUES (2,'12',NULL,NULL,NULL,NULL,NULL,'123','$2a$12$UfB93uFqTYLpyBJe/GIH.O4RGvqSQhFVVGwNizoBN7ERFQZGQLh2y',NULL,NULL,NULL,NULL),(3,'1234',NULL,NULL,NULL,NULL,NULL,'123','aha',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -903,4 +902,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-18 19:54:49
+-- Dump completed on 2024-09-19  5:36:00
