@@ -33,8 +33,6 @@ public abstract class ProductDecorator implements ProductMapper {
         product.setMenuCategories(menuCategoryRepository.findAllById(productRequest.getMenuCategoryIds()));
         product.setProductCategory(productCategoryRepository.findById(productRequest.getProductCategoryId()).orElse(null));
         product.setRestaurant(restaurantRepository.findById(productRequest.getRestaurantId()).orElse(null));
-
-        if(productRequest.getModifierGroupIds() != null)
-            product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroupIds()));
+        product.setModifierGroups(modifierGroupRepository.findAllById(productRequest.getModifierGroupIds()));
     }
 }

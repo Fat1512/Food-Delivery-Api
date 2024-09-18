@@ -47,7 +47,6 @@ public class Restaurant {
     @JsonIgnore
     private List<Menu> menus;
 
-
     @Override
     public int hashCode() {
         return this.restaurantId;

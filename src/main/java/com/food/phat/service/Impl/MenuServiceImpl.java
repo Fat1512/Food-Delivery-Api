@@ -1,11 +1,10 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.menu.MenuPost;
+import com.food.phat.dto.menu.MenuRequest;
 import com.food.phat.dto.menu.MenuResponse;
 import com.food.phat.entity.Menu;
 import com.food.phat.entity.Restaurant;
 import com.food.phat.mapstruct.menu.MenuMapper;
-import com.food.phat.repository.MenuCategoryRepository;
 import com.food.phat.repository.MenuRepository;
 import com.food.phat.repository.RestaurantRepository;
 import com.food.phat.service.MenuService;
@@ -54,10 +53,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     @Transactional
-    public void createMenu(Integer restaurantId, MenuPost menuPost) {
-        Menu menu = menuMapper.toEntity(menuPost);
+    public void createMenu(Integer restaurantId, MenuRequest menuRequest) {
+        Menu menu = menuMapper.toEntity(menuRequest);
         Restaurant restaurant = restaurantRepository.findById(restaurantId).get();
         restaurant.addMemu(menu);
+        menuRepository.save(menu);
+    }
+
+    @Override
+    @Transactional
+    public void updateMenu(MenuRequest menuRequest) {
+        Menu menu = menuRepository.findById(menuRequest.getMenuId()).get();
+        menuMapper.updateEntity(menuRequest, menu);
         menuRepository.save(menu);
     }
 }

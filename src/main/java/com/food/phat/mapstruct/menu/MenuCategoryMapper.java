@@ -7,6 +7,7 @@ import com.food.phat.mapstruct.menu.decorator.MenuCategoryDecorator;
 import com.food.phat.mapstruct.product.ProductMapper;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = ProductMapper.class)
@@ -14,6 +15,7 @@ import org.mapstruct.MappingTarget;
 public interface MenuCategoryMapper {
     MenuCategoryResponse toDto(MenuCategory menuCategory);
     MenuCategory toEntity(MenuCategoryRequest menuCategoryRequest);
+    @Mapping(target = "menuCategoryId", ignore = true)
     void updateEntity(MenuCategoryRequest menuCategoryRequest, @MappingTarget MenuCategory menuCategory);
 }
 

@@ -38,9 +38,14 @@ public abstract class MenuCategoryDecorator implements MenuCategoryMapper {
 
     @Override
     public void updateEntity(MenuCategoryRequest menuCategoryRequest, MenuCategory menuCategory) {
+        delegate.updateEntity(menuCategoryRequest, menuCategory);
+        menuCategory.getMenus().forEach(menu -> menu.getMenuCategories().remove(menuCategory));
         List<Menu> menus = menuRepository.findAllById(menuCategoryRequest.getMenuIds());
-        List<Product> products = productRepository.findAllById(menuCategoryRequest.getProductIds());
+        menus.forEach(menu -> {
+            menu.getMenuCategories().add(menuCategory);
+        });
 
-        menuCategory
+        menuCategory.setMenus(menus);
+        menuCategory.setProducts(productRepository.findAllById(menuCategoryRequest.getProductIds()));
     }
 }

@@ -6,6 +6,7 @@ import com.food.phat.entity.MenuCategory;
 import com.food.phat.entity.Product;
 import com.food.phat.mapstruct.menu.MenuCategoryMapper;
 import com.food.phat.repository.MenuCategoryRepository;
+import com.food.phat.repository.MenuRepository;
 import com.food.phat.repository.ProductRepository;
 import com.food.phat.service.MenuCategoryService;
 import jakarta.transaction.Transactional;
@@ -76,12 +77,14 @@ public class MenuCategoryServiceImpl implements MenuCategoryService {
         menuCategory.removeProduct(productIds);
 
         menuCategoryRepository.save(menuCategory);
-
     }
 
     @Override
     @Transactional
     public void modifyMenuCategory(MenuCategoryRequest menuCategoryRequest) {
-
+        MenuCategory menuCategory = menuCategoryRepository.findById(menuCategoryRequest.getMenuCategoryId()).orElse(null);
+        menuCategoryMapper.updateEntity(menuCategoryRequest, menuCategory);
+        assert menuCategory != null;
+        menuCategoryRepository.save(menuCategory);
     }
 }

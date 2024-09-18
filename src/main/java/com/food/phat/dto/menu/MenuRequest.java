@@ -10,9 +10,11 @@ import java.util.List;
 @Data
 @Setter
 @Getter
-public class MenuPost {
+public class MenuRequest {
+    private Integer menuId;
     private String name;
     private List<SellingTimeDTO> sellingTimes;
+    private List<Integer> menuCategoryIds;
 }
 
 

@@ -1,6 +1,5 @@
 package com.food.phat.entity;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.List;
 
-@Entity @DynamicUpdate
+@Entity
+@DynamicUpdate
 @Table(name="menu")
 @Setter
 @Getter
@@ -26,7 +26,7 @@ public class Menu {
     @JoinColumn(name="restaurant_fkey")
     private Restaurant restaurant;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name="menu_has_category",
             joinColumns = @JoinColumn(name="menu_fkey"),
@@ -38,7 +38,8 @@ public class Menu {
     @JoinColumn(name="menu_fkey", nullable = false)
     private List<SellingTime> sellingTimes;
 
-    public void updateMenuCategory(List<MenuCategory>)
+
+
 }
 
 

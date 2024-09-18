@@ -1,6 +1,6 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.menu.MenuPost;
+import com.food.phat.dto.menu.MenuRequest;
 import com.food.phat.dto.menu.MenuResponse;
 import com.food.phat.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +40,16 @@ public class MenuController {
     }
 
     @PostMapping("/{restaurantId}/menus")
-    public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuPost menuPost) {
-        menuService.createMenu(restaurantId, menuPost);
+    public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
+        menuService.createMenu(restaurantId, menuRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @PutMapping("/{restaurantId}/menu")
-//    public ResponseEntity<?> modifyMenu(@PathVariable Integer restaurantId, @RequestBody MenuPut menuPost) {
-//        menuService.createMenu(restaurantId, menuPost);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PutMapping("/{restaurantId}/menu")
+    public ResponseEntity<?> modifyMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
+        menuService.updateMenu(menuRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
 

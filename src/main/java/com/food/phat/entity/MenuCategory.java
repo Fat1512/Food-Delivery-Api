@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,15 +33,17 @@ public class MenuCategory {
     )
     private List<Product> products;
 
-    @ManyToMany(mappedBy="menuCategories", cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy="menuCategories", cascade=CascadeType.MERGE)
     private List<Menu> menus;
 
     public void addProduct(List<Product> products) {
+        if(this.products == null) this.products = new ArrayList<>();
         this.products.addAll(products);
     }
 
     public void addProduct(Product product) {
-        products.add(product);
+        if(this.products == null) this.products = new ArrayList<>();
+        this.products.add(product);
         product.addMenuCategeory(this);
     }
 
@@ -54,10 +57,16 @@ public class MenuCategory {
         });
     }
 
+    public void updateProduct(List<Product> products) {
+        this.products.clear();
+        this.products.addAll(products);
+    }
+
     public void updateMenu(List<Menu> menus) {
         this.menus.clear();
         this.menus.addAll(menus);
     }
+
 }
 
 
