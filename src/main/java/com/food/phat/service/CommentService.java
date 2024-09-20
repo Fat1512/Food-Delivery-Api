@@ -10,4 +10,5 @@ public interface CommentService {
     CommentRestaurantResponse getRestaurantComment(Integer restaurantId);
     CommentProductResponse getProductComment(Integer productId);
     CommentResponse getComment(Integer parentId);
+    void modifyComment(CommentPut commentPut);
 }

@@ -44,11 +44,13 @@ public class CommentController {
 
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<CommentRestaurantResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
+        commentService.getRestaurantComment(restaurantId);
         return null;
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<CommentProductResponse> getProductComments(@PathVariable Integer productId) {
+        commentService.getProductComment(productId);
         return null;
     }
 
@@ -58,12 +60,11 @@ public class CommentController {
         return new ResponseEntity<>(commentResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/{commentId}")
-    public ResponseEntity<CommentResponse> modifyComment(@PathVariable Integer commentId) {
-        CommentResponse commentResponse = commentService.getComment(parentCommentId);
-        return new ResponseEntity<>(commentResponse, HttpStatus.OK);
+    @PutMapping("/")
+    public ResponseEntity<CommentResponse> modifyComment(@RequestBody CommentPut commentPut) {
+        commentService.modifyComment(commentPut);
+        return null;
     }
-
 }
 
 

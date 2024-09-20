@@ -81,4 +81,5 @@ public abstract class CommentDecorator implements CommentMapper {
         commentItemResponse.setIsHavingChildren(width > 1);
         return commentItemResponse;
     }
+
 }

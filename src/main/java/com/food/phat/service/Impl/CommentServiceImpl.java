@@ -2,9 +2,11 @@ package com.food.phat.service.Impl;
 
 import com.food.phat.dto.comment.*;
 import com.food.phat.entity.Comment;
+import com.food.phat.entity.CommentHistory;
 import com.food.phat.entity.CommentProduct;
 import com.food.phat.entity.CommentRestaurant;
 import com.food.phat.mapstruct.comment.CommentMapper;
+import com.food.phat.repository.CommentHistoryRepository;
 import com.food.phat.repository.CommentProductRepository;
 import com.food.phat.repository.CommentRepository;
 import com.food.phat.repository.CommentRestaurantRepository;
@@ -20,7 +22,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentRestaurantRepository commentRestaurantRepository;
-    private final CommentProductRepository productCommentRepository;
+    private final CommentHistoryRepository commentHistoryRepository;
 
     private final CommentMapper commentMapper;
     private final CommentProductRepository commentProductRepository;
@@ -29,11 +31,11 @@ public class CommentServiceImpl implements CommentService {
     public CommentServiceImpl(
             CommentRepository commentRepository,
             CommentRestaurantRepository commentRestaurantRepository,
-            CommentProductRepository productCommentRepository,
+            CommentHistoryRepository commentHistoryRepository,
             CommentMapper commentMapper, CommentProductRepository commentProductRepository) {
         this.commentRepository = commentRepository;
         this.commentRestaurantRepository = commentRestaurantRepository;
-        this.productCommentRepository = productCommentRepository;
+        this.commentHistoryRepository = commentHistoryRepository;
         this.commentMapper = commentMapper;
         this.commentProductRepository = commentProductRepository;
     }
@@ -96,5 +98,16 @@ public class CommentServiceImpl implements CommentService {
         commentResponse.setComments(commentItems);
         commentResponse.setParentId(parentId);
         return commentResponse;
+    }
+
+    @Override
+    public void modifyComment(CommentPut commentPut) {
+        CommentHistory commentHistory = new CommentHistory();
+        Comment comment = commentRepository.findById(commentPut.getCommentId()).get();
+        commentHistory.setComment(comment);
+        commentHistory.setContent(comment.getContent());
+
+        comment.setContent(commentPut.getContent());
+        commentHistoryRepository.save(commentHistory);
     }
 }

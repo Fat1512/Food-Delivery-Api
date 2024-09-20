@@ -7,6 +7,7 @@ import com.food.phat.entity.CommentRestaurant;
 import com.food.phat.mapstruct.comment.decorator.CommentDecorator;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 @DecoratedWith(CommentDecorator.class)
