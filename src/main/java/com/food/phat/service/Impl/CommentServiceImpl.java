@@ -1,8 +1,6 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.comment.CommentPost;
-import com.food.phat.dto.comment.CommentProductPost;
-import com.food.phat.dto.comment.CommentRestaurantPost;
+import com.food.phat.dto.comment.*;
 import com.food.phat.entity.Comment;
 import com.food.phat.entity.CommentProduct;
 import com.food.phat.entity.CommentRestaurant;
@@ -15,6 +13,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -22,18 +22,20 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRestaurantRepository commentRestaurantRepository;
     private final CommentProductRepository productCommentRepository;
 
-    private CommentMapper commentMapper;
+    private final CommentMapper commentMapper;
+    private final CommentProductRepository commentProductRepository;
 
     @Autowired
     public CommentServiceImpl(
             CommentRepository commentRepository,
             CommentRestaurantRepository commentRestaurantRepository,
             CommentProductRepository productCommentRepository,
-            CommentMapper commentMapper) {
+            CommentMapper commentMapper, CommentProductRepository commentProductRepository) {
         this.commentRepository = commentRepository;
         this.commentRestaurantRepository = commentRestaurantRepository;
         this.productCommentRepository = productCommentRepository;
         this.commentMapper = commentMapper;
+        this.commentProductRepository = commentProductRepository;
     }
 
     @Override
@@ -49,17 +51,42 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void createComment(CommentProductPost commentPost) {
         CommentProduct commentProduct = commentMapper.toEntity(commentPost);
-        commentRepository.saveComment(commentProduct,
-                commentPost.getLeftParent(),
-                commentPost.getRightParent());
+        commentRepository.saveComment(commentProduct);
     }
 
     @Override
     @Transactional
     public void createComment(CommentRestaurantPost commentPost) {
         CommentRestaurant commentRestaurant = commentMapper.toEntity(commentPost);
-        commentRepository.saveComment(commentRestaurant,
-                commentPost.getLeftParent(),
-                commentPost.getRightParent());
+        commentRepository.saveComment(commentRestaurant);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Integer commentId) {
+        commentRepository.deleteComment(commentId);
+    }
+
+    @Override
+    public CommentRestaurantResponse getRestaurantComment(Integer restaurantId) {
+        List<CommentRestaurant> comments = commentRestaurantRepository.findByRestaurant_RestaurantId(restaurantId);
+        List<CommentRestaurantItemResponse> commentItemResponses = comments.stream().map(commentMapper::toDTO).toList();
+        CommentRestaurantResponse commentRestaurantResponse = new CommentRestaurantResponse();
+        commentRestaurantResponse.setComments(commentItemResponses);
+        return commentRestaurantResponse;
+    }
+
+    @Override
+    public CommentProductResponse getProductComment(Integer productId) {
+        List<CommentProduct> comments = commentProductRepository.findByProduct_ProductId(productId);
+        List<CommentProductItemResponse> commentItemResponses = comments.stream().map(commentMapper::toDTO).toList();
+        CommentProductResponse commentProductResponse = new CommentProductResponse();
+        commentProductResponse.setComments(commentItemResponses);
+        return commentProductResponse;
+    }
+
+    @Override
+    public CommentRestaurantResponse getComment(Integer parentId) {
+
     }
 }

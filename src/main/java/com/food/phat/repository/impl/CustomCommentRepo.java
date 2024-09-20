@@ -6,6 +6,8 @@ import com.food.phat.entity.CommentRestaurant;
 
 public interface CustomCommentRepo {
     Comment saveComment(Comment comment, Integer leftParent, Integer rightParent);
-    CommentProduct saveComment(CommentProduct comment, Integer leftParent, Integer rightParent);
-    CommentRestaurant saveComment(CommentRestaurant comment, Integer leftParent, Integer rightParent);
+    CommentProduct saveComment(CommentProduct comment);
+    CommentRestaurant saveComment(CommentRestaurant comment);
+    void deleteComment(Integer commentId);
+    Comment getCommentByLevel(Integer parentId);
 }

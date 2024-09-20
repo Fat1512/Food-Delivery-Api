@@ -1,15 +1,10 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.comment.CommentPost;
-import com.food.phat.dto.comment.CommentProductPost;
-import com.food.phat.dto.comment.CommentRestaurantPost;
+import com.food.phat.dto.comment.*;
 import com.food.phat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/comments")
@@ -39,6 +34,27 @@ public class CommentController {
         commentService.createComment(commentPost);
         return null;
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComments(@PathVariable Integer commentId) {
+        commentService.deleteComment(commentId);
+        return null;
+    }
+
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<CommentRestaurantResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
+        return null;
+    }
+
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<CommentProductResponse> getProductComments(@PathVariable Integer productId) {
+        return null;
+    }
+
+    @GetMapping("/{parentCommentId}")
+    public ResponseEntity<CommentItemResponse> getCommentLists(@PathVariable Integer parentCommentId) {
+        return null;
+    }
 }
 
 
@@ -53,12 +69,47 @@ public class CommentController {
  *
  *  CommentRestaurantPost
  *  CommentProductPost
- *  CommentReplyPost
+ *  CommentPost
  *
  *  CommentRestaurantResponse
+ *  {
+ *      parentId: 123,
+ *      [
+ *          {
+ *                 ID, starCount, content, isHavingChildren
+ *          },
+ *          {
+ *              ...
+ *          },
+ *          ...
+ *      ]
+ *  }
  *  CommentProductResponse
+ * {
+ *      parentId: 123,
+ *      [
+ *          {
+ *                 ID, starCount, content, isHavingChildren
+ *          },
+ *          {
+ *              ...
+ *          },
+ *          ...
+ *      ]
+ *  }
  *  CommentLevelResponse
- *
+ * {
+ *      parentId: 123,
+ *      [
+ *          {
+ *              ID, content, isHavingChildren
+ *          },
+ *          {
+ *              ...
+ *          },
+ *          ....
+ *      ]
+ * }
  *
  *
  *

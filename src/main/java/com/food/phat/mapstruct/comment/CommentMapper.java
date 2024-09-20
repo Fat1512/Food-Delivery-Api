@@ -1,8 +1,6 @@
 package com.food.phat.mapstruct.comment;
 
-import com.food.phat.dto.comment.CommentPost;
-import com.food.phat.dto.comment.CommentProductPost;
-import com.food.phat.dto.comment.CommentRestaurantPost;
+import com.food.phat.dto.comment.*;
 import com.food.phat.entity.Comment;
 import com.food.phat.entity.CommentProduct;
 import com.food.phat.entity.CommentRestaurant;
@@ -16,5 +14,9 @@ public interface CommentMapper {
     Comment toEntity(CommentPost commentPost);
     CommentRestaurant toEntity(CommentRestaurantPost commentPost);
     CommentProduct toEntity(CommentProductPost commentPost);
+
+    CommentRestaurantItemResponse toDTO(CommentRestaurant commentRestaurant);
+    CommentProductItemResponse toDTO(CommentProduct commentProduct);
+    CommentItemResponse toDTO(Comment comment);
 }
 
