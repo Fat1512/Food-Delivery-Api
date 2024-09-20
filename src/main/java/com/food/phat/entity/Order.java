@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +12,8 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Order {
+public class Order  {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="order_id")
@@ -36,15 +37,15 @@ public class Order {
     @Column(name = "status")
     private OrderStatus orderStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="customer_address_fkey")
     private CustomerAddress customerAddress;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="restaurant_fkey")
     private Restaurant restaurant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_fkey")
     private User user;
 

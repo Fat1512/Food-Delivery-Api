@@ -9,7 +9,10 @@ import com.food.phat.mapstruct.order.OrderCancelMapper;
 import com.food.phat.mapstruct.order.OrderMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +25,20 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderMapper orderMapper;
     private final OrderCancelMapper orderCancelMapper;
+    private final OrderCancelRepository orderCancelRepository;
 
     @Autowired
     public OrderServiceImpl(
             OrderRepository orderRepository,
             OrderMapper orderMapper,
             CartItemRepository cartItemRepository,
-            OrderCancelMapper orderCancelMapper) {
+            OrderCancelMapper orderCancelMapper,
+            OrderCancelRepository orderCancelRepository) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.cartItemRepository = cartItemRepository;
         this.orderCancelMapper = orderCancelMapper;
+        this.orderCancelRepository = orderCancelRepository;
     }
 
     @Override
@@ -64,8 +70,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void cancelOrder(OrderCancelPost orderCancelPost, Integer userId) {
+        Order order =  orderRepository.findById(orderCancelPost.getOrderId()).get();
+        order.setOrderStatus(OrderStatus.CANCELLED);
 
+        OrderCancel orderCancel = new OrderCancel();
+        orderCancel.setReason(orderCancelPost.getReason());
+        orderCancel.setOrder(order);
+        orderCancel.setOrderId(orderCancelPost.getOrderId());
+        orderCancelRepository.save(orderCancel);
     }
 
     @Override
