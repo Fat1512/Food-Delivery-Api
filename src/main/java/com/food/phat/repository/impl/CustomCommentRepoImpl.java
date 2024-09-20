@@ -5,6 +5,7 @@ import com.food.phat.entity.CommentProduct;
 import com.food.phat.entity.CommentRestaurant;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 
 public class CustomCommentRepoImpl implements CustomCommentRepo {
     @PersistenceContext
@@ -62,7 +63,37 @@ public class CustomCommentRepoImpl implements CustomCommentRepo {
     }
 
     @Override
-    public Comment getCommentByLevel(Integer parentId) {
-        return null;
+    public List<Comment> getCommentByLevel(Integer parentId) {
+
+        List commentList = getNextCommentLevel(parentId);
+        List<Integer> commentIds = commentList.stream().map(comment -> ((Object[]) comment)[0]).toList();
+
+        return em.createQuery("select c from Comment c where commentId in :commentIds", Comment.class).setParameter("commentIds", commentIds).getResultList();
+    }
+
+    private List getNextCommentLevel(Integer parentId) {
+        return em.createNativeQuery(
+                """
+                            SELECT node.comment_id ,(COUNT(parent.content) - (sub_tree.depth + 1)) AS depth
+                            FROM    comment AS node,
+                                    comment AS parent,
+                                    comment AS sub_parent,
+                                    (
+                                            SELECT node.content, (COUNT(parent.content) - 1) AS depth
+                                            FROM comment AS node,
+                                            comment AS parent
+                                            WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                                            AND node.comment_id = :parent_id
+                                            GROUP BY node.content
+                                            order by node.lft
+                                    ) AS sub_tree
+                            WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                                    AND node.lft BETWEEN sub_parent.lft AND sub_parent.rgt
+                                    AND sub_parent.content = sub_tree.content
+                            GROUP BY node.comment_id
+                            HAVING depth = 1
+                            order by node.lft
+                        """
+        ).setParameter("parent_id", parentId).getResultList();
     }
 }

@@ -67,6 +67,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteComment(commentId);
     }
 
+    @Transactional
     @Override
     public CommentRestaurantResponse getRestaurantComment(Integer restaurantId) {
         List<CommentRestaurant> comments = commentRestaurantRepository.findByRestaurant_RestaurantId(restaurantId);
@@ -76,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRestaurantResponse;
     }
 
+    @Transactional
     @Override
     public CommentProductResponse getProductComment(Integer productId) {
         List<CommentProduct> comments = commentProductRepository.findByProduct_ProductId(productId);
@@ -85,8 +87,14 @@ public class CommentServiceImpl implements CommentService {
         return commentProductResponse;
     }
 
+    @Transactional
     @Override
-    public CommentRestaurantResponse getComment(Integer parentId) {
-
+    public CommentResponse getComment(Integer parentId) {
+        List<Comment> commentList = commentRepository.getCommentByLevel(parentId);
+        List<CommentItemResponse> commentItems = commentList.stream().map(commentMapper::toDTO).toList();
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setComments(commentItems);
+        commentResponse.setParentId(parentId);
+        return commentResponse;
     }
 }

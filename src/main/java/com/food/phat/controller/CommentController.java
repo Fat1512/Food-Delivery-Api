@@ -3,6 +3,7 @@ package com.food.phat.controller;
 import com.food.phat.dto.comment.*;
 import com.food.phat.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,9 +53,17 @@ public class CommentController {
     }
 
     @GetMapping("/{parentCommentId}")
-    public ResponseEntity<CommentItemResponse> getCommentLists(@PathVariable Integer parentCommentId) {
-        return null;
+    public ResponseEntity<CommentResponse> getCommentLists(@PathVariable Integer parentCommentId) {
+        CommentResponse commentResponse = commentService.getComment(parentCommentId);
+        return new ResponseEntity<>(commentResponse, HttpStatus.OK);
     }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentResponse> modifyComment(@PathVariable Integer commentId) {
+        CommentResponse commentResponse = commentService.getComment(parentCommentId);
+        return new ResponseEntity<>(commentResponse, HttpStatus.OK);
+    }
+
 }
 
 

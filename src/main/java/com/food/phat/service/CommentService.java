@@ -9,5 +9,5 @@ public interface CommentService {
     void deleteComment(Integer commentId);
     CommentRestaurantResponse getRestaurantComment(Integer restaurantId);
     CommentProductResponse getProductComment(Integer productId);
-    CommentRestaurantResponse getComment(Integer parentId);
+    CommentResponse getComment(Integer parentId);
 }
