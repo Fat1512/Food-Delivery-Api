@@ -1,5 +1,6 @@
 package com.food.phat.service.Impl;
 
+import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.service.NotificationService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -29,11 +30,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<String> getSubscriptedEmail(Integer restaurantId) {
-        return em.createNativeQuery("""
+    public NotificationDetailResponse getSubscriptionDetail(Integer restaurantId) {
+        String name = em.createQuery("select r.name from Restaurant r").getSingleResult().toString();
+        List<String> emailList =  em.createNativeQuery("""
             select u.email from user u, notification_subscription ns
             where u.user_id = ns.user_fkey and ns.restaurant_fkey = :restaurantId
         """).setParameter("restaurantId", restaurantId).getResultList();
+
+        NotificationDetailResponse notificationDetailResponse = new NotificationDetailResponse();
+        notificationDetailResponse.setObjectName(name);
+        notificationDetailResponse.setEmailList(emailList);
+        return notificationDetailResponse;
     }
 
 

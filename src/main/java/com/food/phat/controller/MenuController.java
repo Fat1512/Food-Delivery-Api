@@ -1,16 +1,18 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.dto.menu.MenuRequest;
 import com.food.phat.dto.menu.MenuResponse;
 import com.food.phat.service.NotificationService;
 import com.food.phat.service.MenuService;
+import com.food.phat.utils.NotificationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/restaurant")
@@ -46,8 +48,12 @@ public class MenuController {
     @PostMapping("/{restaurantId}/menus")
     public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
         menuService.createMenu(restaurantId, menuRequest);
-        List<String> emailList = notificationService.getSubscriptedEmail(restaurantId);
-        notificationService.send("add menu", "Restaurant has added a new menu", emailList.toArray(new String[0]));
+        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(restaurantId);
+
+        Map<String, String> notificationResponse = NotificationMessage.MENU.notifyMessage(notificationDetailResponse.getObjectName());
+
+        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
+                , notificationDetailResponse.getEmailList().toArray(new String[0]));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

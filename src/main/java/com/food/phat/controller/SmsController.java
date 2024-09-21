@@ -27,7 +27,7 @@ public class SmsController {
 //        message.setSubject("he thong chiu tai 100k user");
 //        message.setText("test he thong chiu tai 100k user phat food delivery");
 //        JavaMailSender.send(message);
-        notificationService.getSubscriptedEmail(restaurantId);
+//        notificationService.getSubscriptedEmail(restaurantId);
 
         return new ResponseEntity<String>("Message sent successfully", HttpStatus.OK);
     }

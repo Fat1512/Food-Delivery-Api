@@ -1,11 +1,14 @@
 package com.food.phat.controller;
 
 import com.food.phat.dto.APIResponse;
+import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.dto.product.ProductReponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
+import com.food.phat.service.NotificationService;
 import com.food.phat.service.ProductService;
+import com.food.phat.utils.NotificationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +22,12 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, NotificationService notificationService) {
         this.productService = productService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/product")
@@ -50,6 +55,12 @@ public class ProductController {
     @PostMapping("/product")
     public ResponseEntity<ProductReponse> saveOrUpdateProduct(@RequestBody ProductRequest product) {
         ProductReponse responseProduct = productService.saveOrUpdate(product);
+        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
+
+        Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
+
+        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
+                , notificationDetailResponse.getEmailList().toArray(new String[0]));
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 
