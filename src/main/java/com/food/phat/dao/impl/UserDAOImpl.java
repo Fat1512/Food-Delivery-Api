@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public UserDAOImpl(EntityManager em) {

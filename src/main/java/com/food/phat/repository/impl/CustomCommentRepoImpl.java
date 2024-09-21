@@ -68,7 +68,8 @@ public class CustomCommentRepoImpl implements CustomCommentRepo {
         List commentList = getNextCommentLevel(parentId);
         List<Integer> commentIds = commentList.stream().map(comment -> ((Object[]) comment)[0]).toList();
 
-        return em.createQuery("select c from Comment c where commentId in :commentIds", Comment.class).setParameter("commentIds", commentIds).getResultList();
+        return em.createQuery("select c from Comment c where commentId in :commentIds", Comment.class)
+                .setParameter("commentIds", commentIds).getResultList();
     }
 
     private List getNextCommentLevel(Integer parentId) {

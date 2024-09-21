@@ -27,10 +27,10 @@ import java.util.List;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    private JwtService jwtService;
-    private UserService userService;
-    private AuthenticationManager authenticationManager;
-    private PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthController(JwtService jwtService, UserService userService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {

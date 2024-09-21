@@ -2,12 +2,14 @@ package com.food.phat.controller;
 
 import com.food.phat.dto.menu.MenuRequest;
 import com.food.phat.dto.menu.MenuResponse;
+import com.food.phat.service.NotificationService;
 import com.food.phat.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -15,10 +17,12 @@ import java.util.List;
 public class MenuController {
 
     private final MenuService menuService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public MenuController(MenuService menuService) {
+    public MenuController(MenuService menuService, NotificationService notificationService) {
         this.menuService = menuService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/{restaurantId}/menus")
@@ -42,6 +46,8 @@ public class MenuController {
     @PostMapping("/{restaurantId}/menus")
     public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
         menuService.createMenu(restaurantId, menuRequest);
+        List<String> emailList = notificationService.getSubscriptedEmail(restaurantId);
+        notificationService.send("add menu", "Restaurant has added a new menu", emailList.toArray(new String[0]));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

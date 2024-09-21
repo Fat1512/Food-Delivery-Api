@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
-    private RestaurantRepository restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Autowired
     public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {

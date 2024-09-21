@@ -22,7 +22,7 @@ import java.util.Map;
 @Repository
 public class ProductDAOImpl implements ProductDAO {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public ProductDAOImpl(EntityManager em) {

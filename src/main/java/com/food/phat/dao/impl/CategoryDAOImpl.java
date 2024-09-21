@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class CategoryDAOImpl implements CategoryDAO {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public CategoryDAOImpl(EntityManager em) {
