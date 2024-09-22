@@ -17,13 +17,8 @@ public class ChatRoom {
     @Column(name="chat_room_id")
     private Integer chatRoomId;
 
-    @ManyToMany
-    @JoinTable(
-            name="chat_room_user",
-            joinColumns = @JoinColumn(name="chat_room_fkey"),
-            inverseJoinColumns = @JoinColumn(name="user_fkey")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "chatRoom", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ChatRoomUser> chatRoomUsers;
 
     @OneToMany
     @JoinColumn(name="chat_room_fkey")
@@ -34,5 +29,12 @@ public class ChatRoom {
             this.chatMessages = new ArrayList<>();
         }
         this.chatMessages.add(chatMessage);
+    }
+
+    public void addChatRoomUser(ChatRoomUser chatRoomUser) {
+        if(this.chatRoomUsers == null){
+            this.chatRoomUsers = new ArrayList<>();
+        }
+        this.chatRoomUsers.add(chatRoomUser);
     }
 }

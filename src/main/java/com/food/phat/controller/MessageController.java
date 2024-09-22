@@ -25,6 +25,9 @@ public class MessageController {
         simpMessagingTemplate.convertAndSendToUser(chatMessageRequest.getChatRoomId().toString()
                 ,"/queue/messages", chatMessageResponse);
     }
+
+
+
 }
 
 /**

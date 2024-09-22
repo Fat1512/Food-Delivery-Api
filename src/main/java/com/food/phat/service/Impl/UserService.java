@@ -15,7 +15,9 @@ import java.util.Collection;
 
 @Service
 public class UserService implements UserDetailsService {
-    UserRepository userRepository;
+
+    private UserRepository userRepository;
+
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -46,5 +48,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void connectUser(Integer userId) {
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setStatus(true);
+            userRepository.save(user);
+        });
     }
 }

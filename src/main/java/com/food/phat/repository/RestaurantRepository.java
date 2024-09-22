@@ -19,4 +19,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
            p.restaurant_fkey = res.restaurant_id
     """, nativeQuery = true)
     List<Restaurant> getRestaurantByCustomerId(Integer customerId);
+
+    @Query(value="select r.* from restaurant r where r.user_fkey = ?1", nativeQuery = true)
+    Restaurant findByUserId(Integer userId);
 }

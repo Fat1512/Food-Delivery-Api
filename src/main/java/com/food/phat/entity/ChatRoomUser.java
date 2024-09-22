@@ -39,6 +39,7 @@ public class ChatRoomUser {
     @Setter
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChatRoomUserId implements Serializable {
         @Column(name="chat_room_fkey")
         private int chatRoomId;
@@ -46,8 +47,5 @@ public class ChatRoomUser {
         @Column(name="user_fkey")
         private int userId;
 
-        public ChatRoomUserId() {
-
-        }
     }
 }

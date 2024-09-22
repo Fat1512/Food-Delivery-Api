@@ -10,6 +10,8 @@ import com.food.phat.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -38,6 +41,13 @@ public class AuthController {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @MessageMapping("/user.addUser")
+    @SendTo("/user/public")
+    public ResponseEntity<?> connectUser(Principal principal) {
+        userService.connectUser(userService.getUserByUsername(principal.getName()).getUserId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/login")
