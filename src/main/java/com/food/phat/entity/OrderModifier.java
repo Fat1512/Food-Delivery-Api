@@ -22,16 +22,6 @@ public class OrderModifier {
     @EmbeddedId
     private OrderModifierId OrderModifierid;
 
-    public OrderModifier(OrderItem orderItem, ModifierGroup modifierGroup, Modifier modifier) {
-        OrderModifierid = new OrderModifierId(
-                orderItem.getOrderItemId(),
-                modifierGroup.getModifierGroupId(),
-                modifier.getModifierId());
-        this.orderItem = orderItem;
-        this.modifierGroup = modifierGroup;
-        this.modifier = modifier;
-    }
-
     @JoinColumn(name = "order_item_fkey")
     @ManyToOne(optional = false)
     @MapsId("orderItemId")

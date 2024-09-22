@@ -14,14 +14,17 @@ public class VNPayService {
 
     @Autowired
     private VNPayConfig vnPayConfig;
+
     public PaymentDTO.VNPayResponse createVnPayPayment(HttpServletRequest request) {
         long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
         String bankCode = request.getParameter("bankCode");
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));
+
         if (bankCode != null && !bankCode.isEmpty()) {
             vnpParamsMap.put("vnp_BankCode", bankCode);
         }
+
         vnpParamsMap.put("vnp_IpAddr", "171.252.155.118");
         //build query url
         String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);

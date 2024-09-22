@@ -27,4 +27,7 @@ public class UserRole {
     @ManyToOne(optional = false)
     @Id
     private Role rolePkey;
+
+    @Column(name="status")
+    private Boolean status;
 }
