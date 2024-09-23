@@ -1,0 +1,16 @@
+package com.food.phat.utils;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum Currency {
+
+    USD("USD"),
+    VND("VND"),
+    ;
+
+    private final String value;
+}

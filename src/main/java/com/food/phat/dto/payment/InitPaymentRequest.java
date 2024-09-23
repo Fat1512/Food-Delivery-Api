@@ -1,0 +1,11 @@
+package com.food.phat.dto.payment;
+
+
+import lombok.Data;
+
+@Data
+public class InitPaymentRequest {
+    private Integer txnRef; //orderId
+    private Double amount; //totalOrderIdAmount
+    private String ipAddress; //ipaddress
+}
