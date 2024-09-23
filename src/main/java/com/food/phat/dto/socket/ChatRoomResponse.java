@@ -9,6 +9,6 @@ import java.util.List;
 @Builder
 public class ChatRoomResponse {
     private String chatRoomId;
-    private List<Integer> userIds;
+    private List<UserSocketResponse> userInfo;
     private List<ChatMessageResponse> chatMessages;
 }

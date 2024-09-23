@@ -21,7 +21,7 @@ public class ChatRoom {
     private List<ChatRoomUser> chatRoomUsers;
 
     @OneToMany
-    @JoinColumn(name="chat_room_fkey")
+    @JoinColumn(name="chat_room_fkey", nullable = false)
     private List<ChatMessage> chatMessages;
 
     public void addChatMessage(ChatMessage chatMessage) {

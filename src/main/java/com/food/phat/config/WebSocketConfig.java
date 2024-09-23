@@ -1,5 +1,6 @@
 package com.food.phat.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -22,13 +23,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //client subcribe to below prefixed url
         registry.setApplicationDestinationPrefixes("/app");
         registry.setUserDestinationPrefix("/user");
-
-        WebSocketMessageBrokerConfigurer.super.configureMessageBroker(registry);
+//        WebSocketMessageBrokerConfigurer.super.configureMessageBroker(registry);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("ws").withSockJS();
+        registry.addEndpoint("ws").setAllowedOrigins();
     }
 
     @Override
@@ -37,6 +37,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setContentTypeResolver(resolver);
+        converter.setObjectMapper(new ObjectMapper());
         messageConverters.add(converter);
         return false;
     }

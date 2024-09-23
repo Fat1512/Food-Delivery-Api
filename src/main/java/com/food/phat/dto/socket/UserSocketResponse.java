@@ -1,16 +1,18 @@
 package com.food.phat.dto.socket;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Map;
 
 @Data
 @Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserSocketResponse {
     private Integer userId;
     private String name;
     private String avatar;
-    private Map<Integer, String> role;
+    private Integer role;
 }

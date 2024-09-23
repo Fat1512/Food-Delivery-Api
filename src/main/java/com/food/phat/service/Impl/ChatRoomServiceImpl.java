@@ -15,8 +15,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ChatRoomServiceImpl implements ChatRoomService {
 
@@ -26,7 +24,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private ChatRoomMapper chatRoomMapper;
 
@@ -34,26 +31,26 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     @Transactional
     public ChatRoomResponse getChatRoomInfo(ChatRoomRequest chatRoomRequest) {
-        ChatRoom chatRoomm = chatRoomRepository.findById(chatRoomRequest.getChatRoomId()).or(() -> {
-            ChatRoom chatRoom = new ChatRoom();
-            chatRoomRequest.getUserInfo().forEach((userId, roleId) -> {
-                ChatRoomUser chatRoomUser = new ChatRoomUser();
+        if(chatRoomRequest.getChatRoomId() != null)
+            return chatRoomMapper.toDto(chatRoomRepository.findById(chatRoomRequest.getChatRoomId()).get());
 
-                ChatRoomUser.ChatRoomUserId chatRoomUserId = new ChatRoomUser.ChatRoomUserId();
-                chatRoomUserId.setUserId(userId);
-                chatRoomUserId.setChatRoomId(chatRoomRequest.getChatRoomId());
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoomRequest.getUserInfo().forEach((userId, roleId) -> {
+            ChatRoomUser chatRoomUser = new ChatRoomUser();
 
-                User user = userRepository.findById(userId).get();
-                Role role = roleRepository.findById(roleId).get();
-                chatRoomUser.setUser(user);
-                chatRoomUser.setChatRoom(chatRoom);
-                chatRoomUser.setRole(role);
-                chatRoomUser.setChatRoomUserId(chatRoomUserId);
-                chatRoom.addChatRoomUser(chatRoomUser);
-            });
-            return Optional.of(chatRoomRepository.save(chatRoom));
-        }).get();
-        return chatRoomMapper.toDto(chatRoomm);
+            ChatRoomUser.ChatRoomUserId chatRoomUserId = new ChatRoomUser.ChatRoomUserId();
+            chatRoomUserId.setUserId(userId);
+
+            User user = userRepository.findById(userId).get();
+            Role role = roleRepository.findById(roleId).get();
+            chatRoomUser.setUser(user);
+            chatRoomUser.setChatRoom(chatRoom);
+            chatRoomUser.setRole(role);
+            chatRoomUser.setChatRoomUserId(chatRoomUserId);
+            chatRoom.addChatRoomUser(chatRoomUser);
+        });
+
+        return chatRoomMapper.toDto(chatRoomRepository.save(chatRoom));
     }
 }
 

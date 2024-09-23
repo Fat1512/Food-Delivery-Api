@@ -12,7 +12,7 @@ public class ChatMessageResponse {
     private String content;
     private Date createdAt;
     private Integer userId;
-    private Integer roleId;
-    private String name;
-    private String avatar;
+//    private Integer roleId;
+//    private String name;
+//    private String avatar;
 }
