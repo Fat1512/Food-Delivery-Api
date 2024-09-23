@@ -1,8 +1,11 @@
 package com.food.phat.service.Impl;
 
+import com.food.phat.dto.socket.UserSocketResponse;
 import com.food.phat.entity.User;
+import com.food.phat.repository.ChatRoomUserRepository;
 import com.food.phat.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +17,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional
@@ -48,13 +49,5 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
-    }
-
-    @Transactional
-    public void connectUser(Integer userId) {
-        userRepository.findById(userId).ifPresent(user -> {
-            user.setStatus(true);
-            userRepository.save(user);
-        });
     }
 }

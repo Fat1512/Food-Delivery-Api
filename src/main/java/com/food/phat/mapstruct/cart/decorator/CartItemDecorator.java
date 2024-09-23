@@ -27,9 +27,9 @@ public abstract class CartItemDecorator implements CartItemMapper {
     private CartModifierMapper cartModifierMapper;
 
 //    @Override
-//    public CartItemResponse toDto(CartItem cartItem) {
-//        List<ModifierGroupResponse> modifierGroups = cartModifierMapper.toDto(cartItem.getModifiers());
-//        CartItemResponse cartItemResponse = delegate.toDto(cartItem);
+//    public CartItemResponse toChatRoomDetailResponse(CartItem cartItem) {
+//        List<ModifierGroupResponse> modifierGroups = cartModifierMapper.toChatRoomDetailResponse(cartItem.getModifiers());
+//        CartItemResponse cartItemResponse = delegate.toChatRoomDetailResponse(cartItem);
 //        cartItemResponse.setModifierGroups(modifierGroups);
 //        return cartItemResponse;
 //    }

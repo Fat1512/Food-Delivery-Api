@@ -1,9 +1,9 @@
-package com.food.phat.mapstruct.decorator;
+package com.food.phat.mapstruct.socket.decorator;
 
 import com.food.phat.dto.socket.ChatMessageRequest;
 import com.food.phat.dto.socket.ChatMessageResponse;
 import com.food.phat.entity.ChatMessage;
-import com.food.phat.mapstruct.ChatMessageMapper;
+import com.food.phat.mapstruct.socket.ChatMessageMapper;
 import com.food.phat.repository.RestaurantRepository;
 import com.food.phat.repository.UserRepository;
 import org.mapstruct.Mapper;

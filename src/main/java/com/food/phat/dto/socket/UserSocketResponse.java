@@ -12,7 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 public class UserSocketResponse {
     private Integer userId;
+    private Integer chatRoomId;
     private String name;
     private String avatar;
     private Integer role;
+    private Boolean status;
 }

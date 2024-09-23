@@ -43,13 +43,6 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @MessageMapping("/user.addUser")
-    @SendTo("/user/public")
-    public ResponseEntity<?> connectUser(Principal principal) {
-        userService.connectUser(userService.getUserByUsername(principal.getName()).getUserId());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
