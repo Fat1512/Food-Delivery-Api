@@ -83,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void modifyOrderStatus(Integer orderId, OrderStatus status) {
         Order order = orderRepository.findById(orderId).get();
         order.setOrderStatus(status);

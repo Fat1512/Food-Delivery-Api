@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class InitPaymentRequest {
     private Integer txnRef; //orderId
-    private Double amount; //totalOrderIdAmount
+    private Integer amount; //totalOrderIdAmount
     private String ipAddress; //ipaddress
 }

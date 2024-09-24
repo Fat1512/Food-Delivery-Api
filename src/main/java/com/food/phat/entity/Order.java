@@ -20,7 +20,7 @@ public class Order  {
     private Integer orderId;
 
     @Column(name="shipping_fee")
-    private float shippingFee;
+    private Integer shippingFee;
 
     @Column(name="note")
     private String note;

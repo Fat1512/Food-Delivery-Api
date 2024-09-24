@@ -4,6 +4,7 @@ import com.food.phat.dto.PaymentDTO;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.payment.InitPaymentRequest;
 import com.food.phat.dto.payment.InitPaymentResponse;
+import com.food.phat.dto.payment.IpnResponse;
 import com.food.phat.service.Impl.UserService;
 import com.food.phat.service.OrderService;
 import com.food.phat.service.PaymentService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -25,17 +27,13 @@ public class CheckoutController {
     private final PaymentService paymentService;
 
     @GetMapping("/order/checkout")
-    public ResponseEntity<InitPaymentResponse> checkout(@RequestBody InitPaymentRequest request) {
-        return new ResponseEntity<>(paymentService.init(request), HttpStatus.OK);
+    public ResponseEntity<?> checkout(@RequestBody InitPaymentRequest paymentRequest) {
+        return new ResponseEntity<>(paymentService.init(paymentRequest), HttpStatus.OK);
+
     }
 
-    @GetMapping("/vnpay_ipn")
-    public ResponseEntity<String> payCallbackHandler(HttpServletRequest request) {
-        String status = request.getParameter("vnp_ResponseCode");
-        if (status.equals("00")) {
-            return new ResponseEntity<>("Success", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("vnpay_ipn")
+    public IpnResponse payCallbackHandler(@RequestParam Map<String, String> params) {
+        return paymentService.process(params);
     }
 }
