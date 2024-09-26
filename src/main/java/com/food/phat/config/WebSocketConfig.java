@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         //server to client
-        registry.enableSimpleBroker("/user", "queue");
+        registry.enableSimpleBroker("/user", "/queue");
         //client subcribe to below prefixed url
         registry.setApplicationDestinationPrefixes("/app");
         registry.setUserDestinationPrefix("/user");
@@ -29,7 +29,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("ws").setAllowedOrigins();
     }
-
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();

@@ -85,15 +85,15 @@ public class ProductServiceImpl implements ProductService {
         //-------------------------------------Specification-------------------------------------
         SearchSpecification<Product> specs = new SearchSpecification<>(new ArrayList<>(List.of(categoryRequest, priceRequest)));
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Product> products = productRepository.findAll(specs, pageable);
-
-        return new PageResponse<>(
-                products.getContent(),
-                page,
-                size,
-                products.getTotalElements(),
-                products.getTotalPages(),
-                products.isLast());
+//        Page<Product> products = productRepository.findAll(specs, pageable);
+//        return new PageResponse<>(
+//                products.getContent(),
+//                page,
+//                size,
+//                products.getTotalElements(),
+//                products.getTotalPages(),
+//                products.isLast());
+        return null;
     }
 
     @Override

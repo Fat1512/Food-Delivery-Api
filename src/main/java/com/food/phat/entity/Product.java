@@ -1,20 +1,19 @@
 package com.food.phat.entity;
 
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-
 import java.util.List;
 
 @Getter
 @Setter
 @Table(name="product")
-@Entity @DynamicUpdate
+@Entity
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {

@@ -39,6 +39,12 @@ public class OrderController {
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
+    @DeleteMapping("/order/{orderId}")
+    public ResponseEntity<OrderResponse> deleteOrder(@PathVariable Integer orderId) {
+        orderService.deleteOrder(orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/order")
     public ResponseEntity<?> placeOrder(Principal principal, List<OrderPost> orderPosts) {
         orderService.placeOrder(orderPosts, userService.getUserByUsername(principal.getName()).getUserId());

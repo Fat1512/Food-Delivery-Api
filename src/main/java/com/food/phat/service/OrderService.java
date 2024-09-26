@@ -12,6 +12,7 @@ public interface OrderService {
     List<OrderResponse> getOrders(Integer userId);
     OrderResponse getOrder(Integer orderId);
     void placeOrder(List<OrderPost> orderPosts, Integer userId);
+    void deleteOrder(Integer orderId);
     void modifyOrderStatus(Integer orderId, OrderStatus status);
     void cancelOrder(OrderCancelPost orderCancelPost, Integer userId);
 }

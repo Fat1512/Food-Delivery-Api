@@ -71,6 +71,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    public void deleteOrder(Integer orderId) {
+        orderRepository.deleteById(orderId);
+    }
+
+    @Override
+    @Transactional
     public void cancelOrder(OrderCancelPost orderCancelPost, Integer userId) {
         Order order =  orderRepository.findById(orderCancelPost.getOrderId()).get();
         order.setOrderStatus(OrderStatus.CANCELLED);
