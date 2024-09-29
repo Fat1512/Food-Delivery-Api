@@ -1,0 +1,19 @@
+{
+    "name": "product-connector", 
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "database.hostname": "mysql", 
+        "database.port": "3306", 
+        "database.user": "root", 
+        "database.password": "15122004", 
+        "database.server.id": "1", 
+        "database.server.name": "mysql-server-1",
+        "database.allowPublicKeyRetrieval":"true",
+        "topic.prefix": "productdb",
+        "database.include.list": "fooder", 
+        "table.include.list": "fooder.product",
+        "include.schema.changes": false,
+        "schema.history.internal.kafka.topic": "productdb",
+        "schema.history.internal.kafka.bootstrap.servers": "kafka:9092"
+    }
+}

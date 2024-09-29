@@ -21,37 +21,37 @@ public class CommentController {
     @PostMapping("/restaurants")
     public ResponseEntity<?> createCommentRestaurant(@RequestBody CommentRestaurantPost commentPost) {
         commentService.createComment(commentPost);
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/products")
     public ResponseEntity<?> createCommentProduct(@RequestBody CommentProductPost commentPost) {
         commentService.createComment(commentPost);
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/")
     public ResponseEntity<?> createCommentOnOthers(@RequestBody CommentPost commentPost) {
         commentService.createComment(commentPost);
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComments(@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<CommentRestaurantResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
         commentService.getRestaurantComment(restaurantId);
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<CommentProductResponse> getProductComments(@PathVariable Integer productId) {
         commentService.getProductComment(productId);
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{parentCommentId}")
@@ -63,7 +63,7 @@ public class CommentController {
     @PutMapping("/")
     public ResponseEntity<CommentResponse> modifyComment(@RequestBody CommentPut commentPut) {
         commentService.modifyComment(commentPut);
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Table(name="product_category")
@@ -23,6 +25,12 @@ public class ProductCategory {
     @Column(name="name")
     private String name;
 
+    @OneToMany(mappedBy = "productCategory")
+    private List<Product> products;
+
+    @ManyToOne
+    @JoinColumn(name="restaurant_fkey")
+    Restaurant restaurant;
     public ProductCategory() {
 
     }

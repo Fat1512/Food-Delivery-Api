@@ -1,32 +1,19 @@
 package com.food.phat.controller;
 
 import com.food.phat.dto.APIResponse;
+import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.dto.product.ProductResponse;
 import com.food.phat.dto.product.ProductRequest;
-import com.food.phat.repository.ProductDocumentRepository;
 import com.food.phat.service.NotificationService;
+import com.food.phat.service.ProductDocumentService;
 import com.food.phat.service.ProductService;
+import com.food.phat.utils.NotificationMessage;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpHost;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.elasticsearch.client.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -36,13 +23,11 @@ public class ProductController {
 
     private final ProductService productService;
     private final NotificationService notificationService;
-    private final ProductDocumentRepository productDocumentRepository;
+    private final ProductDocumentService productDocumentService;
 
-    @GetMapping("/products/{productKeyword}")
-    public ResponseEntity<?> getProducts(Map<String, String> params) throws IOException {
-
-
-        return new ResponseEntity<>(, HttpStatus.OK);
+    @GetMapping("/products")
+    public ResponseEntity<?> getProducts(@RequestParam Map<String, String> params) throws IOException {
+        return new ResponseEntity<>(productDocumentService.getProducts(params), HttpStatus.OK);
     }
 
     @PutMapping("/products")
@@ -54,12 +39,12 @@ public class ProductController {
     @PostMapping("/products")
     public ResponseEntity<ProductResponse> saveProduct(@RequestBody ProductRequest product) {
         ProductResponse responseProduct = productService.save(product);
-//        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
-//
-//        Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
-//
-//        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
-//                , notificationDetailResponse.getEmailList().toArray(new String[0]));
+        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
+
+        Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
+
+        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
+                , notificationDetailResponse.getEmailList().toArray(new String[0]));
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 

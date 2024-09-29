@@ -22,4 +22,12 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     @Query(value="select r.* from restaurant r where r.user_fkey = ?1", nativeQuery = true)
     Restaurant findByUserId(Integer userId);
+
+    @Query(value="select * from restaurant r where r.user_fkey = ?2 and r.restaurant_id = ?1", nativeQuery = true)
+    Restaurant findById(Integer restaurantId, Integer userId);
+
+    @Query(value = """
+        delete * from restaurant where user_fkey = ?2, restaurant_id = ?1
+    """, nativeQuery = true)
+    void delete(Integer restaurantId, Integer userId);
 }

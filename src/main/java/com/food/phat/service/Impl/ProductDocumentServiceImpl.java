@@ -22,6 +22,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 import org.elasticsearch.client.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +35,7 @@ public class ProductDocumentServiceImpl implements ProductDocumentService {
 
     @Override
     @Transactional
-    public List<ProductResponse> getProductsByKeyword(String keyword) {
-        return List.of();
-    }
-
-    @Override
-    @Transactional
-    public List<?> getProducts(Map<String, String> params) {
+    public List<?> getProducts(Map<String, String> params) throws IOException {
 
         String productCategoryId = params.get("productCategoryId");
         String query = params.get("query");
@@ -48,16 +43,23 @@ public class ProductDocumentServiceImpl implements ProductDocumentService {
         String toPrice = params.get("toPrice");
         String priceSortDir = params.get("priceSortDir");
 
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
+        if(productCategoryId != null){
+            boolQueryBuilder = boolQueryBuilder.must(QueryBuilders.matchQuery("productCategoryId", productCategoryId));
+        }
+        boolQueryBuilder = boolQueryBuilder.must(QueryBuilders.multiMatchQuery(query, "title", "description")
+                        .fuzziness(Fuzziness.AUTO));
+        if(fromPrice != null && toPrice != null){
+            boolQueryBuilder = boolQueryBuilder.filter(QueryBuilders.rangeQuery("price")
+                    .gte(fromPrice)
+                    .lte(toPrice));
+        }
 
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.matchQuery("productCategoryId", "6"))
-                .must(QueryBuilders.multiMatchQuery("iphone", "title", "description")
-                        .fuzziness(Fuzziness.AUTO))
-                .filter(QueryBuilders.rangeQuery("price")
-                        .gte(1000)
-                        .lte(10000));
         SortBuilder<FieldSortBuilder> sortBuilders = SortBuilders.fieldSort("price").order(SortOrder.ASC);
+        if("desc".equals(priceSortDir)) {
+            sortBuilders = SortBuilders.fieldSort("price").order(SortOrder.DESC);
+        }
 
         var searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(boolQueryBuilder);
@@ -71,11 +73,5 @@ public class ProductDocumentServiceImpl implements ProductDocumentService {
 
         var hits = searchResponse.getHits().getHits();
         return Arrays.stream(hits).map(SearchHit::getSourceAsMap).toList();
-    }
-
-    @Override
-    @Transactional
-    public ProductResponse getProduct(Integer productId) {
-        return null;
     }
 }

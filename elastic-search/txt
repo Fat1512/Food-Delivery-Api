@@ -1,0 +1,19 @@
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" http://localhost:8083/connectors/ -d '{
+    "name": "product-connector", 
+    "config": {
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "database.hostname": "mysql", 
+        "database.port": "3306", 
+        "database.user": "root", 
+        "database.password": "15122004", 
+        "database.server.id": "1", 
+        "database.server.name": "dbserver1",
+        "database.allowPublicKeyRetrieval":"true",
+        "topic.prefix": "dbproduct",
+        "database.include.list": "fooder", 
+        "table.include.list": "product",
+        "schema.history.kafka.topic": "dbproduct",
+        "schema.history.kafka.bootstrap.servers": "172.19.0.100:9092",
+        "debezium.source.database.history": "io.debezium.relational.history.KafkaDatabaseHistory"
+    }
+}'
