@@ -1,6 +1,6 @@
 package com.food.phat.dto.menu;
 
-import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductResponse;
 import lombok.*;
 
 import java.util.List;
@@ -14,5 +14,5 @@ import java.util.List;
 public class MenuCategoryResponse {
     private int menuCategoryId;
     private String name;
-    private List<ProductReponse> products;
+    private List<ProductResponse> products;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ProductReponse {
+public class ProductResponse {
     private Integer productId;
     private String name;
     private Boolean status;

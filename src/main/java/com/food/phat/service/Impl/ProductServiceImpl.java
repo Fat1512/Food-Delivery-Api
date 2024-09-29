@@ -1,6 +1,6 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.product.ProductReponse;
+import com.food.phat.dto.product.ProductResponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.dto.PageResponse;
 import com.food.phat.entity.Product;
@@ -13,8 +13,8 @@ import com.food.phat.specification.SearchSpecification;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,26 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    ProductRepository productRepository;
-    MenuCategoryRepository menuCategoryRepository;
-    RestaurantRepository restaurantRepository;
-    ModifierRepository modifierRepository;
-    ProductMapper mapper;
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository,
-                              RestaurantRepository restaurantRepository,
-                              MenuCategoryRepository menuCategoryRepository,
-                              ModifierRepository modifierRepository,
-                              ProductMapper mapper) {
-        this.productRepository = productRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.menuCategoryRepository = menuCategoryRepository;
-        this.modifierRepository = modifierRepository;
-        this.mapper = mapper;
-    }
+    private final ProductRepository productRepository;
+    private final ProductMapper mapper;
 
     @Override
     @Transactional
@@ -98,14 +83,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductReponse getProductById(int id) {
+    public ProductResponse getProductById(int id) {
         Product product = productRepository.findById(id).get();
         return mapper.toDto(product);
     }
 
     @Override
     @Transactional
-    public ProductReponse update(ProductRequest productRequest) {
+    public ProductResponse update(ProductRequest productRequest) {
         Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
         mapper.updateEntity(productRequest, product);
         productRepository.save(product);
@@ -114,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductReponse save(ProductRequest productRequest) {
+    public ProductResponse save(ProductRequest productRequest) {
         Product product = mapper.toEntity(productRequest);
         product = productRepository.save(product);
         return mapper.toDto(product);

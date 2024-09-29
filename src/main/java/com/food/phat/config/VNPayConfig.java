@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 @Configuration
+@Deprecated
 public class VNPayConfig {
     public Map<String, String> getVNPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
