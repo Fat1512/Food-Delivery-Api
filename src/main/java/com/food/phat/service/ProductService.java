@@ -10,6 +10,7 @@ import java.util.Map;
 public interface ProductService {
     PageResponse<Product> getAllProducts(Map<String, String> filteredCondition);
     ProductReponse getProductById(int id);
-    ProductReponse saveOrUpdate(ProductRequest product);
+    ProductReponse update(ProductRequest product);
+    ProductReponse save(ProductRequest product);
     void deleteProductById(int id);
 }

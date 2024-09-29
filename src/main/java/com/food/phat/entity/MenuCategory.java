@@ -39,6 +39,7 @@ public class MenuCategory {
     public void addProduct(List<Product> products) {
         if(this.products == null) this.products = new ArrayList<>();
         this.products.addAll(products);
+        products.forEach(product -> product.addMenuCategeory(this));
     }
 
     public void addProduct(Product product) {

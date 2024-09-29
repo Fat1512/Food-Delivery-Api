@@ -52,15 +52,21 @@ public class ProductController {
         return productService.getAllProducts(filteredConditions);
     }
 
+    @PutMapping("/product")
+    public ResponseEntity<ProductReponse> updateProduct(@RequestBody ProductRequest product) {
+        ProductReponse responseProduct = productService.update(product);
+        return new ResponseEntity<>(responseProduct, HttpStatus.OK);
+    }
+
     @PostMapping("/product")
-    public ResponseEntity<ProductReponse> saveOrUpdateProduct(@RequestBody ProductRequest product) {
-        ProductReponse responseProduct = productService.saveOrUpdate(product);
-        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
-
-        Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
-
-        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
-                , notificationDetailResponse.getEmailList().toArray(new String[0]));
+    public ResponseEntity<ProductReponse> saveProduct(@RequestBody ProductRequest product) {
+        ProductReponse responseProduct = productService.save(product);
+//        NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
+//
+//        Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
+//
+//        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
+//                , notificationDetailResponse.getEmailList().toArray(new String[0]));
         return new ResponseEntity<>(responseProduct, HttpStatus.OK);
     }
 

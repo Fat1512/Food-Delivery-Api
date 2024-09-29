@@ -1,5 +1,6 @@
 package com.food.phat.mapstruct.product;
 
+import com.food.phat.dto.ProductDocument;
 import com.food.phat.dto.product.ProductReponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.entity.Product;
@@ -15,6 +16,10 @@ public interface ProductMapper {
 
     @Mapping(target = "restaurantId", source = "restaurant.restaurantId")
     ProductReponse toDto(Product product);
+
+    Product toEntity(ProductRequest productRequest);
+
+    ProductDocument toProductDocument(Product product);
 }
 
 

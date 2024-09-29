@@ -24,12 +24,18 @@ public class ProductDataSyncConsumer {
         if(json != null) {
             JsonObject payload = json.get("payload").getAsJsonObject();
             if(payload != null) {
-                String op = payload.get("op").toString();
-                Integer id = Integer.parseInt(payload.get("payload").getAsJsonObject().get("id").toString());
+                String op = payload.get("op").toString().replace("\"", "");
+                Integer id = null;
                 switch (op) {
-                    case ProductSyncUtil.CREATE: productDataSyncService.create(id); break;
-                    case ProductSyncUtil.UPDATE: productDataSyncService.update(id); break;
-                    case ProductSyncUtil.DELETE: productDataSyncService.delete(id); break;
+                    case ProductSyncUtil.CREATE:
+                        id = Integer.parseInt(payload.get("after").getAsJsonObject().get("product_id").toString());
+                        productDataSyncService.create(id); break;
+                    case ProductSyncUtil.UPDATE:
+                        id = Integer.parseInt(payload.get("after").getAsJsonObject().get("product_id").toString());
+                        productDataSyncService.update(id); break;
+                    case ProductSyncUtil.DELETE:
+                        id = Integer.parseInt(payload.get("before").getAsJsonObject().get("product_id").toString());
+                        productDataSyncService.delete(id); break;
                 }
             }
         }

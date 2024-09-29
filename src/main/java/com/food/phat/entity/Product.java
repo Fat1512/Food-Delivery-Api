@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -51,15 +53,22 @@ public class Product {
     private List<ModifierGroup> modifierGroups;
 
     @ManyToOne
-    @JoinColumn(name="product_category_fkey")
+    @JoinColumn(name="product_category_fkey", nullable = true)
     private ProductCategory productCategory;
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.MERGE)
     private List<MenuCategory> menuCategories;
 
     public void addMenuCategeory(MenuCategory menuCategory) {
+        if(this.menuCategories == null) this.menuCategories = new ArrayList<>();
         this.menuCategories.add(menuCategory);
     }
+
+    public void addMenuCategeory(List<MenuCategory> menuCategories) {
+        if(this.menuCategories == null) this.menuCategories = new ArrayList<>();
+        menuCategories.forEach(this::addMenuCategeory);
+    }
+
 
     public void removeCategory(Integer categoryId) {
         this.menuCategories.removeIf(menuCategory -> menuCategory.getMenuCategoryId() == categoryId);

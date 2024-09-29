@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.List;
 
-@Document(indexName = "product_v001 ")
+@Document(indexName = "product_v001")
 @Data
 public class ProductDocument {
 

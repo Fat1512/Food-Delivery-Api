@@ -105,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductReponse saveOrUpdate(ProductRequest productRequest) {
+    public ProductReponse update(ProductRequest productRequest) {
         Product product = productRepository.findById(productRequest.getProductId()).orElse(new Product());
         mapper.updateEntity(productRequest, product);
         productRepository.save(product);
@@ -113,6 +113,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
+    public ProductReponse save(ProductRequest productRequest) {
+        Product product = mapper.toEntity(productRequest);
+        product = productRepository.save(product);
+        return mapper.toDto(product);
+    }
+
+    @Override
+    @Transactional
     public void deleteProductById(int id) {
         productRepository.deleteById(id);
     }
