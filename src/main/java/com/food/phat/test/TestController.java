@@ -2,7 +2,7 @@ package com.food.phat.test;
 
 
 import com.food.phat.dto.ProductDocument;
-import com.food.phat.repository.TestElasticSearch;
+import com.food.phat.repository.ProductDocumentRepository;
 import com.food.phat.service.CartService;
 import com.food.phat.service.ProductCategoryService;
 import com.food.phat.service.ProductService;
@@ -33,21 +33,21 @@ public class TestController {
     ProductCategoryService productCategoryService;
 
     @Autowired
-    TestElasticSearch testElasticSearch;
+    ProductDocumentRepository productDocumentRepository;
 
     @Autowired
     ProducerService producerService;
 
     @GetMapping("/getting")
     public ResponseEntity<?> getAPI(@RequestBody Map<String, String> params) {
-        List<ProductDocument> x = testElasticSearch.findByName(params.get("name"));
+        List<ProductDocument> x = productDocumentRepository.findByName(params.get("name"));
         return new ResponseEntity<>(x, HttpStatus.OK);
     }
 
     @PostMapping("/posting")
     @Transactional
     public ResponseEntity<?> postAPI(@RequestBody ProductDocument productDocument) {
-        ProductDocument ProductDocument = testElasticSearch.save(productDocument);
+        ProductDocument ProductDocument = productDocumentRepository.save(productDocument);
 //        return new ResponseEntity<>(ProductDocument, HttpStatus.OK);
         return null;
     }

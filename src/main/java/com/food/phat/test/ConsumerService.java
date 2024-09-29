@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ConsumerService {
 
-    @KafkaListener(topics = "${product.topic.name}", groupId = "search")
+//    @KafkaListener(topics = "${product.topic.name}", groupId = "search")
     public void consumeJsonMsg(ConsumerRecord<?, ?> consumerRecord) {
         log.info(String.format("Consuming the message from alibou Topic:: %s", consumerRecord.toString()));
     }
