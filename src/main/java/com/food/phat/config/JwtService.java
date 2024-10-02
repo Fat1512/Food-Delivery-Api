@@ -73,7 +73,7 @@ public class JwtService {
     }
 
     public Boolean validateToken(String token) {
-        if(token == null || token.trim().length() == 0) return false;
+        if(token == null || token.trim().isEmpty()) return false;
 
         String username = extractUsername(token);
         return !(username == null || username.isEmpty() || isTokenExpired(token));

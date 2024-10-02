@@ -1,6 +1,7 @@
 package com.food.phat.dto.modifier;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -9,10 +10,11 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
+@Builder
 public class ModifierGroupResponse {
     private int modifierGroupId;
     private String title;
-    List<ModifierResponse> modifiers = new ArrayList<>();
+    List<ModifierResponse> modifiers;
 
     public void addModifier(ModifierResponse modifier) {
         this.addModifier(Collections.singletonList(modifier));

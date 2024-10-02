@@ -3,7 +3,6 @@ package com.food.phat.mapstruct.cart.decorator;
 import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartItemPut;
 import com.food.phat.dto.cart.CartItemResponse;
-import com.food.phat.dto.modifier.ModifierGroupResponse;
 import com.food.phat.entity.CartItem;
 import com.food.phat.entity.CartModifier;
 import com.food.phat.entity.Product;
@@ -26,13 +25,12 @@ public abstract class CartItemDecorator implements CartItemMapper {
     @Autowired
     private CartModifierMapper cartModifierMapper;
 
-//    @Override
-//    public CartItemResponse toChatRoomDetailResponse(CartItem cartItem) {
-//        List<ModifierGroupResponse> modifierGroups = cartModifierMapper.toChatRoomDetailResponse(cartItem.getModifiers());
-//        CartItemResponse cartItemResponse = delegate.toChatRoomDetailResponse(cartItem);
-//        cartItemResponse.setModifierGroups(modifierGroups);
-//        return cartItemResponse;
-//    }
+    @Override
+    public CartItemResponse toDto(CartItem cartItem) {
+        CartItemResponse cartItemResponse = delegate.toDto(cartItem);
+        cartItemResponse.setModifierGroups(cartModifierMapper.toDto(cartItem.getModifiers()));
+        return cartItemResponse;
+    }
 
     @Override
     public CartItem toEntity(CartItemPost cartItemPost) {

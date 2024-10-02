@@ -31,8 +31,7 @@ public abstract class OrderItemDecorator implements OrderItemMapper {
     @Override
     public OrderItemResponse toDto(OrderItem orderItem) {
         OrderItemResponse orderItemResponse = delegate.toDto(orderItem);
-        List<ModifierGroupResponse> modifierGroupResponses = orderModifierMapper.toDto(orderItem.getModifiers());
-        orderItemResponse.setModifierGroups(modifierGroupResponses);
+        orderItemResponse.setModifierGroups(orderModifierMapper.toDto(orderItem.getModifiers()));
         return orderItemResponse;
     }
 

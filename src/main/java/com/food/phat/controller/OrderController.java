@@ -6,7 +6,7 @@ import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.dto.order.OrderStatusPut;
 import com.food.phat.entity.OrderStatus;
-import com.food.phat.service.Impl.UserService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import com.food.phat.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,44 +20,44 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class OrderController {
     private final OrderService orderService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService, UserServiceImpl userServiceImpl) {
         this.orderService = orderService;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
     }
 
-    @GetMapping("/order")
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderResponse>> getOrderByUser(Principal principal) {
-        return new ResponseEntity<>(orderService.getOrders(userService.getUserByUsername(principal.getName()).getUserId()), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getOrders(userServiceImpl.getUserByUsername(principal.getName()).getUserId()), HttpStatus.OK);
     }
 
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer orderId) {
         OrderResponse orderResponse = orderService.getOrder(orderId);
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/order/{orderId}")
+    @DeleteMapping("/orders/{orderId}")
     public ResponseEntity<OrderResponse> deleteOrder(@PathVariable Integer orderId) {
         orderService.deleteOrder(orderId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/order")
+    @PostMapping("/orders")
     public ResponseEntity<?> placeOrder(Principal principal, List<OrderPost> orderPosts) {
-        orderService.placeOrder(orderPosts, userService.getUserByUsername(principal.getName()).getUserId());
+        orderService.placeOrder(orderPosts, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/order/cancel")
+    @PostMapping("/orders/cancel")
     public ResponseEntity<?> cancelOrder(Principal principal, @RequestBody OrderCancelPost orderCancelPost) {
-        orderService.cancelOrder(orderCancelPost, userService.getUserByUsername(principal.getName()).getUserId());
+        orderService.cancelOrder(orderCancelPost, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/order/{orderId}")
+    @PostMapping("/orders/{orderId}")
     public ResponseEntity<CartResponse> modifyOrderStatus(@RequestBody OrderStatusPut orderStatusPut) {
         orderService.modifyOrderStatus(
                 orderStatusPut.getOrderId(),

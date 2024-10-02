@@ -19,13 +19,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+
 @Mapper
 public abstract class CartModifierDecorator implements CartModifierMapper {
 
     @Qualifier("delegate")
     @Autowired
     private CartModifierMapper delegate;
-
     @Autowired
     private ModifierMapper modifierMapper;
     @Autowired
@@ -65,18 +66,48 @@ public abstract class CartModifierDecorator implements CartModifierMapper {
 
     @Override
     public ArrayList<ModifierGroupResponse> toDto(List<CartModifier> cartModifiers) {
-        Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
 
-        cartModifiers.forEach(cartModifier -> {
-            Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
-
-            boolean isExisted = modifierGroupMp.containsKey(modifierGroupId);
-            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
-
-            if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
-            modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
-        });
-
-        return new ArrayList<>(modifierGroupMp.values());
+        Map<ModifierGroup, List<CartModifier>> groupedCartModifier = cartModifiers.stream()
+                .collect(groupingBy(CartModifier::getModifierGroup));
+        return groupedCartModifier.entrySet().stream().map(groupedModifier -> ModifierGroupResponse.builder()
+                    .modifierGroupId(groupedModifier.getKey().getModifierGroupId())
+                    .title(groupedModifier.getKey().getTitle())
+                    .modifiers(groupedModifier.getValue().stream()
+                            .map(cartModifier -> modifierMapper.toDto(cartModifier.getModifier())).toList())
+                    .build()).collect(Collectors.toCollection(ArrayList::new));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
+//
+//        cartModifiers.forEach(cartModifier -> {
+//            Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
+//
+//            boolean isExisted = modifierGroupMp.containsKey(modifierGroupId);
+//            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
+//
+//            if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
+//            modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
+//        });
+//
+//        return new ArrayList<>(modifierGroupMp.values());

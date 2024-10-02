@@ -32,22 +32,22 @@ public class TestController {
     @Autowired
     ProductCategoryService productCategoryService;
 
-    @Autowired
-    ProductDocumentRepository productDocumentRepository;
+//    @Autowired
+//    ProductDocumentRepository productDocumentRepository;
 
     @Autowired
     ProducerService producerService;
 
     @GetMapping("/getting")
     public ResponseEntity<?> getAPI(@RequestBody Map<String, String> params) {
-        List<ProductDocument> x = productDocumentRepository.findByName(params.get("name"));
-        return new ResponseEntity<>(x, HttpStatus.OK);
+//        List<ProductDocument> x = productDocumentRepository.findByName(params.get("name"));
+        return null;
     }
 
     @PostMapping("/posting")
     @Transactional
     public ResponseEntity<?> postAPI(@RequestBody ProductDocument productDocument) {
-        ProductDocument ProductDocument = productDocumentRepository.save(productDocument);
+//        ProductDocument ProductDocument = productDocumentRepository.save(productDocument);
         return null;
     }
 

@@ -4,9 +4,8 @@ package com.food.phat.controller;
 import com.food.phat.dto.cart.CartItemPut;
 import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartResponse;
-import com.food.phat.repository.CartItemRepository;
 import com.food.phat.service.CartService;
-import com.food.phat.service.Impl.UserService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,37 +19,37 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class CartController {
     private final CartService cartService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public CartController(CartService cartService, UserService userService) {
+    public CartController(CartService cartService, UserServiceImpl userServiceImpl) {
         this.cartService = cartService;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
     }
 
-    @GetMapping("/cart")
+    @GetMapping("/carts")
     public ResponseEntity<CartResponse> getCartByUserId(Principal principal) {
-        return new ResponseEntity<>(cartService.getCart(userService.getUserByUsername(principal.getName()).getUserId()),
+        return new ResponseEntity<>(cartService.getCart(userServiceImpl.getUserByUsername(principal.getName()).getUserId()),
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/cart")
+    @DeleteMapping("/carts")
     public ResponseEntity<String> deleteCartItem(Principal principal, @RequestBody Map<String, Integer[]> cartDetailIdList) {
         cartService.deleteCartItem(
                 Arrays.stream(cartDetailIdList.get("idList")).toList(),
-                userService.getUserByUsername(principal.getName()).getUserId());
+                userServiceImpl.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
 
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     public ResponseEntity<String> saveCartItem(Principal principal, @RequestBody CartItemPost cartItemPost) {
-        cartService.saveCartItem(cartItemPost, userService.getUserByUsername(principal.getName()).getUserId());
+        cartService.saveCartItem(cartItemPost, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
 
-    @PutMapping("/cart")
+    @PutMapping("/carts")
     public ResponseEntity<String> updateCartItem(Principal principal, @RequestBody CartItemPut cartItemPut) {
-        cartService.updateCartItem(cartItemPut, userService.getUserByUsername(principal.getName()).getUserId());
+        cartService.updateCartItem(cartItemPut, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
         return null;
     }
 }

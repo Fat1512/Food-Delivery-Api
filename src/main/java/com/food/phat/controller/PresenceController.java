@@ -3,7 +3,7 @@ package com.food.phat.controller;
 import com.food.phat.dto.socket.UserSocketResponse;
 import com.food.phat.entity.User;
 import com.food.phat.service.ChatRoomService;
-import com.food.phat.service.Impl.UserService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,12 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PresenceController {
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final ChatRoomService chatRoomService;
 
     @MessageMapping("/user.onConnected")
     public void userOnConnected(Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
+        User user = userServiceImpl.getUserByUsername(principal.getName());
 
         List<UserSocketResponse> userSocketResponses = chatRoomService
                 .getChatRoomUserBasedOnUserId(user.getUserId());
@@ -37,7 +37,7 @@ public class PresenceController {
 
     @MessageMapping("/user.onDisconnected")
     public void userOnDisconnected(Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
+        User user = userServiceImpl.getUserByUsername(principal.getName());
 
         List<UserSocketResponse> userSocketResponses = chatRoomService
                 .getChatRoomUserBasedOnUserId(user.getUserId());

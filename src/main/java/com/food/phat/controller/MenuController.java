@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/restaurant")
+@RequestMapping("/api/v1/restaurants")
 public class MenuController {
 
     private final MenuService menuService;
@@ -57,7 +57,7 @@ public class MenuController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{restaurantId}/menu")
+    @PutMapping("/{restaurantId}/menus")
     public ResponseEntity<?> modifyMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
         menuService.updateMenu(menuRequest);
         return new ResponseEntity<>(HttpStatus.OK);

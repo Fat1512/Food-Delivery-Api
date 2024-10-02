@@ -42,7 +42,7 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/restaurant/{restaurantId}")
+    @GetMapping("/restaurants/{restaurantId}")
     public ResponseEntity<CommentRestaurantResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
         commentService.getRestaurantComment(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);

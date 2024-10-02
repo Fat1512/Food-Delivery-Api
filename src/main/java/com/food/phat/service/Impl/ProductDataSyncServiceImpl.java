@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductDataSyncServiceImpl implements ProductDataSyncService {
 
-    private final ProductDocumentRepository productDocumentRepository;
+//    private final ProductDocumentRepository productDocumentRepository;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     @Override
@@ -22,7 +22,7 @@ public class ProductDataSyncServiceImpl implements ProductDataSyncService {
     public void create(Integer productId) {
         Product product = productRepository.findById(productId).get();
         ProductDocument productDocument = productMapper.toProductDocument(product);
-        productDocumentRepository.save(productDocument);
+//        productDocumentRepository.save(productDocument);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class ProductDataSyncServiceImpl implements ProductDataSyncService {
     public void update(Integer productId) {
         Product product = productRepository.findById(productId).get();
         ProductDocument productDocument = productMapper.toProductDocument(product);
-        productDocumentRepository.save(productDocument);
+//        productDocumentRepository.save(productDocument);
     }
 
     @Override
     @Transactional
     public void delete(Integer productId) {
-        productDocumentRepository.deleteById(productId);
+//        productDocumentRepository.deleteById(productId);
     }
 }

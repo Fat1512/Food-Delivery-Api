@@ -23,6 +23,7 @@ public class CartResponse {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class CartItemGroup {
         private RestaurantCheckoutResponse restaurant;
         private List<CartItemResponse> cartItems = new ArrayList<>();

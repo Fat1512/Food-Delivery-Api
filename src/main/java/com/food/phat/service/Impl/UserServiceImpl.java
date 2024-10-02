@@ -1,12 +1,10 @@
 package com.food.phat.service.Impl;
 
-import com.food.phat.dto.socket.UserSocketResponse;
 import com.food.phat.entity.User;
 import com.food.phat.repository.ChatRoomUserRepository;
 import com.food.phat.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,11 +16,10 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
-
 
     @Override
     @Transactional

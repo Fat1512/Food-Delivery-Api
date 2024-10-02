@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ProductDocumentServiceImpl implements ProductDocumentService {
 
-    private final ProductDocumentRepository productDocumentRepository;
+    private ProductDocumentRepository productDocumentRepository;
 
     @Override
     @Transactional

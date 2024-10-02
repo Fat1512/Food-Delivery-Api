@@ -1,6 +1,6 @@
 package com.food.phat.filters;
 
-import com.food.phat.service.Impl.UserService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import com.food.phat.config.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,12 +20,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public JwtAuthenticationFilter(JwtService jwtService, UserService userService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserServiceImpl userServiceImpl) {
         this.jwtService = jwtService;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token = token.substring(7);
         if(jwtService.validateToken(token)) {
             String username = jwtService.extractUsername(token);
-            UserDetails userDetails = userService.loadUserByUsername(username);
+            UserDetails userDetails = userServiceImpl.loadUserByUsername(username);
 
             if(userDetails != null) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

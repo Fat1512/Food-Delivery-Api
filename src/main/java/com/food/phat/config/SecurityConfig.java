@@ -9,13 +9,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.context.request.WebRequest;
 
 @EnableWebSecurity(debug = true)
 @Configuration
@@ -41,8 +39,7 @@ public class SecurityConfig {
             request.requestMatchers(
                     "/api/v1/auth/**",
                     "/api/v1/vnpay_ipn/**",
-                    "/api/v1/vnpay_ipn",
-                    "/api/v1/product/**").permitAll();
+                    "/api/v1/vnpay_ipn").permitAll();
             request.anyRequest().authenticated();
         });
         http.httpBasic(Customizer.withDefaults());

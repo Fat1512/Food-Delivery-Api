@@ -5,13 +5,11 @@ import com.food.phat.dto.authentication.LoginRequest;
 import com.food.phat.dto.authentication.RegisterRequest;
 import com.food.phat.entity.Role;
 import com.food.phat.entity.User;
-import com.food.phat.service.Impl.UserService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import com.food.phat.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,14 +28,14 @@ import java.util.List;
 public class AuthController {
 
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(JwtService jwtService, UserService userService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+    public AuthController(JwtService jwtService, UserServiceImpl userServiceImpl, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.jwtService = jwtService;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
     }
@@ -63,12 +60,11 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
         user.setRoles(new ArrayList<>(List.of(new Role("ROLE_CUSTOMER"))));
-        user = userService.save(user);
+        user = userServiceImpl.save(user);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user
                 .getRoles()
-                .stream()
                 .forEach(u -> authorities.add(new SimpleGrantedAuthority(u.getName())));
 
 

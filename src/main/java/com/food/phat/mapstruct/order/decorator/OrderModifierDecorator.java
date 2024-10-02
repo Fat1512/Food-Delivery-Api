@@ -3,10 +3,7 @@ package com.food.phat.mapstruct.order.decorator;
 import com.food.phat.dto.modifier.ModifierGet;
 import com.food.phat.dto.modifier.ModifierGroupGet;
 import com.food.phat.dto.modifier.ModifierGroupResponse;
-import com.food.phat.entity.Modifier;
-import com.food.phat.entity.ModifierGroup;
-import com.food.phat.entity.OrderItem;
-import com.food.phat.entity.OrderModifier;
+import com.food.phat.entity.*;
 import com.food.phat.mapstruct.modifier.ModifierGroupMapper;
 import com.food.phat.mapstruct.modifier.ModifierMapper;
 import com.food.phat.mapstruct.order.OrderModifierMapper;
@@ -18,6 +15,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Mapper
 public abstract class OrderModifierDecorator implements OrderModifierMapper {
@@ -64,18 +63,54 @@ public abstract class OrderModifierDecorator implements OrderModifierMapper {
 
     @Override
     public ArrayList<ModifierGroupResponse> toDto(List<OrderModifier> orderModifiers) {
-        Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
 
-        orderModifiers.forEach(cartModifier -> {
-            Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
+        Map<ModifierGroup, List<OrderModifier>> groupedOrderModifier = orderModifiers.stream()
+                .collect(groupingBy(OrderModifier::getModifierGroup));
 
-            boolean isExisted = modifierGroupMp.containsKey(modifierGroupId);
-            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
-
-            if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
-            modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
-        });
-
-        return new ArrayList<>(modifierGroupMp.values());
+        return groupedOrderModifier.entrySet().stream().map(groupedModifier -> ModifierGroupResponse.builder()
+                .modifierGroupId(groupedModifier.getKey().getModifierGroupId())
+                .title(groupedModifier.getKey().getTitle())
+                .modifiers(groupedModifier.getValue().stream()
+                        .map(orderModifier -> modifierMapper.toDto(orderModifier.getModifier())).toList())
+                .build()).collect(Collectors.toCollection(ArrayList::new));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Map<Integer, ModifierGroupResponse> modifierGroupMp = new HashMap<>();
+//
+//        orderModifiers.forEach(cartModifier -> {
+//Integer modifierGroupId = cartModifier.getModifierGroup().getModifierGroupId();
+//
+//boolean isExisted = modifierGroupMp.containsKey(modifierGroupId);
+//            modifierGroupMp.putIfAbsent(modifierGroupId, modifierGroupMapper.toDto(cartModifier.getModifierGroup()));
+//
+//        if(!isExisted) modifierGroupMp.get(modifierGroupId).getModifiers().clear();
+//            modifierGroupMp.get(modifierGroupId).addModifier(modifierMapper.toDto(cartModifier.getModifier()));
+//        });
+//
+//        return new ArrayList<>(modifierGroupMp.values());
