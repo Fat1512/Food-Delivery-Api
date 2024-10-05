@@ -8,8 +8,8 @@ import com.food.phat.entity.Restaurant;
 import java.util.List;
 
 public interface RestaurantService {
-    void registerRestaurant(RestaurantPost restaurantId, Integer userId);
-    void updateRestaurant(RestaurantPut restaurant, Integer userId);
-    void deleteRestaurant(Integer restaurantId, Integer userId);
-    RestaurantResponse getRestaurantById(Integer restaurantId, Integer userId);
+    void registerRestaurant(RestaurantPost restaurantId);
+    void updateRestaurant(RestaurantPut restaurant);
+    void deleteRestaurant(Integer restaurantId);
+    RestaurantResponse getRestaurantById(Integer restaurantId);
 }

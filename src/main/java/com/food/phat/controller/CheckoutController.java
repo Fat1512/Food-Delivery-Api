@@ -16,7 +16,7 @@ public class CheckoutController {
 
     private final PaymentService paymentService;
 
-    @GetMapping("/orders/checkout")
+    @GetMapping("/orders/{orderId}/checkout")
     public ResponseEntity<?> checkout(@RequestBody InitPaymentRequest paymentRequest) {
         return new ResponseEntity<>(paymentService.init(paymentRequest), HttpStatus.OK);
 

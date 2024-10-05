@@ -5,48 +5,55 @@ import com.food.phat.dto.cart.CartItemPost;
 import com.food.phat.dto.cart.CartResponse;
 import com.food.phat.entity.Cart;
 import com.food.phat.entity.CartItem;
+import com.food.phat.entity.User;
 import com.food.phat.mapstruct.cart.CartItemMapper;
 import com.food.phat.mapstruct.cart.CartMapper;
 import com.food.phat.repository.CartItemRepository;
 import com.food.phat.repository.CartRepository;
+import com.food.phat.repository.UserRepository;
 import com.food.phat.service.CartService;
+import com.food.phat.utils.AuthenticationUtil;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
     private final CartMapper cartMapper;
     private final CartItemMapper cartItemMapper;
 
-    @Autowired
-    public CartServiceImpl(CartRepository cartRepository
-            , CartItemRepository cartItemRepository
-            , CartMapper cartMapper
-            , CartItemMapper cartItemMapper) {
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.cartMapper = cartMapper;
-        this.cartItemMapper = cartItemMapper;
-    }
-
     @Override
     @Transactional
-    public CartResponse getCart(Integer userId) {
-        Cart cart = cartRepository.findByUser_UserId(userId);
+    public CartResponse getCart(Integer userId) throws Exception {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        if(!user.getUserId().equals(userId)) throw new Exception("User id doesn't match");
+
+        Cart cart = cartRepository.findByUser_UserId(user.getUserId());
         return cartMapper.toDto(cart);
     }
 
     @Override
     @Transactional
-    public void saveCartItem(CartItemPost cartItemPost, Integer userId) {
-        Cart cart = cartRepository.findByUser_UserId(userId);
+    public void saveCartItem(CartItemPost cartItemPost) {
+
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        Cart cart = cartRepository.findByUser_UserId(user.getUserId());
         CartItem cartItem = cartItemMapper.toEntity(cartItemPost);
         cart.addCartItem(cartItem);
         cartItemRepository.save(cartItem);
@@ -54,17 +61,23 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void updateCartItem(CartItemPut cartItemPut, Integer userId) {
-        CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), userId);
+    public void updateCartItem(CartItemPut cartItemPut) throws Exception {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        CartItem cartItem = cartItemRepository.findByIdAndUserId(cartItemPut.getCartItemId(), user.getUserId());
+        if(cartItem == null) throw new Exception("Cart item doesn't exist");
         cartItemMapper.updateEntity(cartItemPut, cartItem);
         cartItemRepository.save(cartItem);
-//        if(cartItem == null) throw new Error("cart item doesn't match with current user id");
     }
 
     @Override
     @Transactional
-    public void deleteCartItem(List<Integer> cartItemIds, Integer userId) {
-        List<CartItem> cartItems = cartItemRepository.findAllByIdAndUserId(cartItemIds, userId);
+    public void deleteCartItem(List<Integer> cartItemIds) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        List<CartItem> cartItems = cartItemRepository.findAllByIdAndUserId(cartItemIds, user.getUserId());
         cartItemRepository.deleteAll(cartItems);
 //        if(cartItemIds.size() != cartItems.size()) throw new Error("desired delete cart item doesn't match with current user id");
     }

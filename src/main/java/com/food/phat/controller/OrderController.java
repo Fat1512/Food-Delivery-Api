@@ -28,41 +28,35 @@ public class OrderController {
         this.userServiceImpl = userServiceImpl;
     }
 
-    @GetMapping("/orders")
-    public ResponseEntity<List<OrderResponse>> getOrderByUser(Principal principal) {
-        return new ResponseEntity<>(orderService.getOrders(userServiceImpl.getUserByUsername(principal.getName()).getUserId()), HttpStatus.OK);
+    @GetMapping("/users/{userId}/orders/")
+    public ResponseEntity<List<OrderResponse>> getOrderByUser(@PathVariable Integer userId) throws Exception {
+        return new ResponseEntity<>(orderService.getOrders(userId), HttpStatus.OK);
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer orderId) {
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable Integer orderId) throws Exception {
         OrderResponse orderResponse = orderService.getOrder(orderId);
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/orders/{orderId}")
-    public ResponseEntity<OrderResponse> deleteOrder(@PathVariable Integer orderId) {
-        orderService.deleteOrder(orderId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PostMapping("/orders")
-    public ResponseEntity<?> placeOrder(Principal principal, List<OrderPost> orderPosts) {
-        orderService.placeOrder(orderPosts, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
+    public ResponseEntity<?> placeOrder(List<OrderPost> orderPosts) {
+        orderService.placeOrder(orderPosts);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/orders/cancel")
-    public ResponseEntity<?> cancelOrder(Principal principal, @RequestBody OrderCancelPost orderCancelPost) {
-        orderService.cancelOrder(orderCancelPost, userServiceImpl.getUserByUsername(principal.getName()).getUserId());
+    public ResponseEntity<?> cancelOrder(@RequestBody OrderCancelPost orderCancelPost) throws Exception {
+        orderService.cancelOrder(orderCancelPost);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/orders/{orderId}")
-    public ResponseEntity<CartResponse> modifyOrderStatus(@RequestBody OrderStatusPut orderStatusPut) {
+    public ResponseEntity<?> modifyOrderStatus(@RequestBody OrderStatusPut orderStatusPut) throws Exception {
         orderService.modifyOrderStatus(
                 orderStatusPut.getOrderId(),
                 OrderStatus.valueOf(orderStatusPut.getStatus()));
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

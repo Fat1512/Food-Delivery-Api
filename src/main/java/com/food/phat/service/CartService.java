@@ -7,8 +7,8 @@ import com.food.phat.dto.cart.CartResponse;
 import java.util.List;
 
 public interface CartService {
-    CartResponse getCart(Integer userId);
-    void deleteCartItem(List<Integer> cartDetailId, Integer userId);
-    void saveCartItem(CartItemPost cartItemPost, Integer userId);
-    void updateCartItem(CartItemPut cartItemRequest, Integer userId);
+    CartResponse getCart(Integer userId) throws Exception;
+    void deleteCartItem(List<Integer> cartDetailId);
+    void saveCartItem(CartItemPost cartItemPost);
+    void updateCartItem(CartItemPut cartItemRequest) throws Exception;
 }

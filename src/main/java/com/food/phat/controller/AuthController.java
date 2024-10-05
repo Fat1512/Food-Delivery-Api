@@ -47,7 +47,7 @@ public class AuthController {
 
         UserDetails user = (UserDetails) authentication.getPrincipal();
         String jwt = jwtService.generateToken(user);
-        return new ResponseEntity<JwtResponse>(new JwtResponse(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(new JwtResponse(jwt), HttpStatus.OK);
     }
 
     @PostMapping("/register")

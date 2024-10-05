@@ -3,6 +3,7 @@ package com.food.phat.service.Impl;
 import com.food.phat.entity.User;
 import com.food.phat.repository.ChatRoomUserRepository;
 import com.food.phat.repository.UserRepository;
+import com.food.phat.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +17,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;

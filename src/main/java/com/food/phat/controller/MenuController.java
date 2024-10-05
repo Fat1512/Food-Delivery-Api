@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/restaurants")
+@RequestMapping("/api/v1")
 public class MenuController {
 
     private final MenuService menuService;
@@ -27,25 +27,25 @@ public class MenuController {
         this.notificationService = notificationService;
     }
 
-    @GetMapping("/{restaurantId}/menus")
+    @GetMapping("/restaurants/{restaurantId}/menus")
     public ResponseEntity<?> getMenus(@PathVariable Integer restaurantId) {
         List<MenuResponse> menuResponse = menuService.getMenus(restaurantId);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{restaurantId}/menus/{menuId}")
-    public ResponseEntity<?> getMenu(@PathVariable Integer restaurantId, @PathVariable Integer menuId) {
+    @GetMapping("/menus/{menuId}")
+    public ResponseEntity<?> getMenu(@PathVariable Integer menuId) {
         MenuResponse menuResponse = menuService.getMenu(menuId);
         return new ResponseEntity<>(menuResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{restaurantId}/menus/{menuId}")
-    public ResponseEntity<?> deleteMenu(@PathVariable Integer restaurantId, @PathVariable Integer menuId) {
+    @DeleteMapping("/menus/{menuId}")
+    public ResponseEntity<?> deleteMenu(@PathVariable Integer menuId) {
         menuService.deleteMenu(menuId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{restaurantId}/menus")
+    @PostMapping("/restaurants/{restaurantId}/menus")
     public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
         menuService.createMenu(restaurantId, menuRequest);
         NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(restaurantId);
@@ -57,12 +57,11 @@ public class MenuController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{restaurantId}/menus")
-    public ResponseEntity<?> modifyMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
+    @PutMapping("/menus/{menuId}")
+    public ResponseEntity<?> modifyMenu(@RequestBody MenuRequest menuRequest) {
         menuService.updateMenu(menuRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
 

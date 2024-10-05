@@ -9,10 +9,9 @@ import java.util.List;
 
 public interface OrderService {
 
-    List<OrderResponse> getOrders(Integer userId);
-    OrderResponse getOrder(Integer orderId);
-    void placeOrder(List<OrderPost> orderPosts, Integer userId);
-    void deleteOrder(Integer orderId);
-    void modifyOrderStatus(Integer orderId, OrderStatus status);
-    void cancelOrder(OrderCancelPost orderCancelPost, Integer userId);
+    List<OrderResponse> getOrders(Integer userId) throws Exception;
+    OrderResponse getOrder(Integer orderId) throws Exception;
+    void placeOrder(List<OrderPost> orderPosts);
+    void modifyOrderStatus(Integer orderId, OrderStatus status) throws Exception;
+    void cancelOrder(OrderCancelPost orderCancelPost) throws Exception;
 }

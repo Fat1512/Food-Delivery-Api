@@ -1,6 +1,5 @@
 package com.food.phat.config;
 
-
 import com.food.phat.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -47,3 +46,8 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
+
+
+
+

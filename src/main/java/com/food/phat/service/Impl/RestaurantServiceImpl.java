@@ -10,11 +10,14 @@ import com.food.phat.mapstruct.restaurant.RestaurantMapper;
 import com.food.phat.repository.RestaurantRepository;
 import com.food.phat.repository.UserRepository;
 import com.food.phat.service.RestaurantService;
+import com.food.phat.utils.AuthenticationUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -26,27 +29,38 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantMapper restaurantMapper;
 
     @Override
-    public void registerRestaurant(RestaurantPost restaurantPost, Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public void registerRestaurant(RestaurantPost restaurantPost) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
         Restaurant restaurant = restaurantMapper.toEntity(restaurantPost);
         restaurant.setUser(user);
         restaurantRepository.save(restaurant);
     }
 
     @Override
-    public void updateRestaurant(RestaurantPut restaurantPut, Integer userId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantPut.getRestaurantId()).get();
+    public void updateRestaurant(RestaurantPut restaurantPut) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantPut.getRestaurantId(), user.getUserId());
         restaurantMapper.updateEntity(restaurantPut, restaurant);
     }
 
     @Override
-    public void deleteRestaurant(Integer restaurantId, Integer userId) {
-        restaurantRepository.delete(restaurantId, userId);
+    public void deleteRestaurant(Integer restaurantId) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        restaurantRepository.delete(restaurantId, user.getUserId());
     }
 
     @Override
-    public RestaurantResponse getRestaurantById(Integer restaurantId, Integer userId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId, userId);
+    public RestaurantResponse getRestaurantById(Integer restaurantId) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId, user.getUserId());
         return restaurantMapper.toRestaurantResponse(restaurant);
     }
 }

@@ -9,76 +9,76 @@ import com.food.phat.mapstruct.order.OrderCancelMapper;
 import com.food.phat.mapstruct.order.OrderMapper;
 import com.food.phat.repository.*;
 import com.food.phat.service.OrderService;
+import com.food.phat.utils.AuthenticationUtil;
+import com.food.phat.utils.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-    private final OrderCancelMapper orderCancelMapper;
+    private final RestaurantRepository restaurantRepository;
     private final OrderCancelRepository orderCancelRepository;
-
-    @Autowired
-    public OrderServiceImpl(
-            OrderRepository orderRepository,
-            OrderMapper orderMapper,
-            CartItemRepository cartItemRepository,
-            OrderCancelMapper orderCancelMapper,
-            OrderCancelRepository orderCancelRepository) {
-        this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.cartItemRepository = cartItemRepository;
-        this.orderCancelMapper = orderCancelMapper;
-        this.orderCancelRepository = orderCancelRepository;
-    }
 
     @Override
     @Transactional
-    public List<OrderResponse> getOrders(Integer userId) {
+    public List<OrderResponse> getOrders(Integer userId) throws Exception {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
+        if(!Objects.equals(user.getUserId(), userId)) throw new Exception("User id doesn't match");
+
         List<Order> orderList = orderRepository.findByUser_UserId(userId);
         return orderList.stream().map(orderMapper::toDto).toList();
     }
 
     @Override
     @Transactional
-    public OrderResponse getOrder(Integer orderId) {
-        Order order = orderRepository.findById(orderId).get();
+    public OrderResponse getOrder(Integer orderId) throws Exception {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found"));
+        if(!isOwnedOrder(order.getUser().getUserId())) throw new Exception("Order is not yours");
         return orderMapper.toDto(order);
     }
 
     @Override
     @Transactional
-    public void placeOrder(List<OrderPost> orderPosts, Integer userId) {
+    public void placeOrder(List<OrderPost> orderPosts) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+
         orderPosts.forEach(orderPost -> {
             Order order = orderMapper.toEntity(orderPost);
 
             List<Integer> productIds = orderPost.getOrderItems().stream()
                     .map(OrderItemPost::getProductId).toList();
 
-            cartItemRepository.deleteAllByProductIdAndUserId(productIds, userId);
+            cartItemRepository.deleteAllByProductIdAndUserId(productIds, user.getUserId());
             orderRepository.save(order);
         });
     }
 
     @Override
     @Transactional
-    public void deleteOrder(Integer orderId) {
-        orderRepository.deleteById(orderId);
-    }
+    public void cancelOrder(OrderCancelPost orderCancelPost) throws Exception {
+        Order order =  orderRepository.findById(orderCancelPost.getOrderId())
+                .orElseThrow(() -> new Exception("Order not found"));
 
-    @Override
-    @Transactional
-    public void cancelOrder(OrderCancelPost orderCancelPost, Integer userId) {
-        Order order =  orderRepository.findById(orderCancelPost.getOrderId()).get();
+        if(!isOwnedOrder(order.getUser().getUserId())) throw new Exception("Order id is not yours");
         order.setOrderStatus(OrderStatus.CANCELLED);
 
         OrderCancel orderCancel = new OrderCancel();
@@ -90,22 +90,34 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void modifyOrderStatus(Integer orderId, OrderStatus status) {
-        Order order = orderRepository.findById(orderId).get();
+    public void modifyOrderStatus(Integer orderId, OrderStatus status) throws Exception {
+        if(!this.isRestaurant()) {
+            throw new Exception("You're not restaurant");
+        }
+
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+        Restaurant restaurant = restaurantRepository.findByUserId(user.getUserId());
+
+        Order order = orderRepository.findByIdAndRestaurantId(orderId, restaurant.getRestaurantId());
+        if(order == null) throw new Exception("Order not found");
+
         order.setOrderStatus(status);
         orderRepository.save(order);
     }
+
+    private boolean isRestaurant() {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals(Role.RESTAURANT.name()));
+    }
+
+    private boolean isOwnedOrder(Integer userId) {
+        Authentication authentication = AuthenticationUtil.getAuthentication();
+        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+        return user.getUserId().equals(userId);
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

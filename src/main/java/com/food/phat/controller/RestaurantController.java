@@ -13,38 +13,33 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/restaurant")
+@RequestMapping("/api/v1/restaurants")
 @RequiredArgsConstructor
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
-    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerRestaurant(RestaurantPost restaurantPost, Principal principal) {
-        Integer userId = userServiceImpl.getUserByUsername(principal.getName()).getUserId();
-        restaurantService.registerRestaurant(restaurantPost, userId);
+    public ResponseEntity<?> registerRestaurant(RestaurantPost restaurantPost) {
+        restaurantService.registerRestaurant(restaurantPost);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateRestaurant(RestaurantPut restaurantPut, Principal principal) {
-        Integer userId = userServiceImpl.getUserByUsername(principal.getName()).getUserId();
-        restaurantService.updateRestaurant(restaurantPut, userId);
+    public ResponseEntity<?> updateRestaurant(RestaurantPut restaurantPut) {
+        restaurantService.updateRestaurant(restaurantPut);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{restaurantId}")
-    public ResponseEntity<?> deleteRestaurant(@PathVariable Integer restaurantId, Principal principal) {
-        Integer userId = userServiceImpl.getUserByUsername(principal.getName()).getUserId();
-        restaurantService.deleteRestaurant(restaurantId, userId);
+    public ResponseEntity<?> deleteRestaurant(@PathVariable Integer restaurantId) {
+        restaurantService.deleteRestaurant(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("{restaurantId}")
-    public ResponseEntity<?> getRestaurant(@PathVariable Integer restaurantId, Principal principal) {
-        Integer userId = userServiceImpl.getUserByUsername(principal.getName()).getUserId();
-        restaurantService.getRestaurantById(restaurantId, userId);
+    public ResponseEntity<?> getRestaurant(@PathVariable Integer restaurantId) {
+        restaurantService.getRestaurantById(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

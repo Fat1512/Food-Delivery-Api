@@ -11,32 +11,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/restaurants")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ProductCategoryController {
 
     private final ProductCategoryService productCategoryService;
 
-    @GetMapping("{restaurantId}/categories")
+    @GetMapping("/restaurants/{restaurantId}/categories")
     public ResponseEntity<List<ProductCategory>> getAllCategories(@PathVariable Integer restaurantId) {
         List<ProductCategory> categories = productCategoryService.getAllCategories(restaurantId);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @PostMapping("{restaurantId}/categories")
+    @PostMapping("/restaurants/{restaurantId}/categories")
     public ResponseEntity<ProductCategory> createProductCategory(@RequestBody ProductCategory productCategory, @PathVariable Integer restaurantId) {
         ProductCategory responseProductCategory = productCategoryService.createCategory(productCategory);
         return new ResponseEntity<>(responseProductCategory, HttpStatus.OK);
     }
 
-    @PutMapping("{restaurantId}/categories")
-    public ResponseEntity<ProductCategory> modifyCategory(@RequestBody ProductCategory productCategory, @PathVariable Integer restaurantId) {
+    @PutMapping("/categories/{categoryId}")
+    public ResponseEntity<ProductCategory> modifyCategory(@RequestBody ProductCategory productCategory) {
         productCategoryService.updateCategory(productCategory);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("{restaurantId}/categories/{categoryId}")
-    public ResponseEntity<ProductCategory> modifyCategory(@PathVariable Integer categoryId, @PathVariable Integer restaurantId) {
+    @DeleteMapping("/categories/{categoryId}")
+    public ResponseEntity<ProductCategory> modifyCategory(@PathVariable Integer categoryId) {
         productCategoryService.deleteCategory(categoryId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
