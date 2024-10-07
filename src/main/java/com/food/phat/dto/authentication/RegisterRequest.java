@@ -1,15 +1,12 @@
 package com.food.phat.dto.authentication;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegisterRequest {
     private String username, password, lastName, firstName, email;
-    public RegisterRequest(String username, String password, String lastName, String firstName, String email) {
-        this.username = username;
-        this.password = password;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.email = email;
-    }
 }

@@ -1,5 +1,6 @@
 package com.food.phat.config;
 
+import com.food.phat.dto.authentication.TokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -13,6 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,10 @@ public class JwtService {
 
     @Value(value = "${app.token.expirationTime}")
     private int expirationTime;
+
+    @Value(value = "${app.token.refreshTime}")
+    private int refreshTime;
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -51,21 +57,36 @@ public class JwtService {
 
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        Date now = new Date();
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Date expirationTime) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(now.getTime() * expirationTime))
-                .claim("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .setExpiration(expirationTime)
+//                .claim("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .signWith(getSignInKey())
                 .compact();
+    }
+
+    public TokenResponse generateToken(UserDetails userDetails) {
+        Date now = new Date();
+
+        UUID uuid = UUID.randomUUID();
+        Map<String, Object> extraClaims = new HashMap<>() {{put("uuid", uuid);}};
+
+        Date accessTokenExpirationTime = new Date(now.getTime() * expirationTime);
+        Date refreshTokenExpirationTime = new Date(now.getTime() * refreshTime);
+
+        String refreshToken = generateToken(extraClaims, userDetails, refreshTokenExpirationTime);
+        String accessToken = generateToken(extraClaims, userDetails, accessTokenExpirationTime);
+
+        return TokenResponse.builder()
+                .uuid(uuid.toString())
+                .refreshToken(refreshToken)
+                .accessToken(accessToken)
+                .timeToLive(Long.parseLong(accessTokenExpirationTime.toString()))
+                .build();
     }
 
     private Boolean isTokenExpired(String token) {

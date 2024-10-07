@@ -4,6 +4,7 @@ package com.food.phat.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity @DynamicUpdate
 @Setter
 @Getter
+@Builder
 public class User {
 
     @Id

@@ -24,7 +24,7 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/products/{productId/comments/{commentId}")
+    @PostMapping("/products/{productId}/comments/{commentId}")
     public ResponseEntity<?> createCommentProduct(@RequestBody CommentProductPost commentPost) {
         commentService.createComment(commentPost);
         return new ResponseEntity<>(HttpStatus.CREATED);
