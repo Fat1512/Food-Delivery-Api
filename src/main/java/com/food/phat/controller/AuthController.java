@@ -48,8 +48,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<TokenResponse> refreshToken(@RequestBody String refreshToken) throws Exception {
-        TokenResponse tokenResponse = authService.refreshToken(refreshToken);
+    public ResponseEntity<TokenResponse> refreshToken(@RequestBody Map<String, String> params) throws Exception {
+        TokenResponse tokenResponse = authService.refreshToken(params.get("refreshToken"));
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 }

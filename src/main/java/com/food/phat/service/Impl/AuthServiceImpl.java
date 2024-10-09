@@ -43,11 +43,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse refreshToken(String refreshToken) throws Exception {
+
         String uuid = jwtService.extractUuid(refreshToken);
         Token token = tokenService.get(uuid);
         if (token != null) throw new Exception("Access key is still valid !");
 
-        if(jwtService.validateToken(refreshToken)){
+        if (!jwtService.validateToken(refreshToken)) {
             throw new Exception("Refresh token invalid or expired");
         }
 
