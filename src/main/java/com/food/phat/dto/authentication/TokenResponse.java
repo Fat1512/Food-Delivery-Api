@@ -14,7 +14,5 @@ public class TokenResponse {
     private String accessToken;
     private String refreshToken;
     @JsonIgnore
-    private Long timeToLive;
-    @JsonIgnore
     private String uuid;
 }

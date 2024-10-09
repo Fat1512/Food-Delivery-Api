@@ -38,6 +38,10 @@ public class JwtService {
         return extractClaim(token, Claims::getId);
     }
 
+    public String extractUuid(String token) {
+        return extractClaim(token, (claims -> claims.get("uuid", String.class)));
+    }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -85,8 +89,11 @@ public class JwtService {
                 .uuid(uuid.toString())
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
-                .timeToLive(Long.parseLong(accessTokenExpirationTime.toString()))
                 .build();
+    }
+
+    public String extractToken(String token) {
+        return token.split(" ")[1];
     }
 
     private Boolean isTokenExpired(String token) {

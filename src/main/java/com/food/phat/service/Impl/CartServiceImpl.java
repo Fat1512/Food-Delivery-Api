@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -38,7 +39,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartResponse getCart(Integer userId) throws Exception {
         Authentication authentication = AuthenticationUtil.getAuthentication();
-        User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
+        User user = userRepository.findByUsername(((UserDetails)authentication.getPrincipal()).getUsername());
 
         if(!user.getUserId().equals(userId)) throw new Exception("User id doesn't match");
 

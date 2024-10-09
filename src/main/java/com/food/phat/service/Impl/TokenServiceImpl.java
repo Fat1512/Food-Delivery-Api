@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
@@ -17,5 +19,23 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public void save(Token token) {
         tokenRedisRepository.save(token);
+    }
+
+    @Override
+    public void delete(String uuid) {
+        tokenRedisRepository.deleteById(uuid);
+    }
+
+    @Override
+    @Transactional
+    public Token get(String uuid) {
+        return tokenRedisRepository.findById(uuid).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void invalidateAllUserToken(Integer userId) {
+        List<Token> tokens = tokenRedisRepository.findByUserKey(userId);
+        tokenRedisRepository.deleteAllById(tokens.stream().map(Token::getUuid).toList());
     }
 }
