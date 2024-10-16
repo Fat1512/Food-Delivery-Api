@@ -32,6 +32,4 @@ public class MessageController {
  *
  *  initialize chat room -> ()
  *
- *
- *
  */

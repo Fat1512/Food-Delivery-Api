@@ -4,11 +4,9 @@ import com.food.phat.config.JwtService;
 import com.food.phat.dto.authentication.LoginRequest;
 import com.food.phat.dto.authentication.RegisterRequest;
 import com.food.phat.dto.authentication.TokenResponse;
-import com.food.phat.entity.Role;
 import com.food.phat.entity.Token;
 import com.food.phat.entity.User;
 import com.food.phat.repository.RoleRepository;
-import com.food.phat.repository.TokenRedisRepository;
 import com.food.phat.service.AuthService;
 import com.food.phat.service.TokenService;
 import com.food.phat.utils.AuthenticationUtil;
@@ -24,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.*;
 
 @RequiredArgsConstructor
