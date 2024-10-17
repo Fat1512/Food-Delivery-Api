@@ -35,7 +35,7 @@ public class PresenceController {
                     userSocketResponse));
     }
 
-    @MessageMapping("/user.onDisconnected")
+    @MessageMapping("/user-disconnected")
     public void userOnDisconnected(Principal principal) {
         User user = userServiceImpl.getUserByUsername(principal.getName());
 

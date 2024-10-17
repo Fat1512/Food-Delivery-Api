@@ -4,12 +4,20 @@ import com.food.phat.config.JwtService;
 import com.food.phat.dto.authentication.TokenResponse;
 import com.food.phat.dto.authentication.LoginRequest;
 import com.food.phat.dto.authentication.RegisterRequest;
+import com.food.phat.dto.socket.UserSocketResponse;
+import com.food.phat.entity.User;
 import com.food.phat.service.AuthService;
+import com.food.phat.service.ChatRoomService;
+import com.food.phat.service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,12 +25,28 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final AuthService authService;
     private final JwtService jwtService;
+    private final ChatRoomService chatRoomService;
+    private final ReactiveUserDetailsServiceAutoConfiguration reactiveUserDetailsServiceAutoConfiguration;
+    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/login")
+    @MessageMapping("/user-connected")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = authService.login(loginRequest);
+
+        User user = userServiceImpl.getUserByUsername(loginRequest.getUsername());
+
+        List<UserSocketResponse> userSocketResponses = chatRoomService
+                .getChatRoomUserBasedOnUserId(user.getUserId());
+
+        userSocketResponses.forEach(userSocketResponse ->
+                simpMessagingTemplate.convertAndSendToUser(
+                        userSocketResponse.getChatRoomId().toString(),
+                        "/queue/online_users",
+                        userSocketResponse));
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
@@ -41,9 +65,22 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @MessageMapping("/user-disconnected")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         token = jwtService.extractToken(token);
         authService.logout(token);
+        String username = jwtService.extractUsername(token);
+
+        User user = userServiceImpl.getUserByUsername(username);
+
+        List<UserSocketResponse> userSocketResponses = chatRoomService
+                .getChatRoomUserBasedOnUserId(user.getUserId());
+
+        userSocketResponses.forEach(userSocketResponse ->
+                simpMessagingTemplate.convertAndSendToUser(
+                        userSocketResponse.getChatRoomId().toString(),
+                        "/queue/online_users",
+                        userSocketResponse));
         return new ResponseEntity<>("Logout successfully", HttpStatus.OK);
     }
 

@@ -18,7 +18,7 @@ public class MessageController {
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @MessageMapping("/sendMessage")
+    @MessageMapping("/message")
     public void processMessage(@Payload ChatMessageRequest chatMessageRequest) {
         ChatMessageResponse chatMessageResponse = chatMessageService.save(chatMessageRequest);
         //user/{chatRoomId}/queue/messages

@@ -20,7 +20,6 @@ import java.util.Collection;
 public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
-    private final ChatRoomUserRepository chatRoomUserRepository;
 
     @Override
     @Transactional
