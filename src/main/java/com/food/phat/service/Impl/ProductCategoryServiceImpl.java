@@ -24,8 +24,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public ProductCategory createCategory(ProductCategory productCategory) {
-        return productCategoryRepository.save(productCategory);
+    public void createCategory(ProductCategory productCategory) {
+        productCategoryRepository.save(productCategory);
     }
 
     @Override

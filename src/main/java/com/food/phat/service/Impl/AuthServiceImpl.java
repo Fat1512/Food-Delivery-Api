@@ -6,17 +6,13 @@ import com.food.phat.dto.authentication.RegisterRequest;
 import com.food.phat.dto.authentication.TokenResponse;
 import com.food.phat.entity.Token;
 import com.food.phat.entity.User;
-import com.food.phat.exception.InvalidJwtTokenException;
-import com.food.phat.exception.OverlapResourceException;
-import com.food.phat.exception.ResourceNotFoundException;
-import com.food.phat.exception.UnauthorizedException;
+import com.food.phat.exception.*;
 import com.food.phat.repository.RoleRepository;
 import com.food.phat.service.AuthService;
 import com.food.phat.service.TokenService;
 import com.food.phat.utils.AuthenticationUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private int expirationTime;
 
     @Override
-    public TokenResponse refreshToken(String refreshToken) throws Exception {
+    public TokenResponse refreshToken(String refreshToken) {
 
         String uuid = jwtService.extractUuid(refreshToken);
         Token token = tokenService.get(uuid);
@@ -71,7 +67,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public TokenResponse login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetail = (UserDetails) authentication.getPrincipal();
@@ -91,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public TokenResponse register(RegisterRequest registerRequest) throws Exception {
+    public TokenResponse register(RegisterRequest registerRequest) {
 
         User user = userServiceImpl.getUserByUsername(registerRequest.getUsername());
         if(user != null)
@@ -125,7 +122,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public TokenResponse changePassword(String newPassword, String oldPassword, boolean isLogAllOut) throws Exception {
+    public TokenResponse changePassword(String newPassword, String oldPassword, boolean isLogAllOut) {
         Authentication authentication = AuthenticationUtil.getAuthentication();
 
         if(authentication == null) throw new UnauthorizedException("Authentication is null !");

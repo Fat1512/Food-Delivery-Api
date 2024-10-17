@@ -1,7 +1,9 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.MessageResponse;
 import com.food.phat.dto.comment.*;
 import com.food.phat.service.CommentService;
+import com.food.phat.utils.ApiResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,51 +21,90 @@ public class CommentController {
     }
 
     @PostMapping("/restaurants/{restaurantId}/comments/{commentId}")
-    public ResponseEntity<?> createCommentRestaurant(@RequestBody CommentRestaurantPost commentPost) {
+    public ResponseEntity<MessageResponse> createCommentRestaurant(@RequestBody CommentRestaurantPost commentPost) {
         commentService.createComment(commentPost);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_CREATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/products/{productId}/comments/{commentId}")
-    public ResponseEntity<?> createCommentProduct(@RequestBody CommentProductPost commentPost) {
+    public ResponseEntity<MessageResponse> createCommentProduct(@RequestBody CommentProductPost commentPost) {
         commentService.createComment(commentPost);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_CREATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);    }
 
     @PostMapping("/comments")
-    public ResponseEntity<?> createCommentOnOthers(@RequestBody CommentPost commentPost) {
+    public ResponseEntity<MessageResponse> createCommentOnOthers(@RequestBody CommentPost commentPost) {
         commentService.createComment(commentPost);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_CREATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<?> deleteComments(@PathVariable Integer commentId) {
+    public ResponseEntity<MessageResponse> deleteComments(@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_DELETED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);    }
 
     @GetMapping("/restaurants/{restaurantId}/comments")
-    public ResponseEntity<CommentRestaurantResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
-        commentService.getRestaurantComment(restaurantId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<MessageResponse> getRestaurantComments(@PathVariable Integer restaurantId) {
+        CommentRestaurantResponse commentRestaurantResponse = commentService.getRestaurantComment(restaurantId);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(commentRestaurantResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @GetMapping("/products/{productId}/comments")
-    public ResponseEntity<CommentProductResponse> getProductComments(@PathVariable Integer productId) {
-        commentService.getProductComment(productId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<MessageResponse> getProductComments(@PathVariable Integer productId) {
+        CommentProductResponse commentProductResponse = commentService.getProductComment(productId);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(commentProductResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @GetMapping("/comments/{parentCommentId}")
-    public ResponseEntity<CommentResponse> getCommentLists(@PathVariable Integer parentCommentId) {
+    public ResponseEntity<MessageResponse> getCommentLists(@PathVariable Integer parentCommentId) {
         CommentResponse commentResponse = commentService.getComment(parentCommentId);
-        return new ResponseEntity<>(commentResponse, HttpStatus.OK);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(commentResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponse> modifyComment(@RequestBody CommentPut commentPut) {
+    public ResponseEntity<MessageResponse> modifyComment(@RequestBody CommentPut commentPut) {
         commentService.modifyComment(commentPut);
-        return new ResponseEntity<>(HttpStatus.OK);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_UPDATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 }
 

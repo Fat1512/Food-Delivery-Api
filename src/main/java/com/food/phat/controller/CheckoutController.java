@@ -1,8 +1,11 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.MessageResponse;
 import com.food.phat.dto.payment.InitPaymentRequest;
+import com.food.phat.dto.payment.InitPaymentResponse;
 import com.food.phat.dto.payment.IpnResponse;
 import com.food.phat.service.PaymentService;
+import com.food.phat.utils.ApiResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +20,14 @@ public class CheckoutController {
     private final PaymentService paymentService;
 
     @GetMapping("/orders/{orderId}/checkout")
-    public ResponseEntity<?> checkout(@RequestBody InitPaymentRequest paymentRequest) {
-        return new ResponseEntity<>(paymentService.init(paymentRequest), HttpStatus.OK);
+    public ResponseEntity<MessageResponse> checkout(@RequestBody InitPaymentRequest paymentRequest) {
+        InitPaymentResponse initPaymentResponse = paymentService.init(paymentRequest);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(initPaymentResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
 
     }
 

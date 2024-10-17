@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProductCategoryService {
     List<ProductCategory> getAllCategories(Integer restaurantId);
-    ProductCategory createCategory(ProductCategory productCategory);
+    void createCategory(ProductCategory productCategory);
     void updateCategory(ProductCategory productCategory);
     void deleteCategory(Integer categoryId);
 }

@@ -1,12 +1,14 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.socket.MessageResponse;
+import com.food.phat.dto.MessageResponse;
 import com.food.phat.dto.NotificationDetailResponse;
+import com.food.phat.dto.ProductDocument;
 import com.food.phat.dto.product.ProductResponse;
 import com.food.phat.dto.product.ProductRequest;
 import com.food.phat.service.NotificationService;
 import com.food.phat.service.ProductDocumentService;
 import com.food.phat.service.ProductService;
+import com.food.phat.utils.ApiResponseMessage;
 import com.food.phat.utils.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,33 +29,52 @@ public class ProductController {
     private final ProductDocumentService productDocumentService;
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts(@RequestParam Map<String, String> params) throws IOException {
-        return new ResponseEntity<>(productDocumentService.getProducts(params), HttpStatus.OK);
+    public ResponseEntity<MessageResponse> getProducts(@RequestParam Map<String, String> params) throws IOException {
+        List<ProductDocument> productResponses = productDocumentService.getProducts(params);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(productResponses)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @PutMapping("/products")
-    public ResponseEntity<ProductResponse> updateProduct(@RequestBody ProductRequest product) {
-        ProductResponse responseProduct = productService.update(product);
-        return new ResponseEntity<>(responseProduct, HttpStatus.OK);
-    }
+    public ResponseEntity<MessageResponse> updateProduct(@RequestBody ProductRequest product) {
+        productService.update(product);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_UPDATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);    }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductResponse> saveProduct(@RequestBody ProductRequest product) {
+    public ResponseEntity<MessageResponse> saveProduct(@RequestBody ProductRequest product) {
         ProductResponse responseProduct = productService.save(product);
         NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(product.getRestaurantId());
 
         Map<String, String> notificationResponse = NotificationMessage.PRODUCT.notifyMessage(notificationDetailResponse.getObjectName());
 
-        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
-                , notificationDetailResponse.getEmailList().toArray(new String[0]));
-        return new ResponseEntity<>(responseProduct, HttpStatus.OK);
+//        notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
+//                , notificationDetailResponse.getEmailList().toArray(new String[0]));
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_CREATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer productId) {
         productService.deleteProductById(productId);
-//        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "successfully deleted"), HttpStatus.OK);
-        return null;
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_DELETED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 }
 

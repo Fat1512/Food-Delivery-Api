@@ -57,6 +57,8 @@ public class CartServiceImpl implements CartService {
         Authentication authentication = AuthenticationUtil.getAuthentication();
         User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
 
+        if(user == null) throw new UnauthorizedException("User doesn't exist");
+
         Cart cart = cartRepository.findByUser_UserId(user.getUserId());
         CartItem cartItem = cartItemMapper.toEntity(cartItemPost);
         cart.addCartItem(cartItem);

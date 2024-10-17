@@ -1,10 +1,12 @@
 package com.food.phat.controller;
 
+import com.food.phat.dto.MessageResponse;
 import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.dto.menu.MenuRequest;
 import com.food.phat.dto.menu.MenuResponse;
 import com.food.phat.service.NotificationService;
 import com.food.phat.service.MenuService;
+import com.food.phat.utils.ApiResponseMessage;
 import com.food.phat.utils.NotificationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,25 +30,39 @@ public class MenuController {
     }
 
     @GetMapping("/restaurants/{restaurantId}/menus")
-    public ResponseEntity<?> getMenus(@PathVariable Integer restaurantId) {
+    public ResponseEntity<MessageResponse> getMenus(@PathVariable Integer restaurantId) {
         List<MenuResponse> menuResponse = menuService.getMenus(restaurantId);
-        return new ResponseEntity<>(menuResponse, HttpStatus.OK);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(menuResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @GetMapping("/menus/{menuId}")
-    public ResponseEntity<?> getMenu(@PathVariable Integer menuId) {
+    public ResponseEntity<MessageResponse> getMenu(@PathVariable Integer menuId) {
         MenuResponse menuResponse = menuService.getMenu(menuId);
-        return new ResponseEntity<>(menuResponse, HttpStatus.OK);
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_RETRIEVED.name())
+                .data(menuResponse)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/menus/{menuId}")
-    public ResponseEntity<?> deleteMenu(@PathVariable Integer menuId) {
+    public ResponseEntity<MessageResponse> deleteMenu(@PathVariable Integer menuId) {
         menuService.deleteMenu(menuId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_DELETED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);    }
 
     @PostMapping("/restaurants/{restaurantId}/menus")
-    public ResponseEntity<?> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
+    public ResponseEntity<MessageResponse> createMenu(@PathVariable Integer restaurantId, @RequestBody MenuRequest menuRequest) {
         menuService.createMenu(restaurantId, menuRequest);
         NotificationDetailResponse notificationDetailResponse  = notificationService.getSubscriptionDetail(restaurantId);
 
@@ -54,14 +70,22 @@ public class MenuController {
 
         notificationService.send(notificationResponse.get("subject"),notificationResponse.get("content")
                 , notificationDetailResponse.getEmailList().toArray(new String[0]));
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_CREATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.CREATED);    }
 
     @PutMapping("/menus/{menuId}")
-    public ResponseEntity<?> modifyMenu(@RequestBody MenuRequest menuRequest) {
+    public ResponseEntity<MessageResponse> modifyMenu(@RequestBody MenuRequest menuRequest) {
         menuService.updateMenu(menuRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+        MessageResponse messageResponse = MessageResponse.builder()
+                .status(HttpStatus.OK)
+                .message(ApiResponseMessage.SUCCESSFULLY_UPDATED.name())
+                .data(null)
+                .build();
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);    }
 }
 
 

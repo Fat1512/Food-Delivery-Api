@@ -25,7 +25,7 @@ public class ProductDocumentServiceImpl implements ProductDocumentService {
     private ElasticsearchOperations client;
     @Override
     @Transactional
-    public List<?> getProducts(Map<String, String> params) throws IOException {
+    public List<ProductDocument> getProducts(Map<String, String> params) throws IOException {
 
         String productCategoryId = params.get("productCategoryId");
         String query = params.get("query");

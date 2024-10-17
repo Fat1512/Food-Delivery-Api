@@ -21,6 +21,18 @@ public class RestControllerException {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> resolveBadRequest(BadRequestException exception) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(exception.getMessage())
+                .timestamp(System.currentTimeMillis())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ExceptionResponse> resolveResourceNotFound(UnauthorizedException exception) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())

@@ -1,4 +1,4 @@
-package com.food.phat.dto.socket;
+package com.food.phat.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,11 +16,11 @@ public class MessageResponse implements Serializable {
     @JsonIgnore
     private static final long serialVersionUID = 7702134516418120340L;
 
-    @JsonProperty("success")
-    private Boolean success;
-
     @JsonProperty("message")
     private String message;
+
+    @JsonProperty
+    private Object data;
 
     @JsonIgnore
     private HttpStatus status;
