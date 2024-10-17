@@ -1,10 +1,18 @@
-package com.food.phat.dto;
+package com.food.phat.dto.socket;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
-public class APIResponse  {
+import java.io.Serial;
+import java.io.Serializable;
+
+@Data
+@Builder
+public class MessageResponse implements Serializable {
+    @Serial
     @JsonIgnore
     private static final long serialVersionUID = 7702134516418120340L;
 
@@ -16,19 +24,4 @@ public class APIResponse  {
 
     @JsonIgnore
     private HttpStatus status;
-
-    public APIResponse() {
-
-    }
-
-    public APIResponse(Boolean success, String message) {
-        this.success = success;
-        this.message = message;
-    }
-
-    public APIResponse(Boolean success, String message, HttpStatus httpStatus) {
-        this.success = success;
-        this.message = message;
-        this.status = httpStatus;
-    }
 }

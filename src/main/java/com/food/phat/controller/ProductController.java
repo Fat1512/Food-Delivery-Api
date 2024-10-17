@@ -1,6 +1,6 @@
 package com.food.phat.controller;
 
-import com.food.phat.dto.APIResponse;
+import com.food.phat.dto.socket.MessageResponse;
 import com.food.phat.dto.NotificationDetailResponse;
 import com.food.phat.dto.product.ProductResponse;
 import com.food.phat.dto.product.ProductRequest;
@@ -49,9 +49,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<APIResponse> deleteProduct(@PathVariable Integer productId) {
+    public ResponseEntity<MessageResponse> deleteProduct(@PathVariable Integer productId) {
         productService.deleteProductById(productId);
-        return new ResponseEntity<>(new APIResponse(Boolean.TRUE, "successfully deleted"), HttpStatus.OK);
+//        return new ResponseEntity<>(new MessageResponse(Boolean.TRUE, "successfully deleted"), HttpStatus.OK);
+        return null;
     }
 }
 

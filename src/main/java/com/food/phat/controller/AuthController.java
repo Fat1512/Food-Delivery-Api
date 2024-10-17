@@ -29,24 +29,11 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     private final ChatRoomService chatRoomService;
-    private final ReactiveUserDetailsServiceAutoConfiguration reactiveUserDetailsServiceAutoConfiguration;
     private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/login")
-    @MessageMapping("/user-connected")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         TokenResponse tokenResponse = authService.login(loginRequest);
-
-        User user = userServiceImpl.getUserByUsername(loginRequest.getUsername());
-
-        List<UserSocketResponse> userSocketResponses = chatRoomService
-                .getChatRoomUserBasedOnUserId(user.getUserId());
-
-        userSocketResponses.forEach(userSocketResponse ->
-                simpMessagingTemplate.convertAndSendToUser(
-                        userSocketResponse.getChatRoomId().toString(),
-                        "/queue/online_users",
-                        userSocketResponse));
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
@@ -65,22 +52,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    @MessageMapping("/user-disconnected")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
         token = jwtService.extractToken(token);
         authService.logout(token);
-        String username = jwtService.extractUsername(token);
-
-        User user = userServiceImpl.getUserByUsername(username);
-
-        List<UserSocketResponse> userSocketResponses = chatRoomService
-                .getChatRoomUserBasedOnUserId(user.getUserId());
-
-        userSocketResponses.forEach(userSocketResponse ->
-                simpMessagingTemplate.convertAndSendToUser(
-                        userSocketResponse.getChatRoomId().toString(),
-                        "/queue/online_users",
-                        userSocketResponse));
         return new ResponseEntity<>("Logout successfully", HttpStatus.OK);
     }
 

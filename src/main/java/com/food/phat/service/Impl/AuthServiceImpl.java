@@ -6,12 +6,17 @@ import com.food.phat.dto.authentication.RegisterRequest;
 import com.food.phat.dto.authentication.TokenResponse;
 import com.food.phat.entity.Token;
 import com.food.phat.entity.User;
+import com.food.phat.exception.InvalidJwtTokenException;
+import com.food.phat.exception.OverlapResourceException;
+import com.food.phat.exception.ResourceNotFoundException;
+import com.food.phat.exception.UnauthorizedException;
 import com.food.phat.repository.RoleRepository;
 import com.food.phat.service.AuthService;
 import com.food.phat.service.TokenService;
 import com.food.phat.utils.AuthenticationUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,10 +48,10 @@ public class AuthServiceImpl implements AuthService {
 
         String uuid = jwtService.extractUuid(refreshToken);
         Token token = tokenService.get(uuid);
-        if (token != null) throw new Exception("Access key is still valid !");
+        if (token != null) throw new OverlapResourceException("Access key is still valid !");
 
         if (!jwtService.validateToken(refreshToken)) {
-            throw new Exception("Refresh token invalid or expired");
+            throw new InvalidJwtTokenException("Refresh token invalid or expired");
         }
 
         User user = userServiceImpl.getUserByUsername(jwtService.extractUsername(refreshToken));
@@ -89,8 +94,10 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse register(RegisterRequest registerRequest) throws Exception {
 
         User user = userServiceImpl.getUserByUsername(registerRequest.getUsername());
-        if(user != null) throw new Exception("User with specified username has already existed ! please try a new one");
-        if(registerRequest.getPassword() == null || registerRequest.getPassword().length() < 9) throw new Exception("Password length should be at least 9 !");
+        if(user != null)
+            throw new OverlapResourceException("User with specified username has already existed ! please try a new one");
+        if(registerRequest.getPassword() == null || registerRequest.getPassword().length() < 9)
+            throw new BadRequestException("Password length should be at least 9 !");
 
         user = User.builder()
                 .username(registerRequest.getUsername())
@@ -121,15 +128,15 @@ public class AuthServiceImpl implements AuthService {
     public TokenResponse changePassword(String newPassword, String oldPassword, boolean isLogAllOut) throws Exception {
         Authentication authentication = AuthenticationUtil.getAuthentication();
 
-        if(authentication == null) throw new Exception("Authentication is null !");
+        if(authentication == null) throw new UnauthorizedException("Authentication is null !");
 
         UserDetails userDetail = (UserDetails) authentication.getPrincipal();
         User user = userServiceImpl.getUserByUsername(userDetail.getUsername());
 
-        if(user == null) throw new Exception("User not exist !");
+        if(user == null) throw new ResourceNotFoundException("User not exist !");
 
         if(!user.getPassword().equals(passwordEncoder.encode(oldPassword)))
-            throw new Exception("Specified password doesn't match");
+            throw new UnauthorizedException("Specified password doesn't match");
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userServiceImpl.save(user);

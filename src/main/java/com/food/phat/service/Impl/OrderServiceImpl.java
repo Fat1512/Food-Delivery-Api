@@ -5,6 +5,8 @@ import com.food.phat.dto.order.OrderItemPost;
 import com.food.phat.dto.order.OrderPost;
 import com.food.phat.dto.order.OrderResponse;
 import com.food.phat.entity.*;
+import com.food.phat.exception.ResourceNotFoundException;
+import com.food.phat.exception.UnauthorizedException;
 import com.food.phat.mapstruct.order.OrderCancelMapper;
 import com.food.phat.mapstruct.order.OrderMapper;
 import com.food.phat.repository.*;
@@ -41,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
         Authentication authentication = AuthenticationUtil.getAuthentication();
         User user = userRepository.findByUsername(((Principal)authentication.getPrincipal()).getName());
 
-        if(!Objects.equals(user.getUserId(), userId)) throw new Exception("User id doesn't match");
+        if(!Objects.equals(user.getUserId(), userId)) throw new UnauthorizedException("User id doesn't match");
 
         List<Order> orderList = orderRepository.findByUser_UserId(userId);
         return orderList.stream().map(orderMapper::toDto).toList();
@@ -50,8 +52,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse getOrder(Integer orderId) throws Exception {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new Exception("Order not found"));
-        if(!isOwnedOrder(order.getUser().getUserId())) throw new Exception("Order is not yours");
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        if(!isOwnedOrder(order.getUser().getUserId())) throw new ResourceNotFoundException("Order is not yours");
         return orderMapper.toDto(order);
     }
 
@@ -78,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         Order order =  orderRepository.findById(orderCancelPost.getOrderId())
                 .orElseThrow(() -> new Exception("Order not found"));
 
-        if(!isOwnedOrder(order.getUser().getUserId())) throw new Exception("Order id is not yours");
+        if(!isOwnedOrder(order.getUser().getUserId())) throw new ResourceNotFoundException("Order id is not yours");
         order.setOrderStatus(OrderStatus.CANCELLED);
 
         OrderCancel orderCancel = new OrderCancel();
@@ -92,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void modifyOrderStatus(Integer orderId, OrderStatus status) throws Exception {
         if(!this.isRestaurant()) {
-            throw new Exception("You're not restaurant");
+            throw new UnauthorizedException("You're not restaurant");
         }
 
         Authentication authentication = AuthenticationUtil.getAuthentication();
@@ -101,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
         Restaurant restaurant = restaurantRepository.findByUserId(user.getUserId());
 
         Order order = orderRepository.findByIdAndRestaurantId(orderId, restaurant.getRestaurantId());
-        if(order == null) throw new Exception("Order not found");
+        if(order == null) throw new ResourceNotFoundException("Order not found");
 
         order.setOrderStatus(status);
         orderRepository.save(order);
