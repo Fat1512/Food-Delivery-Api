@@ -17,7 +17,7 @@ public class ProductDataSyncConsumer {
 
     private final ProductDataSyncService productDataSyncService;
 
-//    @KafkaListener(topics = "${product.topic.name}", groupId = "search")
+    @KafkaListener(topics = "${product.topic.name}", groupId = "search")
     public void listen(ConsumerRecord<?, ?> consumerRecord) {
         log.info(String.format("Data sync:: %s", consumerRecord.toString()));
         JsonObject json = new Gson().fromJson((String) consumerRecord.value(), JsonObject.class);

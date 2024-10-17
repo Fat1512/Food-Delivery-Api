@@ -8,17 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
-import org.springframework.data.redis.connection.DefaultStringRedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.index.IndexConfiguration;
-import org.springframework.data.redis.core.index.IndexDefinition;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @SpringBootApplication
 @EnableElasticsearchRepositories(basePackages = "com.food.phat.repository")
@@ -28,14 +20,6 @@ public class PhatApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PhatApplication.class, args);
 	}
-
-
-//	public static class RedisIndexConfiguration extends IndexConfiguration {
-//		@Override
-//		protected Iterable<? extends IndexDefinition> initialConfiguration() {
-//			return Collections;
-//		}
-//	}
 
 }
 
